@@ -3,915 +3,436 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI & HR Tech Weekly — Issue #13 | 5 April 2026</title>
+<title>AI & HR Tech Weekly — 21 Mar 2026</title>
 <style>
-  :root {
-    --bg: #08090e;
-    --surface: #111218;
-    --surface2: #17181f;
-    --surface3: #1e1f28;
-    --border: #2a2b36;
-    --text: #e8e9f0;
-    --muted: #8b8d9e;
-    --green: #00e5a0;
-    --blue: #4da6ff;
-    --purple: #b06cff;
-    --orange: #ff8c42;
-    --red: #ff5555;
-    --yellow: #ffd166;
-    --pink: #ff6b9d;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    font-size: 15px;
-    line-height: 1.65;
-    min-height: 100vh;
-    scrollbar-width: none;
-  }
-  body::-webkit-scrollbar { display: none; }
+  :root { --bg:#0a0e1a; --card:#131a2e; --card2:#1a2340; --accent:#38bdf8; --accent2:#818cf8; --green:#34d399; --orange:#fb923c; --red:#f87171; --text:#e2e8f0; --muted:#8892b0; --border:#1e2d4a; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .newsletter{max-width:780px;margin:0 auto;padding:0 20px}
+  .hero{text-align:center;padding:60px 20px 40px;position:relative}
+  .hero::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px}
+  .hero .issue{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px}
+  .hero h1{font-size:32px;font-weight:700;line-height:1.3;margin-bottom:8px}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .hero .subtitle{color:var(--muted);font-size:15px}
+  .hero .byline{color:var(--muted);font-size:13px;margin-top:16px}
 
-  /* HEADER */
-  .header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 28px 24px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .header-inner { max-width: 960px; margin: 0 auto; }
-  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
-  .issue-badge {
-    background: var(--green);
-    color: #000;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    padding: 3px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
-  .auto-badge {
-    background: var(--surface3);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-  h1 {
-    font-size: clamp(22px, 4vw, 34px);
-    font-weight: 800;
-    color: var(--text);
-    margin-bottom: 4px;
-    line-height: 1.2;
-  }
-  .header-meta {
-    color: var(--muted);
-    font-size: 13px;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .header-meta span { display: flex; align-items: center; gap: 4px; }
+  /* NAV TABS */
+  .nav{display:flex;justify-content:center;gap:8px;margin:32px 0 0;padding:16px 0;border-bottom:1px solid var(--border)}
+  .nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;padding:8px 20px;border-radius:8px;transition:all 0.2s;cursor:pointer}
+  .nav a:hover,.nav a.active{color:var(--accent);background:rgba(56,189,248,0.08)}
+  .tab-content{display:none}
+  .tab-content.active{display:block}
 
-  /* TABS */
-  .tab-nav {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .tab-nav-inner {
-    max-width: 960px;
-    margin: 0 auto;
-    display: flex;
-    gap: 0;
-    padding: 0 24px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tab-nav-inner::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 14px 20px;
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
-
-  /* MAIN */
-  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* SECTION HEADERS */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    margin-top: 36px;
-  }
-  .section-header:first-child { margin-top: 0; }
-  .section-title {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* VELOCITY GRID */
-  .velocity-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-  .velocity-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-  }
-  .velocity-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 6px;
-  }
-  .velocity-value {
-    font-size: 22px;
-    font-weight: 800;
-    line-height: 1.1;
-  }
-  .velocity-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-
-  /* STORY CARDS */
-  .story-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
-  .story-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
-    transition: border-color 0.2s;
-  }
-  .story-card:hover { border-color: #3a3b4a; }
-  .story-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-  .story-badges { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
-  .badge {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    padding: 2px 8px;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
-  .badge-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
-  .badge-hot { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
-  .badge-servicenow { background: rgba(77,166,255,0.12); color: var(--blue); border: 1px solid rgba(77,166,255,0.25); }
-  .badge-genai { background: rgba(176,108,255,0.12); color: var(--purple); border: 1px solid rgba(176,108,255,0.25); }
-  .badge-agentic { background: rgba(255,107,157,0.12); color: var(--pink); border: 1px solid rgba(255,107,157,0.25); }
-  .badge-watch { background: rgba(255,209,102,0.12); color: var(--yellow); border: 1px solid rgba(255,209,102,0.25); }
-  .badge-breaking { background: rgba(255,85,85,0.15); color: var(--red); border: 1px solid rgba(255,85,85,0.3); }
-  .story-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; }
-  .story-body { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
-  .story-link {
-    font-size: 12px;
-    color: var(--blue);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .story-link:hover { text-decoration: underline; }
-
-  /* POC IDEAS HIGHLIGHT */
-  .poc-highlight {
-    background: linear-gradient(135deg, rgba(0,229,160,0.06) 0%, rgba(176,108,255,0.06) 100%);
-    border: 1px solid rgba(0,229,160,0.2);
-    border-radius: 12px;
-    padding: 22px 24px;
-    margin-top: 36px;
-  }
-  .poc-highlight-title {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 14px;
-  }
-  .poc-idea-list { display: flex; flex-direction: column; gap: 12px; }
-  .poc-idea-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .poc-idea-num {
-    background: var(--surface3);
-    color: var(--green);
-    font-size: 11px;
-    font-weight: 800;
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .poc-idea-text { font-size: 14px; color: var(--text); line-height: 1.5; }
-  .poc-idea-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-  /* POC LAB */
-  .poc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 14px;
-    margin-top: 8px;
-  }
-  .poc-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px;
-    transition: border-color 0.2s;
-  }
-  .poc-card:hover { border-color: #3a3b4a; }
-  .poc-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 10px; }
-  .poc-card-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
-  .poc-status {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .status-idea { background: rgba(139,141,158,0.15); color: var(--muted); border: 1px solid rgba(139,141,158,0.25); }
-  .status-building { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
-  .status-done { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
-  .poc-card-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
-  .poc-card-footer { display: flex; gap: 8px; flex-wrap: wrap; }
-  .difficulty {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .diff-beginner { background: rgba(0,229,160,0.1); color: var(--green); border: 1px solid rgba(0,229,160,0.2); }
-  .diff-intermediate { background: rgba(77,166,255,0.1); color: var(--blue); border: 1px solid rgba(77,166,255,0.2); }
-  .diff-advanced { background: rgba(255,85,85,0.1); color: var(--red); border: 1px solid rgba(255,85,85,0.2); }
-  .poc-platform {
-    font-size: 10px;
-    color: var(--muted);
-    padding: 2px 8px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: var(--surface3);
-  }
+  .section{margin:48px 0}
+  .section-header{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+  .section-header .icon{font-size:22px}
+  .section-header h2{font-size:20px;font-weight:600}
+  .section-header .line{flex:1;height:1px;background:var(--border)}
+  .story{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;transition:transform 0.15s}
+  .story:hover{transform:translateY(-1px)}
+  .story-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+  .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:5px;white-space:nowrap}
+  .badge-hrsd{background:rgba(56,189,248,0.12);color:var(--accent)}
+  .badge-nowassist{background:rgba(129,140,248,0.12);color:var(--accent2)}
+  .badge-moveworks{background:rgba(52,211,153,0.12);color:var(--green)}
+  .badge-claude{background:rgba(210,168,120,0.12);color:#d2a878}
+  .badge-openai{background:rgba(116,204,160,0.12);color:#74cca0}
+  .badge-google{background:rgba(100,180,246,0.12);color:#64b4f6}
+  .badge-nvidia{background:rgba(118,185,0,0.12);color:#76b900}
+  .badge-deepseek{background:rgba(173,127,255,0.12);color:#ad7fff}
+  .badge-openclaw{background:rgba(255,167,38,0.12);color:#ffa726}
+  .badge-team{background:rgba(236,72,153,0.12);color:#ec4899}
+  .story h3{font-size:16px;line-height:1.4;font-weight:600}
+  .story p{color:var(--muted);font-size:14px;line-height:1.75;margin-top:8px}
+  .story-links{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .story-links a{font-size:12px;color:var(--accent);text-decoration:none;padding:3px 10px;border:1px solid rgba(56,189,248,0.3);border-radius:5px;transition:all 0.15s}
+  .story-links a:hover{background:var(--accent);color:var(--bg)}
+  .highlight-box{background:linear-gradient(135deg,rgba(56,189,248,0.08),rgba(129,140,248,0.08));border:1px solid var(--border);border-radius:12px;padding:28px;margin:32px 0}
+  .highlight-box h3{font-size:17px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .highlight-box ol,.highlight-box ul{padding-left:20px}
+  .highlight-box li{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:6px}
+  .highlight-box li strong{color:var(--text)}
+  .velocity{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin:32px 0}
+  .velocity-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center}
+  .velocity-card .number{font-size:28px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .velocity-card .label{color:var(--muted);font-size:12px;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em}
+  .footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);margin-top:48px}
+  .footer p{color:var(--muted);font-size:13px;line-height:1.8}
+  .footer .brand{color:var(--accent);font-weight:600}
 
   /* ARCHIVE */
-  .archive-list { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
-  .archive-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
-    transition: border-color 0.2s;
-  }
-  .archive-card:hover { border-color: #3a3b4a; }
-  .archive-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
-  .archive-issue { font-size: 13px; font-weight: 700; color: var(--green); }
-  .archive-date { font-size: 12px; color: var(--muted); }
-  .archive-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
-  .archive-link:hover { text-decoration: underline; }
-  .archive-headlines { display: flex; flex-direction: column; gap: 4px; }
-  .archive-headline { font-size: 13px; color: var(--muted); padding-left: 14px; position: relative; }
-  .archive-headline::before { content: '›'; position: absolute; left: 0; color: var(--border); }
+  .archive-list{list-style:none;padding:0}
+  .archive-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;transition:all 0.15s}
+  .archive-item:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .archive-item .info h4{font-size:15px;margin-bottom:4px}
+  .archive-item .info p{color:var(--muted);font-size:13px}
+  .archive-item .date-tag{color:var(--accent);font-size:12px;font-weight:600;padding:4px 12px;border:1px solid rgba(56,189,248,0.3);border-radius:6px;white-space:nowrap}
 
-  /* SUBMIT */
-  .submit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin-top: 8px;
-  }
-  .submit-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px 22px;
-    text-align: center;
-    transition: border-color 0.2s;
-  }
-  .submit-card:hover { border-color: #3a3b4a; }
-  .submit-icon { font-size: 32px; margin-bottom: 12px; }
-  .submit-card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-  .submit-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-  .btn {
-    display: inline-block;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 9px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .btn:hover { opacity: 0.85; }
-  .btn-green { background: var(--green); color: #000; }
-  .btn-blue { background: var(--blue); color: #000; }
-  .btn-purple { background: var(--purple); color: #fff; }
+  /* FEEDBACK FORM */
+  .form-section{margin:48px 0}
+  .form-grid{display:grid;gap:16px}
+  .form-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;transition:all 0.2s;text-decoration:none;color:var(--text);cursor:pointer}
+  .form-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+  .form-card .form-icon{font-size:36px;margin-bottom:12px}
+  .form-card h3{font-size:16px;margin-bottom:8px}
+  .form-card p{color:var(--muted);font-size:13px;line-height:1.6}
+  .form-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
 
-  /* FOOTER */
-  .footer {
-    text-align: center;
-    padding: 24px;
-    border-top: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 24px;
-  }
-  .footer-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--surface3);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 8px;
-  }
-  .footer-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  .agentic-box{background:linear-gradient(135deg,rgba(129,140,248,0.08),rgba(236,72,153,0.08));border:1px solid rgba(129,140,248,0.2);border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+  .agentic-box h4{font-size:15px;margin-bottom:8px;color:var(--accent2)}
+  .agentic-box p{color:var(--muted);font-size:13px;line-height:1.7}
 
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+  /* POC LAB */
+  .poc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+  .poc-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;transition:transform 0.15s,box-shadow 0.15s}
+  .poc-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+  .poc-level{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:5px;display:inline-block;margin-bottom:12px}
+  .level-beginner{background:rgba(52,211,153,0.12);color:var(--green)}
+  .level-intermediate{background:rgba(251,146,60,0.12);color:var(--orange)}
+  .level-advanced{background:rgba(248,113,113,0.12);color:var(--red)}
+  .poc-card h3{font-size:15px;font-weight:600;line-height:1.4;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .poc-card p{color:var(--muted);font-size:13px;line-height:1.7}
+  .poc-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;font-size:12px;color:var(--muted)}
+  .poc-meta span{display:flex;align-items:center;gap:4px}
+  .difficulty{display:inline-flex;gap:3px;vertical-align:middle}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+  .dot.easy{background:var(--green)}
+  .dot.med{background:var(--orange)}
+  .dot.hard{background:var(--red)}
+  .poc-status{margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+  .status-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px}
+  .st-idea{background:rgba(129,140,248,0.12);color:var(--accent2)}
+  .st-building{background:rgba(251,146,60,0.12);color:var(--orange)}
+  .st-demo{background:rgba(52,211,153,0.12);color:var(--green)}
+  .st-done{background:rgba(56,189,248,0.12);color:var(--accent)}
 
-  /* NO SUBMISSIONS NOTE */
-  .empty-state {
-    background: var(--surface2);
-    border: 1px dashed var(--border);
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
+  @media(max-width:600px){
+    .hero h1{font-size:24px}
+    .story{padding:18px}
+    .velocity{grid-template-columns:repeat(2,1fr)}
+    .form-cards{grid-template-columns:1fr}
+    .nav{flex-wrap:wrap}
   }
 </style>
 </head>
 <body>
+<div class="newsletter">
 
-<header class="header">
-  <div class="header-inner">
-    <div class="header-top">
-      <span class="issue-badge">Issue #13</span>
-      <span class="auto-badge">⚡ Auto-compiled by Claude on Cowork</span>
-    </div>
-    <h1>AI &amp; HR Tech Weekly</h1>
-    <div class="header-meta">
-      <span>📅 5 April 2026</span>
-      <span>🏢 Deloitte HRSD Practice (Australia)</span>
-      <span>🤖 ServiceNow · GenAI · HR Technology</span>
+<div class="hero">
+  <div class="issue">Issue #1 — Week of 21 March 2026</div>
+  <h1>AI &amp; HR Tech <em>Weekly</em></h1>
+  <p class="subtitle">The essential digest for ServiceNow HRSD practitioners and AI enthusiasts</p>
+  <p class="byline">Curated by Daniel Correal | HR Technology &amp; Transformation | Deloitte</p>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <a class="active" onclick="showTab('latest')">Latest</a>
+  <a onclick="showTab('poc-lab')">POC Lab</a>
+  <a onclick="showTab('archive')">Archive</a>
+  <a onclick="showTab('submit')">Submit Idea</a>
+</div>
+
+<!-- ==================== LATEST TAB ==================== -->
+<div class="tab-content active" id="latest">
+
+<div class="velocity">
+  <div class="velocity-card"><div class="number">1M</div><div class="label">Token context is the new baseline</div></div>
+  <div class="velocity-card"><div class="number">2-3w</div><div class="label">Release cadence from major labs</div></div>
+  <div class="velocity-card"><div class="number">8</div><div class="label">New languages in HRSD Voice AI</div></div>
+  <div class="velocity-card"><div class="number">40%</div><div class="label">Case deflection with Now Assist</div></div>
+</div>
+
+<!-- HR INTELLIGENCE -->
+<div class="section">
+  <div class="section-header"><span class="icon">🏢</span><h2>HR &amp; ServiceNow Intelligence</h2><div class="line"></div></div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-hrsd">HRSD</span><h3>March 2026 Store Release — Voice AI, Manager Hub, Agent Workspace</h3></div>
+    <p>Voice AI Agents V3.0 dramatically expands telephony and language capabilities (German, Spanish, French, Japanese, Portuguese, French Canadian, Mandarin, Dutch). Manager Hub Team Digest V4.8 now generates AI-powered summaries pulling data from Growth Experience apps. Agent Workspace V4.4 adds Knowledge Centre plugins for richer case handling.</p>
+    <div class="story-links">
+      <a href="https://www.servicenow.com/community/hrsd-blog/march-2026-store-release-deep-dive-blog-hrsd/ba-p/3506473" target="_blank">Release Blog</a>
+      <a href="https://www.servicenow.com/community/hrsd/ct-p/human-resources-service-delivery" target="_blank">HRSD Community</a>
     </div>
   </div>
-</header>
-
-<nav class="tab-nav">
-  <div class="tab-nav-inner">
-    <button class="tab-btn active" onclick="switchTab('latest')">🔥 Latest</button>
-    <button class="tab-btn" onclick="switchTab('poc')">🧪 POC Lab</button>
-    <button class="tab-btn" onclick="switchTab('archive')">📂 Archive</button>
-    <button class="tab-btn" onclick="switchTab('submit')">💡 Submit Idea</button>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-nowassist">Now Assist</span><h3>2026: The Year of Agentic AI at ServiceNow</h3></div>
+    <p>AI Agent Studio is live — build custom agents via natural language with no code. Pre-built agents for HRSD, ITSM, CSM, and SecOps can autonomously diagnose, plan, and execute multi-step workflows. Virtual Agent with GenAI handles complex multi-step employee queries 24/7.</p>
+    <div class="story-links">
+      <a href="https://www.servicenow.com/platform/now-assist.html" target="_blank">Now Assist</a>
+      <a href="https://www.servicenow.com/products/ai-agents.html" target="_blank">AI Agents</a>
+    </div>
   </div>
-</nav>
-
-<main class="main">
-
-  <!-- ===== TAB: LATEST ===== -->
-  <div id="tab-latest" class="tab-content active">
-
-    <!-- Velocity Stats -->
-    <div class="velocity-grid">
-      <div class="velocity-card">
-        <div class="velocity-label">Now Assist Run Rate</div>
-        <div class="velocity-value" style="color: var(--green);">$1B</div>
-        <div class="velocity-sub">Fastest product in ServiceNow history</div>
-      </div>
-      <div class="velocity-card">
-        <div class="velocity-label">EmployeeWorks FastStart</div>
-        <div class="velocity-value" style="color: var(--blue);">50 slots</div>
-        <div class="velocity-sub">Autonomous FastStart offer open until 30 Apr</div>
-      </div>
-      <div class="velocity-card">
-        <div class="velocity-label">NVIDIA Rubin vs Blackwell</div>
-        <div class="velocity-value" style="color: var(--purple);">10x</div>
-        <div class="velocity-sub">Reduction in inference token cost</div>
-      </div>
-      <div class="velocity-card">
-        <div class="velocity-label">Anthropic Batch API</div>
-        <div class="velocity-value" style="color: var(--orange);">300K</div>
-        <div class="velocity-sub">New max_tokens cap for Opus &amp; Sonnet 4.6</div>
-      </div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-moveworks">EmployeeWorks</span><h3>Moveworks Fully Integrated — L1 AI Specialist Coming Q2</h3></div>
+    <p>Post-acquisition, Moveworks is now deeply integrated as "EmployeeWorks." First L1 Service Desk AI Specialist in controlled availability with GA expected Q2 2026. Scoped Assistants, no-code Assistant Builder, and Headless API available for custom deployments across Teams, Slack, and browser.</p>
+    <div class="story-links">
+      <a href="https://www.moveworks.com/us/en/platform" target="_blank">Platform</a>
     </div>
+  </div>
+</div>
 
-    <!-- HR & ServiceNow Section -->
-    <div class="section-header">
-      <span class="section-title">HR &amp; ServiceNow Intelligence</span>
-      <div class="section-line"></div>
+<!-- AI HOT NEWS -->
+<div class="section">
+  <div class="section-header"><span class="icon">🔥</span><h2>General AI Hot News</h2><div class="line"></div></div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-claude">Anthropic</span><h3>Claude Code Channels — Control Your Agent from Telegram &amp; Discord</h3></div>
+    <p>Anthropic shipped Claude Code Channels (v2.1.80+), an MCP server that bridges Telegram or Discord to your local Claude Code session. Send messages from your phone, Claude processes them using your full local environment — files, git, tools, everything — and replies back. Available on Pro, Max, Team, and Enterprise plans.</p>
+    <div class="story-links">
+      <a href="https://venturebeat.com/orchestration/anthropic-just-shipped-an-openclaw-killer-called-claude-code-channels" target="_blank">VentureBeat</a>
+      <a href="https://dev.to/czmilo/claude-code-telegram-plugin-complete-setup-guide-2026-3j0p" target="_blank">Setup Guide</a>
     </div>
-
-    <div class="story-grid">
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">Now Assist Hits $1B Run Rate — Fastest Product Launch in ServiceNow History</div>
-          <div class="story-badges">
-            <span class="badge badge-hot">HOT</span>
-            <span class="badge badge-servicenow">ServiceNow</span>
-          </div>
-        </div>
-        <div class="story-body">Now Assist is on a confirmed trajectory to reach a $1 billion annual run rate by end of FY2026, making it the fastest-growing product in ServiceNow's history. The Pro Plus subscription tier — carrying a 25–40% price premium over standard plans — is seeing massive uptake among Fortune 500 companies automating complex IT, HR, and customer service workflows. For Deloitte HRSD practices, this is the clearest possible signal from the market: clients are spending real money on Now Assist, and implementation partners who can maximise its HR ROI are in the box seat.</div>
-        <a class="story-link" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-4-3-ais-spring-awakening-servicenow-leads-software-sector-recovery-as-now-assist-proves-ai-monetization-is-real" target="_blank">Read more →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">HRSD March 2026 Store Release: Voice Agent V3.0, Interview Summariser &amp; Team Digest</div>
-          <div class="story-badges">
-            <span class="badge badge-new">NEW</span>
-            <span class="badge badge-servicenow">HRSD</span>
-          </div>
-        </div>
-        <div class="story-body">The March 2026 store drop is one of the richest HRSD releases in recent memory. Voice Agents V3.0 now supports eight languages (German, Spanish, French, Japanese, Brazilian Portuguese, French Canadian, Mandarin, Dutch) with WebRTC mobile and improved context retention between turns — a direct enabler for multilingual enterprise rollouts. The Interview Summariser auto-generates structured notes from employee relations interviews. Team Digest on Manager Hub aggregates journeys, tasks, feedback, and growth data into a one-click AI summary. Also shipping: HR Profile View inline during case creation, Advanced Knowledge Editor with drag-and-drop layouts, and a Generate Offboarding Knowledge Transfer Plan module that pulls from SharePoint files.</div>
-        <a class="story-link" href="https://www.servicenow.com/community/hrsd-blog/march-2026-store-release-deep-dive-blog-hrsd/ba-p/3506473" target="_blank">Read full deep dive →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">EmployeeWorks Autonomous FastStart: 50-Slot Limited Offer for First Movers</div>
-          <div class="story-badges">
-            <span class="badge badge-agentic">Agentic</span>
-            <span class="badge badge-servicenow">EmployeeWorks</span>
-          </div>
-        </div>
-        <div class="story-body">ServiceNow is running a limited Autonomous FastStart offer for EmployeeWorks through 30 April 2026, targeting the first 50 enterprise customers. The L1 Service Desk AI Specialist — which autonomously resolves Tier 1 HR queries across Teams and Slack — is in controlled availability now and expected to hit GA in Q2. This agent understands organisational structure, approval chains, and authorisation rules, executing multi-system tasks while maintaining full governance and audit trails. If your clients are asking about agentic employee experience, this is the demo to run.</div>
-        <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-launches-Autonomous-Workforce-that-thinks-and-acts-adds-Moveworks-to-the-ServiceNow-AI-Platform/default.aspx" target="_blank">Read press release →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">Workday x Sana and SAP Joule x Microsoft Copilot: The HR AI Platform Wars Heat Up</div>
-          <div class="story-badges">
-            <span class="badge badge-watch">WATCH</span>
-            <span class="badge badge-genai">GenAI</span>
-          </div>
-        </div>
-        <div class="story-body">Two significant competitive moves this week. Workday and Sana unveiled a bold joint AI strategy, with Workday's Frontline Agent — expected spring 2026 — targeting last-minute shift swaps and hour limits for retail and hospitality clients (90% reduction in manager time on staffing changes in early adopters). Meanwhile, SAP and Microsoft completed a bi-directional Joule / Copilot integration: users in Microsoft 365 can trigger SAP actions via Copilot, and Joule surfaces M365 email and meeting context inside SAP SuccessFactors. For clients evaluating ServiceNow HRSD vs. SAP SuccessFactors, this integration narrows the employee experience gap — something to address head-on in discovery sessions.</div>
-        <a class="story-link" href="https://joshbersin.com/2026/03/workday-and-sana-unveil-a-bold-new-strategy-for-ai/" target="_blank">Josh Bersin analysis →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">ServiceNow's AI Control Tower: GenAI Evolution and 2026 Platform Outlook</div>
-          <div class="story-badges">
-            <span class="badge badge-servicenow">ServiceNow</span>
-            <span class="badge badge-genai">GenAI</span>
-          </div>
-        </div>
-        <div class="story-body">A deep-dive analysis from FinancialContent maps ServiceNow's GenAI roadmap for 2026, framing the platform as an "AI Control Tower" that orchestrates agents across IT, HR, finance, and customer service. Key insight for practitioners: the distinction between Now Assist (quick decisions, text generation, contextual summaries) and AI Agents (complex multi-step workflows, cross-system orchestration) is sharpening, and clients will increasingly ask where to deploy which. Now Assist for HR summarises cases and generates resolution notes; AI Agents handle the full off-boarding sweep across dozens of systems without human handoff.</div>
-        <a class="story-link" href="https://www.financialcontent.com/article/finterra-2026-3-31-the-ai-control-tower-a-deep-dive-into-servicenows-now-genai-evolution-and-2026-outlook" target="_blank">Read analysis →</a>
-      </div>
-
+  </div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-openai">OpenAI</span><h3>GPT-5.4 — 1M Context, Desktop Autonomy, Codex Integration</h3></div>
+    <p>Released March 5 across ChatGPT ("GPT-5.4 Thinking"), API, and Codex. Features a 1M-token context window and autonomous multi-step desktop workflows, scoring 75% on the OSWorld-V benchmark. Pro variant available for maximum performance.</p>
+    <div class="story-links">
+      <a href="https://www.aicritique.org/us/2026/03/16/gpt-5-4-and-the-march-2026-chatgpt-upgrade-cycle-official-release-media-narratives-and-real-world-reactions/" target="_blank">Analysis</a>
     </div>
-
-    <div class="divider"></div>
-
-    <!-- General AI Section -->
-    <div class="section-header">
-      <span class="section-title">General AI Hot News</span>
-      <div class="section-line"></div>
+  </div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-google">Google</span><h3>Gemini 3.1 Pro Tops the Benchmarks</h3></div>
+    <p>Currently the strongest all-around general-purpose model. 77.1% on ARC-AGI-2 (logical reasoning), 94.3% on GPQA Diamond — ahead of both Claude and GPT-5. Ties GPT-5.4 Pro on the AI Intelligence Index at roughly one-third of the cost.</p>
+    <div class="story-links">
+      <a href="https://www.ibtimes.com/has-google-gemini-surpassed-chatgpt-2026-latest-benchmarks-expert-comparisons-reveal-tight-race-3799658" target="_blank">Benchmark Report</a>
     </div>
-
-    <div class="story-grid">
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">Anthropic Raises Batch API cap to 300K Tokens — And Cuts Claude Subscription API Access</div>
-          <div class="story-badges">
-            <span class="badge badge-breaking">BREAKING</span>
-            <span class="badge badge-genai">Anthropic</span>
-          </div>
-        </div>
-        <div class="story-body">Two moves from Anthropic this week with opposite energy. The Message Batches API max_tokens cap has been raised to 300,000 for Claude Opus 4.6 and Sonnet 4.6 — a big unlock for long-form content generation, large code tasks, and structured data processing. On the other hand, from 4 April 2026, Claude subscribers can no longer use their subscriptions to connect Claude models to third-party agentic tools (citing compute strain). Claude Haiku 3 is also being deprecated on 19 April — migrate to Haiku 4.5. For builders using Claude in ServiceNow or MCP workflows, review your integration tier and confirm it's on the API product, not the subscription.</div>
-        <a class="story-link" href="https://releasebot.io/updates/anthropic" target="_blank">Anthropic release notes →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">OpenAI Ships GPT-5.3-Codex and GPT-4.1: Agentic Coding Gets a Major Upgrade</div>
-          <div class="story-badges">
-            <span class="badge badge-hot">HOT</span>
-            <span class="badge badge-genai">OpenAI</span>
-          </div>
-        </div>
-        <div class="story-body">OpenAI has released GPT-5.3-Codex, described as their most capable agentic coding model yet — combining the Codex and GPT-5 training stacks with ~25% speed improvement and new benchmark highs. GPT-4.1 has also landed in the API, specialising in precise instruction following and web development tasks. GPT-5.3 Instant is rolling out as the default for logged-in ChatGPT users. Meanwhile, GPT-5.5 (codenamed Spud) has reportedly completed pretraining, suggesting another major drop is coming before Claude Mythos reaches public availability. The race to own agentic coding infrastructure is accelerating rapidly.</div>
-        <a class="story-link" href="https://techcrunch.com/2026/03/05/openai-launches-gpt-5-4-with-pro-and-thinking-versions/" target="_blank">TechCrunch coverage →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">Google Launches Gemini 3.1 Pro &amp; Flash-Live Plus Gemma 4 for On-Device AI</div>
-          <div class="story-badges">
-            <span class="badge badge-new">NEW</span>
-            <span class="badge badge-genai">Google</span>
-          </div>
-        </div>
-        <div class="story-body">Google has rolled out Gemini 3.1 Pro globally — a step up from the 3.0 series for complex problem-solving and data synthesis tasks, available in the Gemini app with higher limits for AI Pro and Ultra subscribers. Gemini 3.1 Flash-Live introduces audio-to-audio real-time dialogue with natural rhythm, targeting voice-first applications. The Gemma 4 open model was announced for Android via AICore Developer Preview — notably, code written for Gemma 4 will automatically work on Gemini Nano 4-enabled devices later this year. Relevance for HR builders: Flash-Live's real-time voice capability is worth watching as a comparison point against ServiceNow's Voice Agent V3.0.</div>
-        <a class="story-link" href="https://android-developers.googleblog.com/2026/04/AI-Core-Developer-Preview.html" target="_blank">Google Developers blog →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">NVIDIA GTC 2026: Vera Rubin Architecture and Open Physical AI Blueprint Drop</div>
-          <div class="story-badges">
-            <span class="badge badge-hot">HOT</span>
-            <span class="badge badge-genai">NVIDIA</span>
-          </div>
-        </div>
-        <div class="story-body">NVIDIA's GTC 2026 delivered four major announcements. The Vera Rubin GPU platform succeeds Blackwell with up to 10x reduction in inference token cost and 4x fewer GPUs to train MoE models — Azure is already the first hyperscaler to power up NVL72 Rubin systems. The Open Physical AI Data Factory Blueprint was open-sourced on GitHub, providing a reference architecture for generating synthetic training data via Cosmos foundation models. AWS expanded its partnership to deploy more than 1 million NVIDIA GPUs. For enterprise AI practitioners: Rubin's economics will directly reshape the cost-benefit calculus for running large HR AI agents at scale.</div>
-        <a class="story-link" href="https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer" target="_blank">NVIDIA Newsroom →</a>
-      </div>
-
-      <div class="story-card">
-        <div class="story-top">
-          <div class="story-title">Open-Source LLM Landscape April 2026: DeepSeek V3.2, Llama 4, Mistral Small 4, Grok 4.20</div>
-          <div class="story-badges">
-            <span class="badge badge-watch">WATCH</span>
-            <span class="badge badge-genai">Open Source</span>
-          </div>
-        </div>
-        <div class="story-body">The open-source model tier is increasingly competitive with proprietary frontier models. DeepSeek V3.2 delivers near-frontier performance at approximately $0.28 per million input tokens — a fraction of Western flagship pricing — and continues to close the gap on reasoning benchmarks. Meta's Llama 4 was built with tool orchestration at its core, making it a natural fit for agentic pipelines. Mistral Small 4 shipped on 3 March. xAI's Grok 4.20 introduced four specialised AI agents running in parallel on complex queries, though full API access is still pending as of this week. For cost-conscious HR AI PoCs, DeepSeek V3.2 deserves a look for non-sensitive use cases.</div>
-        <a class="story-link" href="https://llm-stats.com/llm-updates" target="_blank">LLM Stats tracker →</a>
-      </div>
-
+  </div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-nvidia">NVIDIA</span><h3>NemoClaw at GTC — Enterprise OpenClaw with Guardrails</h3></div>
+    <p>NVIDIA unveiled NemoClaw at GTC 2026 — an open-source stack adding privacy and security controls to OpenClaw for enterprise customers. Jensen Huang declared OpenClaw "the most important software release probably ever." Separate from NanoClaw (Docker-based minimalist agent, 20K+ stars).</p>
+    <div class="story-links">
+      <a href="https://www.nvidia.com/en-us/ai/nemoclaw/" target="_blank">NemoClaw</a>
+      <a href="https://thenewstack.io/nvidia-nemoclaw-launch/" target="_blank">The New Stack</a>
     </div>
-
-    <div class="divider"></div>
-
-    <!-- Team Submissions Section -->
-    <div class="section-header">
-      <span class="section-title">Team Submissions</span>
-      <div class="section-line"></div>
+  </div>
+  <div class="story">
+    <div class="story-header"><span class="badge badge-deepseek">DeepSeek</span><h3>V4 Imminent — Mystery Model Spotted, April Launch Expected</h3></div>
+    <p>Mystery model "Hunter Alpha" appeared anonymously on OpenRouter (Mar 11), widely speculated to be DeepSeek. V4 Lite sighted Mar 9. Full multimodal MoE model handling text, image, and video expected in April alongside Tencent's new Hunyuan.</p>
+    <div class="story-links">
+      <a href="https://www.nxcode.io/resources/news/deepseek-v4-release-specs-benchmarks-2026" target="_blank">V4 Specs</a>
+      <a href="https://www.taipeitimes.com/News/feat/archives/2026/03/19/2003854074" target="_blank">Mystery Model</a>
     </div>
-    <div class="empty-state">
-      No new submissions this week. Got a POC idea or investigation request? Head to the <strong>Submit Idea</strong> tab.
-    </div>
+  </div>
+</div>
 
-    <div class="divider"></div>
+<!-- POC IDEAS -->
+<div class="highlight-box">
+  <h3>🔬 POC Ideas This Week</h3>
+  <ol>
+    <li><strong>HR Voice Agent for Leave Requests</strong> — Build a bilingual bot with HRSD Voice AI V3.0. Quick win, ~2-3 days.</li>
+    <li><strong>Agentic Onboarding Workflow</strong> — Multi-step onboarding agent via AI Agent Studio. High client impact, ~3-5 days.</li>
+    <li><strong>Claude Code via Telegram</strong> — Set up Code Channels to manage your ServiceNow dev from your phone. ~1 day.</li>
+  </ol>
+</div>
 
-    <!-- POC Ideas This Week -->
-    <div class="poc-highlight">
-      <div class="poc-highlight-title">🧪 This Week's POC Ideas</div>
-      <div class="poc-idea-list">
-        <div class="poc-idea-item">
-          <div class="poc-idea-num">1</div>
-          <div>
-            <div class="poc-idea-text"><strong>EmployeeWorks L1 Agent Demo for Deloitte Clients</strong></div>
-            <div class="poc-idea-sub">With the Autonomous FastStart offer closing 30 Apr, now is the window to build a live demo of the L1 Service Desk AI Specialist handling real HRSD queries via Slack/Teams. Time-limited opportunity to be first-mover with clients. Platform: ServiceNow EmployeeWorks · Difficulty: Intermediate</div>
-          </div>
-        </div>
-        <div class="poc-idea-item">
-          <div class="poc-idea-num">2</div>
-          <div>
-            <div class="poc-idea-text"><strong>Voice Agent V3.0 Multilingual Stress Test — Eight Languages in One Demo</strong></div>
-            <div class="poc-idea-sub">The March 2026 release added eight language packs with WebRTC mobile support. Build a demo that walks through leave request, case creation, and FAQ resolution across three languages (e.g. English, Spanish, Mandarin) to showcase multilingual HRSD to APAC and global clients. Platform: ServiceNow HRSD · Difficulty: Intermediate</div>
-          </div>
-        </div>
-        <div class="poc-idea-item">
-          <div class="poc-idea-num">3</div>
-          <div>
-            <div class="poc-idea-text"><strong>Now Assist vs. SAP Joule vs. Microsoft Copilot — Live HR Query Benchmark</strong></div>
-            <div class="poc-idea-sub">Given the SAP Joule / Copilot integration and Workday Sana moves this week, there's fresh demand for a structured 3-way platform comparison. Run identical HR prompts (policy lookup, leave approval, onboarding task creation) across all three platforms and document speed, accuracy, and governance. Platform: Cross-platform · Difficulty: Advanced</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- AGENTIC AI BADGE -->
+<div class="agentic-box">
+  <h4>🤖 Powered by Agentic AI</h4>
+  <p>This newsletter is autonomously researched, compiled, and published every Sunday by a custom AI agent built with Claude. It searches the web, synthesises findings, generates the HTML, and pushes updates — no human intervention required. A real-world example of agentic AI in action.</p>
+</div>
 
-    <!-- Footer powered badge -->
-    <div class="footer">
-      <div class="footer-badge">
-        <div class="footer-dot"></div>
-        Powered by Agentic AI — Claude on Cowork
-      </div>
-    </div>
+</div><!-- end latest tab -->
 
-  </div><!-- /tab-latest -->
-
-
-  <!-- ===== TAB: POC LAB ===== -->
-  <div id="tab-poc" class="tab-content">
-
-    <div class="section-header">
-      <span class="section-title">Active POC Experiments</span>
-      <div class="section-line"></div>
-    </div>
-    <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Track proof-of-concept ideas from the Deloitte HRSD practice. Submit new ideas via the <strong style="color: var(--text);">Submit Idea</strong> tab.</p>
+<!-- ==================== POC LAB TAB ==================== -->
+<div class="tab-content" id="poc-lab">
+  <div class="section">
+    <div class="section-header"><span class="icon">🔬</span><h2>POC Lab — Build Ideas &amp; Activities</h2><div class="line"></div></div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:24px;">Your permanent proof-of-concept workspace. POCs are only removed by explicit request — new ideas are added weekly from team submissions and AI research. Track each build from idea → demo → presented.</p>
 
     <div class="poc-grid">
 
       <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">HR Voice Agent for Leave Requests</div>
-          <span class="poc-status status-idea">💡 Idea</span>
+        <span class="poc-level level-beginner">Beginner</span>
+        <h3>🎙️ HR Voice Agent for Leave Requests
+          <span class="difficulty"><span class="dot easy"></span><span class="dot"></span><span class="dot"></span></span>
+        </h3>
+        <p>Build a custom Voice AI Agent using HRSD V3.0 that handles employee leave requests end-to-end. Leverage the new multi-language support to demo a bilingual (English + Spanish) voice assistant. Great first win to show clients.</p>
+        <div class="poc-meta">
+          <span>🛠 ServiceNow IDE + Voice AI Agents V3.0</span>
+          <span>⏱ ~2-3 days</span>
         </div>
-        <div class="poc-card-desc">Build a ServiceNow Voice Agent that handles the full leave request lifecycle via natural language — submission, manager approval routing, and status enquiry — without any screen interaction.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-beginner">Beginner</span>
-          <span class="poc-platform">ServiceNow HRSD</span>
-        </div>
-      </div>
-
-      <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">Agentic Onboarding Workflow with Now Assist</div>
-          <span class="poc-status status-idea">💡 Idea</span>
-        </div>
-        <div class="poc-card-desc">Use Now Assist AI Agents to autonomously orchestrate a new hire's onboarding — provisioning access, assigning learning, scheduling introductions, and creating tasks — across multiple systems without human handoff.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-intermediate">Intermediate</span>
-          <span class="poc-platform">Now Assist</span>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
+          <a href="https://www.servicenow.com/community/hrsd-blog/march-2026-store-release-deep-dive-blog-hrsd/ba-p/3506473" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;">Voice Agent Docs →</a>
         </div>
       </div>
 
       <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">EmployeeWorks Slack/Teams Integration Demo</div>
-          <span class="poc-status status-idea">💡 Idea</span>
+        <span class="poc-level level-intermediate">Intermediate</span>
+        <h3>🚀 Agentic Onboarding Workflow with Now Assist
+          <span class="difficulty"><span class="dot med"></span><span class="dot med"></span><span class="dot"></span></span>
+        </h3>
+        <p>Use AI Agent Studio to create a custom onboarding agent that autonomously handles welcome comms, IT provisioning requests, policy acknowledgements, and first-week scheduling. Showcases multi-step agentic orchestration — high impact for Deloitte clients.</p>
+        <div class="poc-meta">
+          <span>🛠 AI Agent Studio + HRSD + Flow Designer</span>
+          <span>⏱ ~3-5 days</span>
         </div>
-        <div class="poc-card-desc">Demonstrate how EmployeeWorks (Moveworks + ServiceNow) handles conversational HR requests directly inside Slack and Teams — including case creation, policy lookup, and approval flows — without switching to the portal.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-intermediate">Intermediate</span>
-          <span class="poc-platform">EmployeeWorks</span>
-        </div>
-      </div>
-
-      <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">Autonomous L1 HR Service Desk Agent</div>
-          <span class="poc-status status-building">🔨 Building</span>
-        </div>
-        <div class="poc-card-desc">Deploy the ServiceNow L1 Service Desk AI Specialist in a sandbox environment to autonomously resolve Tier 1 HR queries — password resets, payslip access, leave balances — across channels with full audit trail.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-advanced">Advanced</span>
-          <span class="poc-platform">EmployeeWorks</span>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
+          <a href="https://www.servicenow.com/products/ai-agents.html" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;">AI Agent Studio →</a>
         </div>
       </div>
 
       <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">Cross-Platform AI Benchmark: Now Assist vs Joule vs Copilot</div>
-          <span class="poc-status status-idea">💡 Idea</span>
+        <span class="poc-level level-intermediate">Intermediate</span>
+        <h3>💬 EmployeeWorks Slack/Teams Integration Demo
+          <span class="difficulty"><span class="dot med"></span><span class="dot med"></span><span class="dot"></span></span>
+        </h3>
+        <p>Deploy a Scoped Assistant via Moveworks/EmployeeWorks in Slack or Teams that resolves HR FAQs, routes complex cases to HRSD, and tracks resolution. Use the Headless API for custom channel integration. Shows the integration story end-to-end.</p>
+        <div class="poc-meta">
+          <span>🛠 Moveworks Assistant Builder + Slack API</span>
+          <span>⏱ ~2-4 days</span>
         </div>
-        <div class="poc-card-desc">Run identical HR use cases (policy query, leave approval, onboarding task) across ServiceNow Now Assist, SAP Joule, and Microsoft Copilot for HR. Document response quality, speed, and governance capability to inform platform recommendations.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-advanced">Advanced</span>
-          <span class="poc-platform">Cross-platform</span>
-        </div>
-      </div>
-
-      <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">Manager Hub Digest Customisation</div>
-          <span class="poc-status status-idea">💡 Idea</span>
-        </div>
-        <div class="poc-card-desc">Explore the Team Digest feature in Manager Hub (now GA in March 2026 store release). Configure custom digest templates that surface the most relevant growth, feedback, and journey data for different manager personas.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-beginner">Beginner</span>
-          <span class="poc-platform">ServiceNow HRSD</span>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
+          <a href="https://www.moveworks.com/us/en/platform/ai-assistant" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;">Assistant Builder →</a>
         </div>
       </div>
 
       <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">Claude Code via Telegram for ServiceNow Dev</div>
-          <span class="poc-status status-idea">💡 Idea</span>
+        <span class="poc-level level-advanced">Advanced</span>
+        <h3>🤖 Autonomous L1 HR Service Desk Agent
+          <span class="difficulty"><span class="dot hard"></span><span class="dot hard"></span><span class="dot hard"></span></span>
+        </h3>
+        <p>Build a full L1 HR Service Desk AI Specialist using ServiceNow's Autonomous Workforce framework. Handle ticket triage, auto-resolution for top 10 HR request types, escalation to human agents, and a full audit trail. Compare against Moveworks' native L1 agent. Flagship demo — save for a big presentation.</p>
+        <div class="poc-meta">
+          <span>🛠 Autonomous Workforce + HRSD + Predictive Intelligence</span>
+          <span>⏱ ~1-2 weeks</span>
         </div>
-        <div class="poc-card-desc">Connect Claude Code to a Telegram bot as a mobile development interface for ServiceNow scripting — allowing field consultants to query, generate, and deploy HRSD scripts from their phone during client engagements.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-beginner">Beginner</span>
-          <span class="poc-platform">Claude Code · ServiceNow</span>
-        </div>
-      </div>
-
-      <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">Voice Agent V3.0 Multilingual Stress Test</div>
-          <span class="poc-status status-idea">💡 Idea</span>
-        </div>
-        <div class="poc-card-desc">Stress test the 8 new language packs in Voice Agent V3.0 across leave requests, FAQ resolution, and case creation. Measure accuracy, context retention, and escalation handling across English, Spanish, and Mandarin to validate for APAC client use cases.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-intermediate">Intermediate</span>
-          <span class="poc-platform">ServiceNow HRSD</span>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
+          <a href="https://www.servicenow.com/products/ai-agents.html" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;">AI Agents →</a>
         </div>
       </div>
 
       <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">NeMo + ServiceNow MCP Integration</div>
-          <span class="poc-status status-idea">💡 Idea</span>
+        <span class="poc-level level-advanced">Advanced</span>
+        <h3>📊 Cross-Platform AI Benchmark: Now Assist vs Joule vs Copilot
+          <span class="difficulty"><span class="dot hard"></span><span class="dot hard"></span><span class="dot hard"></span></span>
+        </h3>
+        <p>Design a standardised HR scenario test suite (leave requests, policy queries, benefits lookup, onboarding tasks) and benchmark Now Assist vs SAP Joule vs Microsoft Copilot on accuracy, latency, and user experience. Generate a comparison report for your manager — strategic value for client advisory.</p>
+        <div class="poc-meta">
+          <span>🛠 Multi-platform + Claude Code for analysis</span>
+          <span>⏱ ~2 weeks</span>
         </div>
-        <div class="poc-card-desc">Explore NVIDIA NeMo's enterprise fine-tuning capabilities as a layer to customise a lightweight HR intent classifier for ServiceNow, connected via MCP. Useful for clients needing domain-specific vocabulary (HR policy terms, custom leave types) beyond out-of-the-box NLP.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-advanced">Advanced</span>
-          <span class="poc-platform">NVIDIA NeMo · ServiceNow</span>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
         </div>
       </div>
 
       <div class="poc-card">
-        <div class="poc-card-top">
-          <div class="poc-card-title">EmployeeWorks Headless API Integration</div>
-          <span class="poc-status status-idea">💡 Idea</span>
+        <span class="poc-level level-beginner">Beginner</span>
+        <h3>📋 Manager Hub Digest Customisation
+          <span class="difficulty"><span class="dot easy"></span><span class="dot"></span><span class="dot"></span></span>
+        </h3>
+        <p>Extend the new Manager Hub Team Digest V4.8 with custom data sources — pull in project allocation data, training completion rates, and sentiment signals. Show managers a richer AI-generated weekly brief that goes beyond what's available out of the box.</p>
+        <div class="poc-meta">
+          <span>🛠 Manager Hub + IntegrationHub</span>
+          <span>⏱ ~1-2 days</span>
         </div>
-        <div class="poc-card-desc">Test the EmployeeWorks Headless API to embed Moveworks conversational AI into a custom intranet or mobile app, bypassing the standard Employee Center portal. Evaluate for clients with strong existing digital workplace investments who want conversational AI without a full portal migration.</div>
-        <div class="poc-card-footer">
-          <span class="difficulty diff-intermediate">Intermediate</span>
-          <span class="poc-platform">EmployeeWorks</span>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
+        </div>
+      </div>
+
+      <div class="poc-card">
+        <span class="poc-level level-beginner">Beginner</span>
+        <h3>📱 Claude Code via Telegram for ServiceNow Dev
+          <span class="difficulty"><span class="dot easy"></span><span class="dot"></span><span class="dot"></span></span>
+        </h3>
+        <p>Set up Claude Code Channels (v2.1.80+) with Telegram so you can manage your ServiceNow IDE sessions from your phone. Message Claude Code while on the go — it accesses your local files, git, and tools and replies back. Great productivity demo.</p>
+        <div class="poc-meta">
+          <span>🛠 Claude Code + Telegram MCP Plugin</span>
+          <span>⏱ ~1 day</span>
+        </div>
+        <div class="poc-status">
+          <span class="status-badge st-idea">💡 Idea</span>
+          <a href="https://dev.to/czmilo/claude-code-telegram-plugin-complete-setup-guide-2026-3j0p" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;">Setup Guide →</a>
         </div>
       </div>
 
     </div>
 
-  </div><!-- /tab-poc -->
-
-
-  <!-- ===== TAB: ARCHIVE ===== -->
-  <div id="tab-archive" class="tab-content">
-
-    <div class="section-header">
-      <span class="section-title">Previous Issues</span>
-      <div class="section-line"></div>
+    <div class="highlight-box" style="margin-top:32px">
+      <h3>📌 POC Status Guide</h3>
+      <ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:12px">
+        <li><span class="status-badge st-idea">💡 Idea</span> &nbsp;Not started yet</li>
+        <li><span class="status-badge st-building">🔨 Building</span> &nbsp;In progress</li>
+        <li><span class="status-badge st-demo">✅ Demo Ready</span> &nbsp;Demoed internally</li>
+        <li><span class="status-badge st-done">🎯 Presented</span> &nbsp;Shown to manager</li>
+      </ul>
+      <p style="color:var(--muted);font-size:13px;margin-top:16px;line-height:1.6;">POCs are permanent and only removed on request. New POC ideas are added each week from AI research and team submissions. To update a status or add a new POC, use the Submit Idea tab or tell Daniel directly.</p>
     </div>
-    <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Last 4 weeks of digests. Issues older than 4 weeks are retired from this index.</p>
+  </div>
+</div>
 
-    <div class="archive-list">
+<!-- ==================== ARCHIVE TAB ==================== -->
+<div class="tab-content" id="archive">
+  <div class="section">
+    <div class="section-header"><span class="icon">📚</span><h2>Past Issues (Rolling 4 Weeks)</h2><div class="line"></div></div>
+    <div class="highlight-box" style="text-align:center">
+      <h3 style="justify-content:center">🕐 No Past Issues Yet</h3>
+      <p style="color:var(--muted);font-size:14px;margin:0">This is Issue #1 — we're just getting started! Past issues will appear here each week automatically, kept for a rolling 4 weeks before rotating out.</p>
+    </div>
+  </div>
+</div>
 
-      <div class="archive-card">
-        <div class="archive-top">
-          <div>
-            <div class="archive-issue">Issue #12</div>
-            <div class="archive-date">22 March 2026</div>
-          </div>
-          <a class="archive-link" href="archive/2026-03-29.html">View issue →</a>
-        </div>
-        <div class="archive-headlines">
-          <div class="archive-headline">NVIDIA GTC 2026: Vera Rubin architecture and $1T Blackwell/Rubin order pipeline</div>
-          <div class="archive-headline">ServiceNow EmployeeWorks GA: 200M employees, L1 Specialist in controlled availability</div>
-          <div class="archive-headline">GPT-5.4 launches with Pro &amp; Thinking variants; Gemini 3.1 Flash-Lite at $0.25/M tokens</div>
-        </div>
-      </div>
+<!-- ==================== SUBMIT IDEA TAB ==================== -->
+<div class="tab-content" id="submit">
+  <div class="section">
+    <div class="section-header"><span class="icon">💡</span><h2>Submit an Idea</h2><div class="line"></div></div>
+    <p style="color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:24px;">Got a topic you want investigated? A POC idea worth exploring? Submit it below and it'll be picked up in next week's digest by our AI agent.</p>
 
-      <div class="archive-card">
-        <div class="archive-top">
-          <div>
-            <div class="archive-issue">Issue #11</div>
-            <div class="archive-date">15 March 2026</div>
-          </div>
-          <a class="archive-link" href="archive/2026-03-15.html">View issue →</a>
-        </div>
-        <div class="archive-headlines">
-          <div class="archive-headline">ServiceNow AI Control Tower deep dive: GenAI and Agentic AI product roadmap 2026</div>
-          <div class="archive-headline">GTC 2026 preview: NeMo enterprise fine-tuning and Rubin architecture teaser</div>
-          <div class="archive-headline">GPT-5.4 launch confirmed by OpenAI; Mistral Small 4 ships quietly</div>
-        </div>
-      </div>
-
-      <div class="archive-card">
-        <div class="archive-top">
-          <div>
-            <div class="archive-issue">Issue #10</div>
-            <div class="archive-date">8 March 2026</div>
-          </div>
-          <a class="archive-link" href="archive/2026-03-08.html">View issue →</a>
-        </div>
-        <div class="archive-headlines">
-          <div class="archive-headline">Gemini 3.1 Flash-Lite: 45% faster generation at $0.25/M tokens</div>
-          <div class="archive-headline">DeepSeek V4 Lite spotted; open-source models closing gap on frontier benchmarks</div>
-          <div class="archive-headline">ServiceNow Moveworks acquisition closes; EmployeeWorks product roadmap revealed</div>
-        </div>
-      </div>
-
-      <div class="archive-card">
-        <div class="archive-top">
-          <div>
-            <div class="archive-issue">Issue #9</div>
-            <div class="archive-date">1 March 2026</div>
-          </div>
-          <a class="archive-link" href="archive/2026-03-01.html">View issue →</a>
-        </div>
-        <div class="archive-headlines">
-          <div class="archive-headline">EmployeeWorks reaches general availability; Autonomous Workforce L1 in controlled availability</div>
-          <div class="archive-headline">Claude Sonnet 4.6 with 1M context window beta launches</div>
-          <div class="archive-headline">DeepSeek V4 countdown begins; near-frontier performance at sub-$0.30/M token pricing</div>
-        </div>
-      </div>
-
+    <div class="form-cards">
+      <a class="form-card" href="https://github.com/dmcr85/ai-hr-weekly/issues/new?labels=poc-idea&title=%5BPOC+Idea%5D+&body=%23%23+POC+Idea%0A%0A**What+do+you+want+to+build%3F**%0A%0A%0A**Which+platform%3F**+(ServiceNow+%2F+Now+Assist+%2F+Moveworks+%2F+Other)%0A%0A%0A**Estimated+effort%3F**+(hours+%2F+days+%2F+weeks)%0A%0A%0A**Why+is+this+valuable+for+clients%3F**%0A" target="_blank">
+        <div class="form-icon">🔬</div>
+        <h3>Submit a POC Idea</h3>
+        <p>Propose a proof-of-concept project for the team to build — could be a ServiceNow app, an AI integration, or a competitive demo.</p>
+      </a>
+      <a class="form-card" href="https://github.com/dmcr85/ai-hr-weekly/issues/new?labels=investigation-request&title=%5BInvestigation%5D+&body=%23%23+Investigation+Request%0A%0A**What+topic+should+we+research%3F**%0A%0A%0A**Why+is+this+relevant+to+our+work%3F**%0A%0A%0A**Any+specific+sources+or+angles+to+cover%3F**%0A" target="_blank">
+        <div class="form-icon">🔍</div>
+        <h3>Request an Investigation</h3>
+        <p>Ask for a deep dive on a specific tool, technology, competitor, or trend. It'll be featured in the next weekly digest.</p>
+      </a>
+      <a class="form-card" href="https://github.com/dmcr85/ai-hr-weekly/issues/new?labels=feedback&title=%5BFeedback%5D+&body=%23%23+Feedback%0A%0A**What+did+you+find+useful+this+week%3F**%0A%0A%0A**What+could+be+improved%3F**%0A%0A%0A**Any+other+suggestions%3F**%0A" target="_blank">
+        <div class="form-icon">💬</div>
+        <h3>Share Feedback</h3>
+        <p>Tell us what's working, what's not, or suggest improvements to the newsletter format and content.</p>
+      </a>
     </div>
 
-  </div><!-- /tab-archive -->
-
-
-  <!-- ===== TAB: SUBMIT IDEA ===== -->
-  <div id="tab-submit" class="tab-content">
-
-    <div class="section-header">
-      <span class="section-title">Contribute to the Digest</span>
-      <div class="section-line"></div>
-    </div>
-    <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">Got a POC idea, want a deep-dive investigation, or have feedback on the format? Submit via GitHub Issues — your submission will be picked up in next week's automated compile run.</p>
-
-    <div class="submit-grid">
-
-      <div class="submit-card">
-        <div class="submit-icon">💡</div>
-        <div class="submit-card-title">Submit a POC Idea</div>
-        <div class="submit-card-desc">Propose a new proof-of-concept experiment. Include the use case, target platform, and expected outcome for the team to explore.</div>
-        <a class="btn btn-green" href="https://github.com/dmcr85/ai-hr-weekly/issues/new?labels=poc-idea&template=poc-idea.md&title=POC+Idea%3A+" target="_blank">Submit POC →</a>
-      </div>
-
-      <div class="submit-card">
-        <div class="submit-icon">🔍</div>
-        <div class="submit-card-title">Request an Investigation</div>
-        <div class="submit-card-desc">Want a deeper dive into a specific product, vendor, feature, or market trend? Submit an investigation request for next week's research run.</div>
-        <a class="btn btn-blue" href="https://github.com/dmcr85/ai-hr-weekly/issues/new?labels=investigation-request&template=investigation.md&title=Investigate%3A+" target="_blank">Request Investigation →</a>
-      </div>
-
-      <div class="submit-card">
-        <div class="submit-icon">✉️</div>
-        <div class="submit-card-title">Share Feedback</div>
-        <div class="submit-card-desc">Tell us what's working and what isn't — format, coverage, depth, or anything else about the digest. All feedback is reviewed and acted on.</div>
-        <a class="btn btn-purple" href="https://github.com/dmcr85/ai-hr-weekly/issues/new?labels=feedback&template=feedback.md&title=Feedback%3A+" target="_blank">Share Feedback →</a>
-      </div>
-
+    <div class="highlight-box" style="margin-top:32px">
+      <h3>📋 How It Works</h3>
+      <ul style="list-style:none;padding:0">
+        <li style="padding:6px 0"><strong>1.</strong> Click one of the cards above — it opens a pre-filled GitHub Issue</li>
+        <li style="padding:6px 0"><strong>2.</strong> Fill in the details and submit</li>
+        <li style="padding:6px 0"><strong>3.</strong> Our AI agent picks up submissions every Sunday</li>
+        <li style="padding:6px 0"><strong>4.</strong> Your idea appears in next week's digest with research and analysis</li>
+      </ul>
     </div>
 
-  </div><!-- /tab-submit -->
+    <div class="agentic-box">
+      <h4>🤖 No GitHub Account? No Worries!</h4>
+      <p>Just send your idea to Daniel directly and he'll log it. Or reply to the weekly email digest with your suggestion.</p>
+    </div>
+  </div>
+</div>
 
-</main>
+<div class="footer">
+  <p><span class="brand">AI &amp; HR Tech Weekly</span><br>
+  HR Technology &amp; Transformation | Deloitte<br>
+  Curated by Daniel Correal — Powered by Agentic AI, delivered every Sunday</p>
+</div>
+
+</div>
 
 <script>
-  function switchTab(tabId) {
-    // Update tab buttons
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-
-    // Update tab content
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-
-    // Scroll to top of main
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
 </script>
-
 </body>
 </html>
