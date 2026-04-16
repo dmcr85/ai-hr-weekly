@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI & HR Tech Weekly — Issue #13 | 5 April 2026 [Archive]</title>
+<style>
+  :root {
+    --bg: #08090e;
+    --surface: #111218;
+    --surface2: #17181f;
+    --surface3: #1e1f28;
+    --border: #2a2b36;
+    --text: #e8e9f0;
+    --muted: #8b8d9e;
+    --green: #00e5a0;
+    --blue: #4da6ff;
+    --purple: #b06cff;
+    --orange: #ff8c42;
+    --red: #ff5555;
+    --yellow: #ffd166;
+    --pink: #ff6b9d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+    scrollbar-width: none;
+  }
+  body::-webkit-scrollbar { display: none; }
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .issue-badge {
+    background: var(--green);
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .archive-ribbon {
+    background: rgba(255,209,102,0.15);
+    border: 1px solid rgba(255,209,102,0.3);
+    color: var(--yellow);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .auto-badge {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  h1 {
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .header-meta {
+    color: var(--muted);
+    font-size: 13px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .back-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    text-align: center;
+  }
+  .back-link {
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .back-link:hover { text-decoration: underline; }
+  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    margin-top: 36px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .velocity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .velocity-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .velocity-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .velocity-value { font-size: 22px; font-weight: 800; line-height: 1.1; }
+  .velocity-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .story-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+  .story-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .story-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .story-badges { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; }
+  .badge-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .badge-hot { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+  .badge-servicenow { background: rgba(77,166,255,0.12); color: var(--blue); border: 1px solid rgba(77,166,255,0.25); }
+  .badge-genai { background: rgba(176,108,255,0.12); color: var(--purple); border: 1px solid rgba(176,108,255,0.25); }
+  .badge-agentic { background: rgba(255,107,157,0.12); color: var(--pink); border: 1px solid rgba(255,107,157,0.25); }
+  .badge-watch { background: rgba(255,209,102,0.12); color: var(--yellow); border: 1px solid rgba(255,209,102,0.25); }
+  .badge-breaking { background: rgba(255,85,85,0.15); color: var(--red); border: 1px solid rgba(255,85,85,0.3); }
+  .story-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .story-body { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .story-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .story-link:hover { text-decoration: underline; }
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+  .empty-state { background: var(--surface2); border: 1px dashed var(--border); border-radius: 10px; padding: 20px; text-align: center; color: var(--muted); font-size: 14px; }
+  .poc-highlight {
+    background: linear-gradient(135deg, rgba(0,229,160,0.06) 0%, rgba(176,108,255,0.06) 100%);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-top: 36px;
+  }
+  .poc-highlight-title { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 14px; }
+  .poc-idea-list { display: flex; flex-direction: column; gap: 12px; }
+  .poc-idea-item { display: flex; gap: 12px; align-items: flex-start; }
+  .poc-idea-num { background: var(--surface3); color: var(--green); font-size: 11px; font-weight: 800; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .poc-idea-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+  .poc-idea-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .footer { text-align: center; padding: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 24px; }
+  .footer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .footer-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <span class="issue-badge">Issue #13</span>
+      <span class="archive-ribbon">📂 Archive</span>
+      <span class="auto-badge">⚡ Auto-compiled by Claude on Cowork</span>
+    </div>
+    <h1>AI &amp; HR Tech Weekly</h1>
+    <div class="header-meta">
+      <span>📅 5 April 2026</span>
+      <span>🏢 Deloitte HRSD Practice (Australia)</span>
+      <span>🤖 ServiceNow · GenAI · HR Technology</span>
+    </div>
+  </div>
+</header>
+
+<div class="back-bar">
+  <a class="back-link" href="../index.html">← Back to Latest Issue (#14)</a>
+</div>
+
+<main class="main">
+
+  <div class="velocity-grid">
+    <div class="velocity-card">
+      <div class="velocity-label">Now Assist Run Rate</div>
+      <div class="velocity-value" style="color: var(--green);">$1B</div>
+      <div class="velocity-sub">Fastest product in ServiceNow history</div>
+    </div>
+    <div class="velocity-card">
+      <div class="velocity-label">EmployeeWorks FastStart</div>
+      <div class="velocity-value" style="color: var(--blue);">50 slots</div>
+      <div class="velocity-sub">Autonomous FastStart offer open until 30 Apr</div>
+    </div>
+    <div class="velocity-card">
+      <div class="velocity-label">NVIDIA Rubin vs Blackwell</div>
+      <div class="velocity-value" style="color: var(--purple);">10x</div>
+      <div class="velocity-sub">Reduction in inference token cost</div>
+    </div>
+    <div class="velocity-card">
+      <div class="velocity-label">Anthropic Batch API</div>
+      <div class="velocity-value" style="color: var(--orange);">300K</div>
+      <div class="velocity-sub">New max_tokens cap for Opus &amp; Sonnet 4.6</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">HR &amp; ServiceNow Intelligence</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="story-grid">
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">Now Assist Hits $1B Run Rate — Fastest Product Launch in ServiceNow History</div>
+        <div class="story-badges">
+          <span class="badge badge-hot">HOT</span>
+          <span class="badge badge-servicenow">ServiceNow</span>
+        </div>
+      </div>
+      <div class="story-body">Now Assist is on a confirmed trajectory to reach a $1 billion annual run rate by end of FY2026, making it the fastest-growing product in ServiceNow's history. The Pro Plus subscription tier — carrying a 25–40% price premium over standard plans — is seeing massive uptake among Fortune 500 companies automating complex IT, HR, and customer service workflows.</div>
+      <a class="story-link" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-4-3-ais-spring-awakening-servicenow-leads-software-sector-recovery-as-now-assist-proves-ai-monetization-is-real" target="_blank">Read more →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">HRSD March 2026 Store Release: Voice Agent V3.0, Interview Summariser &amp; Team Digest</div>
+        <div class="story-badges">
+          <span class="badge badge-new">NEW</span>
+          <span class="badge badge-servicenow">HRSD</span>
+        </div>
+      </div>
+      <div class="story-body">Voice Agents V3.0 now supports eight languages (German, Spanish, French, Japanese, Brazilian Portuguese, French Canadian, Mandarin, Dutch) with WebRTC mobile and improved context retention. The Interview Summariser auto-generates structured notes. Team Digest on Manager Hub aggregates journeys, tasks, feedback, and growth data into a one-click AI summary.</div>
+      <a class="story-link" href="https://www.servicenow.com/community/hrsd-blog/march-2026-store-release-deep-dive-blog-hrsd/ba-p/3506473" target="_blank">Read full deep dive →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">EmployeeWorks Autonomous FastStart: 50-Slot Limited Offer for First Movers</div>
+        <div class="story-badges">
+          <span class="badge badge-agentic">Agentic</span>
+          <span class="badge badge-servicenow">EmployeeWorks</span>
+        </div>
+      </div>
+      <div class="story-body">ServiceNow is running a limited Autonomous FastStart offer for EmployeeWorks through 30 April 2026 for the first 50 enterprise customers. The L1 Service Desk AI Specialist — autonomously resolving Tier 1 HR queries across Teams and Slack — is in controlled availability and targeting Q2 GA.</div>
+      <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-launches-Autonomous-Workforce-that-thinks-and-acts-adds-Moveworks-to-the-ServiceNow-AI-Platform/default.aspx" target="_blank">Read press release →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">Workday x Sana and SAP Joule x Microsoft Copilot: The HR AI Platform Wars Heat Up</div>
+        <div class="story-badges">
+          <span class="badge badge-watch">WATCH</span>
+          <span class="badge badge-genai">GenAI</span>
+        </div>
+      </div>
+      <div class="story-body">Workday's Frontline Agent (spring 2026) targets shift swaps and hour limits for retail/hospitality. SAP and Microsoft completed a bi-directional Joule/Copilot integration: users in M365 can trigger SAP actions via Copilot, and Joule surfaces email and meeting context inside SuccessFactors.</div>
+      <a class="story-link" href="https://joshbersin.com/2026/03/gloat-enters-the-crowded-war-for-ai-agents-in-hr/" target="_blank">Josh Bersin analysis →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">ServiceNow's AI Control Tower: GenAI Evolution and 2026 Platform Outlook</div>
+        <div class="story-badges">
+          <span class="badge badge-servicenow">ServiceNow</span>
+          <span class="badge badge-genai">GenAI</span>
+        </div>
+      </div>
+      <div class="story-body">A deep-dive maps ServiceNow's GenAI roadmap for 2026, framing the platform as an "AI Control Tower" orchestrating agents across IT, HR, finance, and customer service. The distinction between Now Assist (quick summaries, text generation) and AI Agents (multi-step, cross-system orchestration) is sharpening in client conversations.</div>
+      <a class="story-link" href="https://www.financialcontent.com/article/finterra-2026-3-31-the-ai-control-tower-a-deep-dive-into-servicenows-now-genai-evolution-and-2026-outlook" target="_blank">Read analysis →</a>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-header">
+    <span class="section-title">General AI Hot News</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="story-grid">
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">Anthropic Raises Batch API cap to 300K Tokens — And Cuts Claude Subscription API Access</div>
+        <div class="story-badges">
+          <span class="badge badge-breaking">BREAKING</span>
+          <span class="badge badge-genai">Anthropic</span>
+        </div>
+      </div>
+      <div class="story-body">The Message Batches API max_tokens cap has been raised to 300,000 for Opus 4.6 and Sonnet 4.6. Separately, Claude subscribers can no longer use subscriptions to connect to third-party agentic tools from 4 April 2026. Claude Haiku 3 is deprecated 19 April — migrate to Haiku 4.5.</div>
+      <a class="story-link" href="https://releasebot.io/updates/anthropic" target="_blank">Anthropic release notes →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">OpenAI Ships GPT-5.3-Codex and GPT-4.1: Agentic Coding Gets a Major Upgrade</div>
+        <div class="story-badges">
+          <span class="badge badge-hot">HOT</span>
+          <span class="badge badge-genai">OpenAI</span>
+        </div>
+      </div>
+      <div class="story-body">GPT-5.3-Codex delivers ~25% speed improvement and new coding benchmark highs. GPT-4.1 lands in the API specialising in instruction following and web development tasks. GPT-5.3 Instant is rolling out as the default for logged-in ChatGPT users.</div>
+      <a class="story-link" href="https://openai.com/index/introducing-gpt-5-2-codex/" target="_blank">OpenAI blog →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">Google Launches Gemini 3.1 Pro &amp; Flash-Live Plus Gemma 4 for On-Device AI</div>
+        <div class="story-badges">
+          <span class="badge badge-new">NEW</span>
+          <span class="badge badge-genai">Google</span>
+        </div>
+      </div>
+      <div class="story-body">Gemini 3.1 Pro targets complex reasoning and data synthesis. Flash-Live introduces real-time audio-to-audio dialogue. Gemma 4 (Apache 2.0, 256K context, 140 languages) launches for Android via AICore Developer Preview — code written today will run on Gemini Nano 4 devices later this year.</div>
+      <a class="story-link" href="https://android-developers.googleblog.com/2026/04/AI-Core-Developer-Preview.html" target="_blank">Google Developers blog →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">NVIDIA GTC 2026: Vera Rubin Architecture and Open Physical AI Blueprint Drop</div>
+        <div class="story-badges">
+          <span class="badge badge-hot">HOT</span>
+          <span class="badge badge-genai">NVIDIA</span>
+        </div>
+      </div>
+      <div class="story-body">Vera Rubin delivers 10x reduction in inference token cost and 4x fewer GPUs to train MoE models vs Blackwell. Azure is first to power up NVL72 Rubin systems. The Open Physical AI Data Factory Blueprint was open-sourced for generating synthetic training data via Cosmos foundation models.</div>
+      <a class="story-link" href="https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer" target="_blank">NVIDIA Newsroom →</a>
+    </div>
+
+    <div class="story-card">
+      <div class="story-top">
+        <div class="story-title">Open-Source LLM Landscape April 2026: DeepSeek V3.2, Llama 4, Mistral Small 4, Grok 4.20</div>
+        <div class="story-badges">
+          <span class="badge badge-watch">WATCH</span>
+          <span class="badge badge-genai">Open Source</span>
+        </div>
+      </div>
+      <div class="story-body">DeepSeek V3.2 delivers near-frontier performance at ~$0.28/M input tokens. Meta's Llama 4 Maverick (400B params, 10M context) is built with tool orchestration at its core. Mistral Small 4 shipped. xAI's Grok 4.20 introduces four parallel specialised agents per query (Grok, Harper, Benjamin, Lucas).</div>
+      <a class="story-link" href="https://llm-stats.com/llm-updates" target="_blank">LLM Stats tracker →</a>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-header">
+    <span class="section-title">Team Submissions</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="empty-state">No new submissions this week. Got a POC idea or investigation request? Submit via GitHub Issues.</div>
+
+  <div class="poc-highlight">
+    <div class="poc-highlight-title">🧪 This Week's POC Ideas</div>
+    <div class="poc-idea-list">
+      <div class="poc-idea-item">
+        <div class="poc-idea-num">1</div>
+        <div>
+          <div class="poc-idea-text"><strong>EmployeeWorks L1 Agent Demo for Deloitte Clients</strong></div>
+          <div class="poc-idea-sub">With the Autonomous FastStart offer closing 30 Apr, build a live demo of the L1 Service Desk AI Specialist handling real HRSD queries via Slack/Teams. Platform: ServiceNow EmployeeWorks · Difficulty: Intermediate</div>
+        </div>
+      </div>
+      <div class="poc-idea-item">
+        <div class="poc-idea-num">2</div>
+        <div>
+          <div class="poc-idea-text"><strong>Voice Agent V3.0 Multilingual Stress Test — Eight Languages in One Demo</strong></div>
+          <div class="poc-idea-sub">Build a demo that walks through leave request, case creation, and FAQ resolution across three languages to showcase multilingual HRSD to APAC and global clients. Platform: ServiceNow HRSD · Difficulty: Intermediate</div>
+        </div>
+      </div>
+      <div class="poc-idea-item">
+        <div class="poc-idea-num">3</div>
+        <div>
+          <div class="poc-idea-text"><strong>Now Assist vs. SAP Joule vs. Microsoft Copilot — Live HR Query Benchmark</strong></div>
+          <div class="poc-idea-sub">Run identical HR prompts across all three platforms and document speed, accuracy, and governance for client recommendation artefacts. Platform: Cross-platform · Difficulty: Advanced</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-badge">
+      <div class="footer-dot"></div>
+      Powered by Agentic AI — Claude on Cowork
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
