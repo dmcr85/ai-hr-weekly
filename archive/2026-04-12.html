@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; HR Tech Weekly — Issue #14 | 12 April 2026 [Archive]</title>
+<style>
+  :root {
+    --bg: #08090e;
+    --surface: #111218;
+    --surface2: #17181f;
+    --surface3: #1e1f28;
+    --surface4: #24252f;
+    --border: #2a2b36;
+    --border-strong: #3a3b4a;
+    --text: #e8e9f0;
+    --text-dim: #c4c5d2;
+    --muted: #8b8d9e;
+    --muted-dim: #6b6d7e;
+    --green: #00e5a0;
+    --blue: #4da6ff;
+    --purple: #b06cff;
+    --orange: #ff8c42;
+    --red: #ff5555;
+    --yellow: #ffd166;
+    --pink: #ff6b9d;
+    --ring: rgba(0,229,160,0.45);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+    scrollbar-width: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::-webkit-scrollbar { display: none; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+  button { font-family: inherit; }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(0,229,160,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -120px; left: 30%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(176,108,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1040px; margin: 0 auto; position: relative; z-index: 1; }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .issue-badge { background: var(--green); color: #000; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
+  .auto-badge { background: var(--surface3); border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+  .archive-ribbon { background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); color: var(--yellow); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .back-bar { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 10px 24px; text-align: center; }
+  .back-link { color: var(--green); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .back-link:hover { text-decoration: underline; }
+  h1 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; color: var(--text); margin-bottom: 6px; line-height: 1.15; letter-spacing: -0.015em; }
+  .header-meta { color: var(--muted); font-size: 13px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .header-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* Tab nav */
+  .tab-nav { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+  .tab-nav-inner { max-width: 1040px; margin: 0 auto; display: flex; gap: 0; padding: 0 24px; overflow-x: auto; scrollbar-width: none; }
+  .tab-nav-inner::-webkit-scrollbar { display: none; }
+  .tab-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; font-weight: 600; padding: 14px 18px; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 0.18s, border-color 0.18s; display: inline-flex; align-items: center; gap: 6px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn[aria-selected="true"] { color: var(--green); border-bottom-color: var(--green); }
+  .tab-btn .kbd-hint { font-size: 10px; color: var(--muted-dim); background: var(--surface3); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-weight: 700; font-family: ui-monospace, monospace; }
+  .tab-btn[aria-selected="true"] .kbd-hint { color: var(--green); border-color: rgba(0,229,160,0.25); background: rgba(0,229,160,0.08); }
+
+  /* Main */
+  .main { max-width: 1040px; margin: 0 auto; padding: 32px 24px 64px; }
+  .tab-content { display: none; animation: fade 0.22s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* Section headers */
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; margin-top: 36px; }
+  .section-header:first-child { margin-top: 0; }
+  .section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-hint { font-size: 12px; color: var(--muted-dim); }
+
+  /* Velocity cards */
+  .velocity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .velocity-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+  .velocity-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .velocity-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 600; }
+  .velocity-value { font-size: 24px; font-weight: 800; line-height: 1.1; letter-spacing: -0.01em; }
+  .velocity-sub { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* Story cards */
+  .story-grid { display: flex; flex-direction: column; gap: 12px; }
+  .story-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; transition: border-color 0.2s, transform 0.2s; }
+  .story-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .story-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .story-badges { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 9px; border-radius: 20px; text-transform: uppercase; }
+  .badge-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .badge-hot { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+  .badge-servicenow { background: rgba(77,166,255,0.12); color: var(--blue); border: 1px solid rgba(77,166,255,0.25); }
+  .badge-genai { background: rgba(176,108,255,0.12); color: var(--purple); border: 1px solid rgba(176,108,255,0.25); }
+  .badge-agentic { background: rgba(255,107,157,0.12); color: var(--pink); border: 1px solid rgba(255,107,157,0.25); }
+  .badge-watch { background: rgba(255,209,102,0.12); color: var(--yellow); border: 1px solid rgba(255,209,102,0.25); }
+  .badge-breaking { background: rgba(255,85,85,0.15); color: var(--red); border: 1px solid rgba(255,85,85,0.3); }
+  .story-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.35; flex: 1; min-width: 260px; }
+  .story-body { font-size: 14px; color: var(--text-dim); line-height: 1.65; margin-bottom: 10px; }
+  .story-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .story-link:hover { text-decoration: underline; }
+
+  /* Weekly POC ideas highlight */
+  .poc-highlight { background: linear-gradient(135deg, rgba(0,229,160,0.06) 0%, rgba(176,108,255,0.06) 100%); border: 1px solid rgba(0,229,160,0.22); border-radius: 14px; padding: 22px 24px; margin-top: 36px; }
+  .poc-highlight-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .poc-highlight-title { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+  .poc-highlight-note { font-size: 11px; color: var(--muted); background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; }
+  .poc-idea-list { display: flex; flex-direction: column; gap: 14px; }
+  .poc-idea-item { display: flex; gap: 12px; align-items: flex-start; }
+  .poc-idea-num { background: var(--surface3); color: var(--green); font-size: 11px; font-weight: 800; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; border: 1px solid rgba(0,229,160,0.25); }
+  .poc-idea-text { font-size: 14px; color: var(--text); line-height: 1.5; font-weight: 700; }
+  .poc-idea-sub { font-size: 13px; color: var(--text-dim); margin-top: 4px; line-height: 1.55; }
+  .poc-idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+  /* POC Lab: toolbar */
+  .poc-toolbar { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 22px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 50px; z-index: 90; backdrop-filter: blur(8px); }
+  .poc-search-row { display: flex; gap: 10px; align-items: center; }
+  .poc-search { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 13px; font-size: 14px; transition: border-color 0.18s; }
+  .poc-search::placeholder { color: var(--muted-dim); }
+  .poc-search:focus { outline: none; border-color: var(--green); }
+  .poc-results { font-size: 12px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .poc-filters { display: flex; flex-direction: column; gap: 8px; }
+  .filter-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .filter-label { font-size: 10px; color: var(--muted-dim); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; min-width: 62px; }
+  .filter-chip { background: var(--surface3); border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 16px; cursor: pointer; transition: color 0.15s, background 0.15s, border-color 0.15s; }
+  .filter-chip:hover { color: var(--text); border-color: var(--border-strong); }
+  .filter-chip.active { background: rgba(0,229,160,0.12); color: var(--green); border-color: rgba(0,229,160,0.35); }
+  .filter-chip-count { opacity: 0.7; font-weight: 700; margin-left: 4px; font-variant-numeric: tabular-nums; }
+  .poc-clear { background: none; border: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; padding: 5px 9px; border-radius: 6px; }
+  .poc-clear:hover { color: var(--text); background: var(--surface3); }
+  .poc-clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* POC groups */
+  .poc-group { margin-bottom: 28px; }
+  .poc-group[hidden] { display: none; }
+  .poc-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .poc-group-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .poc-group-title.group-building { color: var(--orange); }
+  .poc-group-title.group-idea { color: var(--muted); }
+  .poc-group-title.group-done { color: var(--green); }
+  .poc-group-title.group-parked { color: var(--muted-dim); }
+  .poc-group-count { background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 1px 9px; font-size: 11px; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+  .poc-group-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* POC cards */
+  .poc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .poc-card { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 12px; padding: 18px 20px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 10px; }
+  .poc-card:hover { border-color: var(--border-strong); transform: translateY(-1px); box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5); }
+  .poc-card[hidden] { display: none; }
+  .poc-card[data-status="building"] { border-left-color: var(--orange); }
+  .poc-card[data-status="done"] { border-left-color: var(--green); }
+  .poc-card[data-status="parked"] { border-left-color: var(--muted-dim); opacity: 0.75; }
+  .poc-card.new-this-week { box-shadow: 0 0 0 1px rgba(0,229,160,0.18); }
+  .poc-card-head { display: flex; flex-direction: column; gap: 8px; }
+  .poc-card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .poc-card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.005em; }
+  .poc-status { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.04em; text-transform: uppercase; }
+  .status-idea { background: rgba(139,141,158,0.15); color: var(--muted); border: 1px solid rgba(139,141,158,0.25); }
+  .status-building { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+  .status-done { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .status-parked { background: rgba(107,109,126,0.15); color: var(--muted-dim); border: 1px solid rgba(107,109,126,0.3); }
+  .poc-card-hook { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+  .poc-card-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .chip { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 16px; letter-spacing: 0.04em; }
+  .chip-diff.diff-beginner { background: rgba(0,229,160,0.1); color: var(--green); border: 1px solid rgba(0,229,160,0.22); text-transform: uppercase; }
+  .chip-diff.diff-intermediate { background: rgba(77,166,255,0.1); color: var(--blue); border: 1px solid rgba(77,166,255,0.22); text-transform: uppercase; }
+  .chip-diff.diff-advanced { background: rgba(255,85,85,0.1); color: var(--red); border: 1px solid rgba(255,85,85,0.22); text-transform: uppercase; }
+  .chip-platform { background: var(--surface3); color: var(--muted); border: 1px solid var(--border); }
+  .chip-date { background: transparent; color: var(--muted-dim); border: 1px solid transparent; padding-left: 0; padding-right: 0; }
+  .chip-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); text-transform: uppercase; }
+  .poc-expand-btn { background: none; border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; transition: color 0.18s, border-color 0.18s, background 0.18s; align-self: flex-start; }
+  .poc-expand-btn:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface3); }
+  .poc-expand-btn .expand-icon { transition: transform 0.2s; display: inline-block; font-family: ui-monospace, monospace; }
+  .poc-expand-btn[aria-expanded="true"] .expand-icon { transform: rotate(90deg); }
+  .poc-expand-btn[aria-expanded="true"] { color: var(--green); border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.05); }
+  .poc-card-detail { margin-top: 2px; border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .poc-card-detail[hidden] { display: none; }
+  .poc-sec h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .poc-sec p, .poc-sec li { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .poc-sec ol, .poc-sec ul { padding-left: 20px; }
+  .poc-sec li { margin-bottom: 3px; }
+  .poc-sec li::marker { color: var(--muted-dim); font-size: 11px; }
+
+  .poc-empty { background: var(--surface2); border: 1px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; color: var(--muted); font-size: 14px; }
+  .poc-empty[hidden] { display: none; }
+
+  /* Archive */
+  .archive-list { display: flex; flex-direction: column; gap: 14px; }
+  .archive-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; transition: border-color 0.2s, transform 0.2s; }
+  .archive-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .archive-card.archive-pending { opacity: 0.65; }
+  .archive-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .archive-issue { font-size: 13px; font-weight: 700; color: var(--green); }
+  .archive-date { font-size: 12px; color: var(--muted); }
+  .archive-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .archive-link:hover { text-decoration: underline; }
+  .archive-link-pending { font-size: 12px; color: var(--muted-dim); font-weight: 600; background: var(--surface3); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; }
+  .archive-headlines { display: flex; flex-direction: column; gap: 4px; }
+  .archive-headline { font-size: 13px; color: var(--muted); padding-left: 14px; position: relative; line-height: 1.55; }
+  .archive-headline::before { content: '\203A'; position: absolute; left: 0; color: var(--border-strong); }
+
+  /* Submit */
+  .submit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 8px; }
+  .submit-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 26px 22px; text-align: center; transition: border-color 0.2s, transform 0.2s; }
+  .submit-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .submit-icon { font-size: 34px; margin-bottom: 12px; }
+  .submit-card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .submit-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .btn { display: inline-block; font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-green { background: var(--green); color: #000; }
+  .btn-blue { background: var(--blue); color: #000; }
+  .btn-purple { background: var(--purple); color: #fff; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 28px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 28px; }
+  .footer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .footer-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+  .empty-state { background: var(--surface2); border: 1px dashed var(--border); border-radius: 12px; padding: 20px; text-align: center; color: var(--muted); font-size: 14px; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header { padding: 22px 18px 18px; }
+    .main { padding: 24px 18px 48px; }
+    .tab-nav-inner { padding: 0 18px; }
+    .tab-btn { padding: 12px 14px; font-size: 13px; }
+    .poc-toolbar { position: static; padding: 14px; }
+    .filter-label { min-width: auto; }
+    .poc-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <span class="issue-badge">Issue #14</span>
+      <span class="archive-ribbon">&#128194; Archive</span>
+      <span class="auto-badge">&#x26A1; Auto-compiled by Claude on Cowork</span>
+    </div>
+    <h1>AI &amp; HR Tech Weekly</h1>
+    <div class="header-meta">
+      <span>&#128197; 12 April 2026</span>
+      <span>&#127970; Deloitte HRSD Practice (Australia)</span>
+      <span>&#129302; ServiceNow &middot; GenAI &middot; HR Technology</span>
+    </div>
+  </div>
+</header>
+
+<div class="back-bar">
+  <a class="back-link" href="../index.html">&larr; Back to Latest Issue</a>
+</div>
+
+<main class="main">
+
+  <!-- TAB: LATEST -->
+  <section id="tab-latest" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-latest">
+
+    <div class="velocity-grid">
+      <div class="velocity-card">
+        <div class="velocity-label">DeepSeek V4 Parameters</div>
+        <div class="velocity-value" style="color: var(--green);">1T</div>
+        <div class="velocity-sub">Trillion-parameter model imminent on Huawei chips</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Claude Mythos Zero-Days</div>
+        <div class="velocity-value" style="color: var(--red);">1000s</div>
+        <div class="velocity-sub">Project Glasswing: bugs in OpenBSD, FFmpeg &amp; Linux</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Gemma 4 Context Window</div>
+        <div class="velocity-value" style="color: var(--blue);">256K</div>
+        <div class="velocity-sub">Apache 2.0, 140 languages, on-device Android</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Grok 4.20 Parallel Agents</div>
+        <div class="velocity-value" style="color: var(--purple);">4</div>
+        <div class="velocity-sub">Specialist agents debate in real time per query</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">HR &amp; ServiceNow Intelligence</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow Australia Release Q2 2026: AI Agent Studio Gets APAC Compliance Controls</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-agentic">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">The ServiceNow Australia release (Q2 2026) removes the biggest adoption blocker for enterprise AI agents in regulated APAC verticals. AI Agent Studio now enforces data residency controls &mdash; all training data, prompts, and outputs remain in Australian data centres with no transient export to US regions. This is a direct enabler for banking, healthcare, and government clients who have stalled on AI Agent adoption due to data sovereignty concerns. The HR Business Partner Hub gains a significant upgrade as well: AI highlights turnover spikes in real time, drafts action plans, and automates outreach to managers from a single consolidated view. Sandbox access is available now with production staggered by geography. For Deloitte HRSD practitioners pitching to financial services or healthcare clients, this release materially changes the governance conversation &mdash; previously a roadblock, now an asset.</div>
+        <a class="story-link" href="https://www.servicenow.com/community/upgrades-and-patching-forum/servicenow-australia-release-2026-complete-detailed-guide/td-p/3515746" target="_blank" rel="noopener">ServiceNow community guide &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">EmployeeWorks Autonomous Workforce: L1 Specialist Hits Q2 GA, 99% Faster Case Resolution</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-agentic">Agentic</span>
+            <span class="badge badge-servicenow">EmployeeWorks</span>
+          </div>
+        </div>
+        <div class="story-body">ServiceNow's L1 Service Desk AI Specialist &mdash; the first product under the Autonomous Workforce banner &mdash; is in controlled availability and targeting GA in Q2 2026. Early production data is striking: the specialist handles 90%+ of employee IT and HR requests, resolving cases 99% faster than a human L1 agent. It understands organisational structure, approval chains, and authorisation rules, then executes multi-system tasks (payslip access, leave balances, password resets) with full governance and audit trails across Teams and Slack. For Deloitte HRSD practitioners, this is the clearest agentic AI demo in the market right now. The Autonomous FastStart offer &mdash; 50 public sector slots, closing 30 April 2026 &mdash; creates a genuine urgency narrative for any client conversation this week. Get the demo environment running now.</div>
+        <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-launches-Autonomous-Workforce-that-thinks-and-acts-adds-Moveworks-to-the-ServiceNow-AI-Platform/default.aspx" target="_blank" rel="noopener">ServiceNow Newsroom &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Now Assist Pro Plus Adoption Surge: Fortune 500 Doubling Down on HRSD Automation</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-servicenow">Now Assist</span>
+          </div>
+        </div>
+        <div class="story-body">Now Assist's Pro Plus tier &mdash; priced at a 25&ndash;40% premium over standard plans &mdash; is seeing sustained acceleration among Fortune 500 companies. The platform crossed $600M ACV at end of 2025 and is tracking to hit $1B annual run rate by end of FY2026, making it the fastest-growing product in ServiceNow's history. For HRSD practitioners, the signal is unambiguous: clients are committing real budget to Now Assist at scale, not just running pilots. The window to build differentiated HRSD-specific implementation frameworks &mdash; before the market commoditises delivery &mdash; is right now. Highest-uptake use cases in HR: case summarisation, resolution note generation, and agentic onboarding orchestration. If you're not leading with these three in every HRSD discovery, you're leaving revenue on the table.</div>
+        <a class="story-link" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-4-3-ais-spring-awakening-servicenow-leads-software-sector-recovery-as-now-assist-proves-ai-monetization-is-real" target="_blank" rel="noopener">Financial analysis &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">SAP Joule + Microsoft Copilot: Bi-Directional HR Integration Narrows the EX Gap</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">GenAI</span>
+          </div>
+        </div>
+        <div class="story-body">SAP and Microsoft have completed the first bi-directional integration between SAP Joule and Microsoft 365 Copilot. HR users can now trigger SuccessFactors actions from within M365 Copilot, while Joule surfaces email and meeting context inside SAP. Practical HR use cases are live: drafting employee letters, analysing engagement survey data, coordinating hiring actions using SAP workforce analytics, and managing HR workflows across Planner and Outlook without switching applications. For Deloitte practitioners in ServiceNow HRSD, this is not vapourware &mdash; it's a real capability shift that directly addresses the employee experience gap historically associated with SuccessFactors. Update your platform comparison artefacts: the "EX advantage" argument for ServiceNow needs recalibrating in light of this integration.</div>
+        <a class="story-link" href="https://techcommunity.microsoft.com/blog/sap-partnernews/why-customers-win-when-sap-joule-and-microsoft-copilot-work-together/4495661" target="_blank" rel="noopener">Microsoft Tech Community &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Workday Frontline Agent Spring 2026: AI Scheduling and Shift Swaps Hit General Availability</div>
+          <div class="story-badges">
+            <span class="badge badge-watch">WATCH</span>
+            <span class="badge badge-genai">GenAI</span>
+          </div>
+        </div>
+        <div class="story-body">Workday's Frontline Agent &mdash; expected GA in spring 2026 &mdash; targets last-minute shift swaps, hour limit management, and AI-driven scheduling for retail and hospitality workforces. Demand forecasting in Workday Scheduling and Labour Optimisation uses AI alongside historical sales, traffic, and staffing data to build more accurate rosters; early adopters report significantly reduced manager time on staffing changes. Backed by a customer base of over 1,800 retail and hospitality companies, Workday is betting that frontline workforce management is where AI earns its keep in HR &mdash; not just in professional-worker scenarios. Relevant for Deloitte engagements with clients in retail or hospitality who are evaluating ServiceNow HRSD vs Workday for frontline-heavy workforces. Know this argument cold.</div>
+        <a class="story-link" href="https://erp.today/retail-ai-hits-nrf-2026-sap-microsoft-workday-turn-agentic-platforms-into-new-operating-system-for-stores-and-commerce/" target="_blank" rel="noopener">ERP.today coverage &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-header">
+      <span class="section-title">General AI Hot News</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Anthropic Claude Mythos Preview: Project Glasswing Finds Thousands of Zero-Days in Major OSS</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">Anthropic</span>
+          </div>
+        </div>
+        <div class="story-body">Announced on 7 April 2026, Claude Mythos Preview is Anthropic's new frontier security model, deployed via "Project Glasswing" to 11 organisations tasked with finding and patching cybersecurity vulnerabilities. The results are significant: Mythos discovered thousands of zero-day vulnerabilities in OpenBSD, FFmpeg, and the Linux kernel, then drafted and tested patches autonomously. This positions Anthropic directly in enterprise security alongside specialised tooling. Mythos is not yet available for general enterprise workflows, but it sets a capability ceiling that will pull future Claude models upward. Separately, Claude Managed Agents launched in public beta &mdash; a fully managed agent harness with secure sandboxing, built-in tools, and server-sent event streaming for running Claude as an autonomous agent via API. Worth evaluating for any ServiceNow MCP integration work.</div>
+        <a class="story-link" href="https://red.anthropic.com/2026/mythos-preview/" target="_blank" rel="noopener">Anthropic Mythos preview &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Google Gemma 4: Apache 2.0, 256K Context, 140 Languages &mdash; Now on Android via AICore</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">Google</span>
+          </div>
+        </div>
+        <div class="story-body">Google released Gemma 4 on 2 April 2026 under Apache 2.0 licence &mdash; free to use commercially, modify, and redistribute. The model supports 256K context, 140 languages, and can run on-device via the Android AICore Developer Preview. Code written for Gemma 4 today will work automatically on Gemini Nano 4-enabled devices later this year, meaning developers can build once and deploy across cloud and edge. Gemini 3.1 Pro also shipped globally this week, targeting complex reasoning and data synthesis. Gemini 3.1 Flash-Live introduces real-time audio-to-audio dialogue with natural rhythm &mdash; worth benchmarking against ServiceNow Voice Agent V3.0 for multilingual HR use cases, given both launched new language capabilities in the same fortnight.</div>
+        <a class="story-link" href="https://android-developers.googleblog.com/2026/04/AI-Core-Developer-Preview.html" target="_blank" rel="noopener">Google Android Developers blog &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">OpenAI GPT-5.3 Instant Mini Rolls Out as Default Fallback; CarPlay Voice Integration Arrives</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">OpenAI</span>
+          </div>
+        </div>
+        <div class="story-body">OpenAI released GPT-5.3 Instant Mini on 9 April 2026 as the new fallback model users hit after rate-limiting GPT-5.3 Instant. The model delivers more natural conversation, stronger writing, and better contextual awareness than its predecessor. ChatGPT has also added hands-free CarPlay voice integration, giving users access to GPT-5.3 while driving &mdash; the first major conversational AI platform to hit the car dashboard at scale. GPT-5.4 (the first model with native state-of-the-art computer-use capabilities) continues rolling out across platforms, and GPT-5.5 (codenamed Spud) has reportedly completed pretraining. For HR practitioners building conversational AI demos: the voice UX bar is rising fast across all platforms, and ServiceNow Voice Agent V3.0 will increasingly be benchmarked against native OS integrations like CarPlay.</div>
+        <a class="story-link" href="https://www.chatgptimagegenerator.org/2026/04/09/openai-rolls-out-gpt-5-4-across-chatgpt-codex-and-the-api/" target="_blank" rel="noopener">GPT-5.4 rollout coverage &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">NVIDIA Vera Rubin CPX: Purpose-Built GPU for Million-Token Context &mdash; AI Infrastructure Reshaping</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">NVIDIA</span>
+          </div>
+        </div>
+        <div class="story-body">NVIDIA announced Rubin CPX this week &mdash; a new class of GPU purpose-built for massive-context processing, enabling AI systems to handle million-token software coding and generative video with groundbreaking speed and efficiency. Rubin CPX is expected to be available at end of 2026. Meanwhile, the Vera Rubin platform (announced at GTC) is in full production with AWS, Google Cloud, Microsoft, and OCI among the first hyperscalers deploying Rubin-based instances. Compared to Blackwell, Rubin delivers up to 10x reduction in inference token cost and 4x fewer GPUs to train MoE models. For enterprise HR AI practitioners: falling inference costs directly reduce the cost per resolved HR case for agentic AI &mdash; this is the infrastructure tailwind powering the EmployeeWorks and Now Assist economics above.</div>
+        <a class="story-link" href="https://nvidianews.nvidia.com/news/nvidia-unveils-rubin-cpx-a-new-class-of-gpu-designed-for-massive-context-inference" target="_blank" rel="noopener">NVIDIA Newsroom: Rubin CPX &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">DeepSeek V4: 1 Trillion Parameters on Huawei Chips, MIT Licence &mdash; Expected Within Weeks</div>
+          <div class="story-badges">
+            <span class="badge badge-watch">WATCH</span>
+            <span class="badge badge-genai">DeepSeek</span>
+          </div>
+        </div>
+        <div class="story-body">As of 11 April 2026, DeepSeek V4 has not been publicly released, but Reuters reported on 3 April that it is expected "within the next few weeks." The model is a ~1 trillion parameter Mixture-of-Experts architecture with only ~37 billion active parameters per token, a 1M-token context window powered by Engram conditional memory, and native multimodal generation (text, image, video). Crucially, it runs on Huawei's latest chips &mdash; not NVIDIA silicon &mdash; which sidesteps US export controls and signals a genuine decoupling of the Chinese AI ecosystem. Following DeepSeek's established pattern, V4 is expected to ship with open weights under a permissive licence. If it delivers on benchmark leaks, it will be the most capable open-weight model available &mdash; at a fraction of Western API pricing. For cost-conscious HR AI PoCs on non-sensitive data, this one is worth watching closely.</div>
+        <a class="story-link" href="https://findskill.ai/blog/deepseek-v4-release-date-specs/" target="_blank" rel="noopener">DeepSeek V4 specs &amp; release date &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">xAI Grok 4.20 Debuts 4-Agent Architecture; Meta Llama 4 Maverick Opens 10M Context Window</div>
+          <div class="story-badges">
+            <span class="badge badge-watch">WATCH</span>
+            <span class="badge badge-genai">Open Source</span>
+          </div>
+        </div>
+        <div class="story-body">Two significant open-model developments this week. xAI's Grok 4.20 introduced a genuinely novel approach: four specialised AI agents (Grok for coordination, Harper for fact-checking and live X data, Benjamin for logic and coding, Lucas for creative reasoning) running in parallel on every complex query, debating in real time before producing a single output. Enterprise API access is still limited. Meta's Llama 4 Maverick (400B parameters, 10M context window) has solidified its position as the top open-weight option for tool orchestration and agentic pipelines, built with agent-native design from the ground up. Mistral released EU data residency via La Plateforme &mdash; positioning it as the top choice for GDPR data locality requirements, relevant for European clients in Deloitte's HRSD portfolio.</div>
+        <a class="story-link" href="https://llm-stats.com/llm-updates" target="_blank" rel="noopener">LLM Stats tracker &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-header">
+      <span class="section-title">Team Submissions</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="empty-state">
+      No new submissions this week. Got a POC idea or investigation request? Head to the <strong>Submit Idea</strong> tab.
+    </div>
+
+    <div class="poc-highlight">
+      <div class="poc-highlight-head">
+        <div class="poc-highlight-title">&#129514; This Week's POC Ideas</div>
+        <span class="poc-highlight-note">Promoted to POC Lab &middot; persists until retired</span>
+      </div>
+      <div class="poc-idea-list">
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">1</div>
+          <div>
+            <div class="poc-idea-text">Australia Release Compliance Demo: AI Agent with Data Residency Controls</div>
+            <div class="poc-idea-sub">Build an AI Agent Studio agent in an AU sandbox configured with the new Australia Release data residency enforcement. Demonstrate the governance controls to a mock banking or healthcare audience and produce a client-ready one-pager against APRA CPS 234.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow AI Agent Studio</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">2</div>
+          <div>
+            <div class="poc-idea-text">Workday Frontline Agent vs ServiceNow EmployeeWorks: Shift Swap Head-to-Head</div>
+            <div class="poc-idea-sub">Run the same shift-swap scenario through Workday Frontline Agent and EmployeeWorks in parallel tenants. Score each on scheduling accuracy, audit rigour, and response time. Produce a decision tree for retail/hospitality client workshops.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-advanced">Advanced</span>
+              <span class="chip chip-platform">Cross-platform</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">3</div>
+          <div>
+            <div class="poc-idea-text">Gemma 4 vs Now Assist: Open-Weight HR Intent Classification on the Cheap</div>
+            <div class="poc-idea-sub">Use Gemma 4's 256K context and Apache 2.0 licence to build an HR intent classifier running on a cheap GCP instance. Benchmark accuracy, latency, and 12-month TCO against Now Assist Pro Plus.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">Gemma 4 &middot; ServiceNow HRSD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section><!-- /tab-latest -->
+
+  <div class="footer">
+    <div class="footer-badge">
+      <div class="footer-dot"></div>
+      Powered by Agentic AI &mdash; Claude on Cowork
+    </div>
+  </div>
+
+</main>
+
+
+</body>
+</html>
