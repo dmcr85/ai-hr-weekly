@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; HR Tech Weekly — Issue #16 | 25 April 2026 [Archive]</title>
+<style>
+  :root {
+    --bg: #08090e;
+    --surface: #111218;
+    --surface2: #17181f;
+    --surface3: #1e1f28;
+    --surface4: #24252f;
+    --border: #2a2b36;
+    --border-strong: #3a3b4a;
+    --text: #e8e9f0;
+    --text-dim: #c4c5d2;
+    --muted: #8b8d9e;
+    --muted-dim: #6b6d7e;
+    --green: #00e5a0;
+    --blue: #4da6ff;
+    --purple: #b06cff;
+    --orange: #ff8c42;
+    --red: #ff5555;
+    --yellow: #ffd166;
+    --pink: #ff6b9d;
+    --ring: rgba(0,229,160,0.45);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+    scrollbar-width: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::-webkit-scrollbar { display: none; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+  button { font-family: inherit; }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(0,229,160,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -120px; left: 30%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(176,108,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1040px; margin: 0 auto; position: relative; z-index: 1; }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .issue-badge { background: var(--green); color: #000; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
+  .auto-badge { background: var(--surface3); border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+  h1 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; color: var(--text); margin-bottom: 6px; line-height: 1.15; letter-spacing: -0.015em; }
+  .header-meta { color: var(--muted); font-size: 13px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .header-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* Tab nav */
+  .tab-nav { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+  .tab-nav-inner { max-width: 1040px; margin: 0 auto; display: flex; gap: 0; padding: 0 24px; overflow-x: auto; scrollbar-width: none; }
+  .tab-nav-inner::-webkit-scrollbar { display: none; }
+  .tab-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; font-weight: 600; padding: 14px 18px; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 0.18s, border-color 0.18s; display: inline-flex; align-items: center; gap: 6px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn[aria-selected="true"] { color: var(--green); border-bottom-color: var(--green); }
+  .tab-btn .kbd-hint { font-size: 10px; color: var(--muted-dim); background: var(--surface3); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-weight: 700; font-family: ui-monospace, monospace; }
+  .tab-btn[aria-selected="true"] .kbd-hint { color: var(--green); border-color: rgba(0,229,160,0.25); background: rgba(0,229,160,0.08); }
+
+  /* Main */
+  .main { max-width: 1040px; margin: 0 auto; padding: 32px 24px 64px; }
+  .tab-content { display: none; animation: fade 0.22s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* Section headers */
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; margin-top: 36px; }
+  .section-header:first-child { margin-top: 0; }
+  .section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-hint { font-size: 12px; color: var(--muted-dim); }
+
+  /* Velocity cards */
+  .velocity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .velocity-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+  .velocity-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .velocity-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 600; }
+  .velocity-value { font-size: 24px; font-weight: 800; line-height: 1.1; letter-spacing: -0.01em; }
+  .velocity-sub { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* Story cards */
+  .story-grid { display: flex; flex-direction: column; gap: 12px; }
+  .story-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; transition: border-color 0.2s, transform 0.2s; }
+  .story-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .story-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .story-badges { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 9px; border-radius: 20px; text-transform: uppercase; }
+  .badge-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .badge-hot { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+  .badge-servicenow { background: rgba(77,166,255,0.12); color: var(--blue); border: 1px solid rgba(77,166,255,0.25); }
+  .badge-genai { background: rgba(176,108,255,0.12); color: var(--purple); border: 1px solid rgba(176,108,255,0.25); }
+  .badge-agentic { background: rgba(255,107,157,0.12); color: var(--pink); border: 1px solid rgba(255,107,157,0.25); }
+  .badge-watch { background: rgba(255,209,102,0.12); color: var(--yellow); border: 1px solid rgba(255,209,102,0.25); }
+  .badge-breaking { background: rgba(255,85,85,0.15); color: var(--red); border: 1px solid rgba(255,85,85,0.3); }
+  .story-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.35; flex: 1; min-width: 260px; }
+  .story-body { font-size: 14px; color: var(--text-dim); line-height: 1.65; margin-bottom: 10px; }
+  .story-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .story-link:hover { text-decoration: underline; }
+
+  /* Weekly POC ideas highlight */
+  .poc-highlight { background: linear-gradient(135deg, rgba(0,229,160,0.06) 0%, rgba(176,108,255,0.06) 100%); border: 1px solid rgba(0,229,160,0.22); border-radius: 14px; padding: 22px 24px; margin-top: 36px; }
+  .poc-highlight-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .poc-highlight-title { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+  .poc-highlight-note { font-size: 11px; color: var(--muted); background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; }
+  .poc-idea-list { display: flex; flex-direction: column; gap: 14px; }
+  .poc-idea-item { display: flex; gap: 12px; align-items: flex-start; }
+  .poc-idea-num { background: var(--surface3); color: var(--green); font-size: 11px; font-weight: 800; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; border: 1px solid rgba(0,229,160,0.25); }
+  .poc-idea-text { font-size: 14px; color: var(--text); line-height: 1.5; font-weight: 700; }
+  .poc-idea-sub { font-size: 13px; color: var(--text-dim); margin-top: 4px; line-height: 1.55; }
+  .poc-idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+  /* POC Lab: toolbar */
+  .poc-toolbar { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 22px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 50px; z-index: 90; backdrop-filter: blur(8px); }
+  .poc-search-row { display: flex; gap: 10px; align-items: center; }
+  .poc-search { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 13px; font-size: 14px; transition: border-color 0.18s; }
+  .poc-search::placeholder { color: var(--muted-dim); }
+  .poc-search:focus { outline: none; border-color: var(--green); }
+  .poc-results { font-size: 12px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .poc-filters { display: flex; flex-direction: column; gap: 8px; }
+  .filter-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .filter-label { font-size: 10px; color: var(--muted-dim); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; min-width: 62px; }
+  .filter-chip { background: var(--surface3); border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 16px; cursor: pointer; transition: color 0.15s, background 0.15s, border-color 0.15s; }
+  .filter-chip:hover { color: var(--text); border-color: var(--border-strong); }
+  .filter-chip.active { background: rgba(0,229,160,0.12); color: var(--green); border-color: rgba(0,229,160,0.35); }
+  .filter-chip-count { opacity: 0.7; font-weight: 700; margin-left: 4px; font-variant-numeric: tabular-nums; }
+  .poc-clear { background: none; border: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; padding: 5px 9px; border-radius: 6px; }
+  .poc-clear:hover { color: var(--text); background: var(--surface3); }
+  .poc-clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* POC groups */
+  .poc-group { margin-bottom: 28px; }
+  .poc-group[hidden] { display: none; }
+  .poc-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .poc-group-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .poc-group-title.group-building { color: var(--orange); }
+  .poc-group-title.group-idea { color: var(--muted); }
+  .poc-group-title.group-done { color: var(--green); }
+  .poc-group-title.group-parked { color: var(--muted-dim); }
+  .poc-group-count { background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 1px 9px; font-size: 11px; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+  .poc-group-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* POC cards */
+  .poc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .poc-card { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 12px; padding: 18px 20px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 10px; }
+  .poc-card:hover { border-color: var(--border-strong); transform: translateY(-1px); box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5); }
+  .poc-card[hidden] { display: none; }
+  .poc-card[data-status="building"] { border-left-color: var(--orange); }
+  .poc-card[data-status="done"] { border-left-color: var(--green); }
+  .poc-card[data-status="parked"] { border-left-color: var(--muted-dim); opacity: 0.75; }
+  .poc-card.new-this-week { box-shadow: 0 0 0 1px rgba(0,229,160,0.18); }
+  .poc-card-head { display: flex; flex-direction: column; gap: 8px; }
+  .poc-card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .poc-card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.005em; }
+  .poc-status { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.04em; text-transform: uppercase; }
+  .status-idea { background: rgba(139,141,158,0.15); color: var(--muted); border: 1px solid rgba(139,141,158,0.25); }
+  .status-building { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+  .status-done { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .status-parked { background: rgba(107,109,126,0.15); color: var(--muted-dim); border: 1px solid rgba(107,109,126,0.3); }
+  .poc-card-hook { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+  .poc-card-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .chip { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 16px; letter-spacing: 0.04em; }
+  .chip-diff.diff-beginner { background: rgba(0,229,160,0.1); color: var(--green); border: 1px solid rgba(0,229,160,0.22); text-transform: uppercase; }
+  .chip-diff.diff-intermediate { background: rgba(77,166,255,0.1); color: var(--blue); border: 1px solid rgba(77,166,255,0.22); text-transform: uppercase; }
+  .chip-diff.diff-advanced { background: rgba(255,85,85,0.1); color: var(--red); border: 1px solid rgba(255,85,85,0.22); text-transform: uppercase; }
+  .chip-platform { background: var(--surface3); color: var(--muted); border: 1px solid var(--border); }
+  .chip-date { background: transparent; color: var(--muted-dim); border: 1px solid transparent; padding-left: 0; padding-right: 0; }
+  .chip-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); text-transform: uppercase; }
+  .poc-expand-btn { background: none; border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; transition: color 0.18s, border-color 0.18s, background 0.18s; align-self: flex-start; }
+  .poc-expand-btn:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface3); }
+  .poc-expand-btn .expand-icon { transition: transform 0.2s; display: inline-block; font-family: ui-monospace, monospace; }
+  .poc-expand-btn[aria-expanded="true"] .expand-icon { transform: rotate(90deg); }
+  .poc-expand-btn[aria-expanded="true"] { color: var(--green); border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.05); }
+  .poc-card-detail { margin-top: 2px; border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .poc-card-detail[hidden] { display: none; }
+  .poc-sec h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .poc-sec p, .poc-sec li { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .poc-sec ol, .poc-sec ul { padding-left: 20px; }
+  .poc-sec li { margin-bottom: 3px; }
+  .poc-sec li::marker { color: var(--muted-dim); font-size: 11px; }
+
+  .poc-empty { background: var(--surface2); border: 1px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; color: var(--muted); font-size: 14px; }
+  .poc-empty[hidden] { display: none; }
+
+  /* Archive */
+  .archive-list { display: flex; flex-direction: column; gap: 14px; }
+  .archive-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; transition: border-color 0.2s, transform 0.2s; }
+  .archive-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .archive-card.archive-pending { opacity: 0.65; }
+  .archive-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .archive-issue { font-size: 13px; font-weight: 700; color: var(--green); }
+  .archive-date { font-size: 12px; color: var(--muted); }
+  .archive-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .archive-link:hover { text-decoration: underline; }
+  .archive-link-pending { font-size: 12px; color: var(--muted-dim); font-weight: 600; background: var(--surface3); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; }
+  .archive-headlines { display: flex; flex-direction: column; gap: 4px; }
+  .archive-headline { font-size: 13px; color: var(--muted); padding-left: 14px; position: relative; line-height: 1.55; }
+  .archive-headline::before { content: '\203A'; position: absolute; left: 0; color: var(--border-strong); }
+
+  /* Submit */
+  .submit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 8px; }
+  .submit-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 26px 22px; text-align: center; transition: border-color 0.2s, transform 0.2s; }
+  .submit-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .submit-icon { font-size: 34px; margin-bottom: 12px; }
+  .submit-card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .submit-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .btn { display: inline-block; font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-green { background: var(--green); color: #000; }
+  .btn-blue { background: var(--blue); color: #000; }
+  .btn-purple { background: var(--purple); color: #fff; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 28px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 28px; }
+  .footer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .footer-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+  .empty-state { background: var(--surface2); border: 1px dashed var(--border); border-radius: 12px; padding: 20px; text-align: center; color: var(--muted); font-size: 14px; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header { padding: 22px 18px 18px; }
+    .main { padding: 24px 18px 48px; }
+    .tab-nav-inner { padding: 0 18px; }
+    .tab-btn { padding: 12px 14px; font-size: 13px; }
+    .poc-toolbar { position: static; padding: 14px; }
+    .filter-label { min-width: auto; }
+    .poc-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  .archive-ribbon { background: rgba(255,209,102,0.15); border: 1px solid rgba(255,209,102,0.3); color: var(--yellow); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .back-bar { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 10px 24px; text-align: center; }
+  .back-link { color: var(--green); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <span class="issue-badge">Issue #16</span>
+      <span class="archive-ribbon">&#128194; Archive</span>
+      <span class="auto-badge">&#x26A1; Auto-compiled by Claude on Cowork</span>
+    </div>
+    <h1>AI &amp; HR Tech Weekly</h1>
+    <div class="header-meta">
+      <span>&#128197; 25 April 2026</span>
+      <span>&#127970; Deloitte HRSD Practice (Australia)</span>
+      <span>&#129302; ServiceNow &middot; GenAI &middot; HR Technology</span>
+    </div>
+  </div>
+</header>
+
+<div class="back-bar">
+  <a class="back-link" href="../index.html">&larr; Back to Latest Issue</a>
+</div>
+
+<main class="main">
+
+  <!-- TAB: LATEST -->
+  <section id="tab-latest" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-latest">
+
+    <div class="velocity-grid">
+      <div class="velocity-card">
+        <div class="velocity-label">OpenAI GPT-5.5 GA</div>
+        <div class="velocity-value" style="color: var(--purple);">5.5</div>
+        <div class="velocity-sub">Shipped 23 April &mdash; agentic coding, computer use, API live 24 Apr</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">DeepSeek V4 Flash</div>
+        <div class="velocity-value" style="color: var(--blue);">$0.28</div>
+        <div class="velocity-sub">Per 1M output tokens &mdash; 1.6T MoE Pro &middot; 1M context &middot; Apache 2.0</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">EmployeeWorks FastStart</div>
+        <div class="velocity-value" style="color: var(--red);">5 days</div>
+        <div class="velocity-sub">Closes 30 April &mdash; 50 slots, public-sector weighted</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">EmployeeWorks Q1 Growth</div>
+        <div class="velocity-value" style="color: var(--green);">5x</div>
+        <div class="velocity-sub">YoY &mdash; Q1 closed more deals than Moveworks did in all of 2025</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">HR &amp; ServiceNow Intelligence</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow Q1 2026 Earnings: EmployeeWorks Up 5x YoY, Q1 Deal Count Beats All of Moveworks' 2025</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-servicenow">EmployeeWorks</span>
+            <span class="badge badge-agentic">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">ServiceNow posted Q1 2026 results on 22 April and the HR-relevant datapoint is concrete: EmployeeWorks &mdash; the rebrand combining Moveworks' conversational AI with ServiceNow's unified employee portal &mdash; grew 5x year-over-year and closed more deals in Q1 alone than Moveworks closed across all of 2025. Published customer outcomes now include handling 90%+ of employee IT requests autonomously, with the L1 specialist resolving cases 99% faster. For Deloitte HRSD practitioners this kills any lingering "is EmployeeWorks real or a repackaging exercise?" objection &mdash; clients want numbers, not narrative, and ServiceNow now has them. Refresh every EmployeeWorks pitch deck with the 5x growth stat and the nearly-200-million-employee reach; use it to accelerate conversations that have been stuck on "show me the adoption curve" for six months.</div>
+        <a class="story-link" href="https://www.constellationr.com/insights/news/servicenow-integrates-moveworks-launches-autonomous-workforce-employeeworks" target="_blank" rel="noopener">Constellation Research analysis &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow Closes Armis Acquisition: Security Signals Now Feed the HR Control Tower</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">AI Control Tower</span>
+          </div>
+        </div>
+        <div class="story-body">ServiceNow closed its acquisition of Armis on 20 April 2026, folding real-time asset discovery and cyber exposure management into the AI Control Tower stack. The strategic line is unified visibility: security posture, AI governance, and workflow automation in one pane. HR isn't the headline, but read-across is immediate &mdash; every HR data-residency, privileged-access, and offboarding-audit conversation now has an Armis signal upstream. For Deloitte HRSD practitioners, this reshapes the governance pitch: "your HR AI agent's actions are visible in the same control tower as your asset inventory and cyber exposure." Combined with the 2 August EU AI Act high-risk deadline, this is a concrete reason to lead discovery with Control Tower and bundle Armis talking points into any HRSD-plus-security conversation.</div>
+        <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-launches-Autonomous-Workforce-that-thinks-and-acts-adds-Moveworks-to-the-ServiceNow-AI-Platform/default.aspx" target="_blank" rel="noopener">ServiceNow Newsroom &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">EmployeeWorks FastStart: Final 5 Days &mdash; Escalate Any Warm Lead Today</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">URGENT</span>
+            <span class="badge badge-servicenow">EmployeeWorks</span>
+          </div>
+        </div>
+        <div class="story-body">The Autonomous FastStart offer closes on 30 April &mdash; 5 days from today. 50 slots total, weighted to public-sector and regulated verticals, with the L1 AI Specialist pre-provisioned. Last week's digest flagged the 12-day window; this is the final call. Q1 earnings confirmed ServiceNow is feeding its strongest customer references directly out of FastStart cohorts, so non-participating partners will be working from marketing slide decks while competitors demo production tenants. For Deloitte HRSD practitioners with any APS, state government, or APRA-regulated lead with genuine HR pain and an executive sponsor reachable this week: submit the application before Tuesday 28 April to allow 48-hour follow-up. If you aren't in by 30 April, the next programme window is unconfirmed and likely six months out.</div>
+        <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-launches-Autonomous-Workforce-that-thinks-and-acts-adds-Moveworks-to-the-ServiceNow-AI-Platform/default.aspx" target="_blank" rel="noopener">ServiceNow FastStart announcement &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">SAP Joule Studio GA: 40+ Packaged Agents, Embedded Across 35 SAP Solutions</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">SAP</span>
+            <span class="badge badge-agentic">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">SAP has pushed Joule from "AI assistant" to a full agent platform, with Joule Studio &mdash; its enterprise agent builder &mdash; now generally available. Joule is embedded in 35 SAP solutions with over 40 specialised agents covering finance, supply chain, HR, and IT. SAP claims 40% time savings on frequent tasks and 35% faster agent deployment via Joule Studio. For Deloitte HRSD practitioners selling into SAP-SuccessFactors-anchored accounts, this shifts the competitive story: the "ServiceNow does agentic, SAP does system of record" framing no longer holds. Clients with material SuccessFactors investment now have a credible native agent platform, and they will ask why they should pay for Now Assist if Joule already covers HR use cases. The right move is the cross-platform benchmark POC (see POC Lab) &mdash; don't concede the ground, but don't argue it with slideware either.</div>
+        <a class="story-link" href="https://aimultiple.com/sap-ai-agents" target="_blank" rel="noopener">SAP AI Agents 2026 deep dive &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Workday Frontline Agent Ships Spring 2026: 90% Manager Time Reduction on Shift-Change Admin</div>
+          <div class="story-badges">
+            <span class="badge badge-watch">WATCH</span>
+            <span class="badge badge-genai">Workday</span>
+          </div>
+        </div>
+        <div class="story-body">Workday's Frontline Agent &mdash; positioned for retail, hospitality, and healthcare &mdash; is tracking to spring 2026 delivery, with early adopters reporting up to 90% reduction in manager time spent on staffing changes and up to 67% reduction in weekly schedule build time via Scheduling &amp; Labor Optimization. The customer base being pitched at is over 1,800 frontline-heavy accounts. For Deloitte HRSD practitioners, the practical implication: if you are competing against Workday on a frontline-workforce client this quarter, the shift-swap demo is the battleground. Expect to see Workday Frontline Agent vs. EmployeeWorks head-to-head requests, and get ahead of them with a prepared decision tree (the cross-platform POC card in POC Lab is this weekend's priority if you have retail, hospitality, or healthcare deals in pipe).</div>
+        <a class="story-link" href="https://erp.today/retail-ai-hits-nrf-2026-sap-microsoft-workday-turn-agentic-platforms-into-new-operating-system-for-stores-and-commerce/" target="_blank" rel="noopener">ERP.today frontline agent coverage &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-header">
+      <span class="section-title">General AI Hot News</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">OpenAI Ships GPT-5.5 and GPT-5.5 Pro: Agentic Coding, Computer Use, API Live</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">OpenAI</span>
+          </div>
+        </div>
+        <div class="story-body">OpenAI released GPT-5.5 on 23 April 2026 and GPT-5.5 Pro alongside it &mdash; rolling out to Plus, Pro, Business, and Enterprise customers in ChatGPT and Codex, with both variants landing in the API on 24 April. Headline gains: agentic coding, computer use, knowledge work, and scientific research, with per-token latency held flat vs. GPT-5.4 despite the intelligence jump. OpenAI frames GPT-5.5 as another step toward a "super app" that can operate software and act over long horizons. For Deloitte HRSD practitioners, two implications worth acting on this week: GPT-5.5 Pro via Codex is now the cheapest credible alternative to Claude Opus 4.7 for complex ServiceNow scripting and update-set work, and "computer use" raises the ceiling on agentic HR workflows that still depend on legacy click-through UIs. Pilot it for in-house productivity before clients ask whether you have tried it.</div>
+        <a class="story-link" href="https://openai.com/index/introducing-gpt-5-5/" target="_blank" rel="noopener">OpenAI GPT-5.5 announcement &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">DeepSeek V4 Released: 1.6T Parameter MoE, 1M Context, Apache 2.0 &mdash; V4-Flash at $0.28/M Tokens</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">DeepSeek</span>
+          </div>
+        </div>
+        <div class="story-body">DeepSeek released V4 on 24 April 2026 in two variants: DeepSeek-V4-Pro (1.6 trillion parameters, 1M context, positioned as rival to top closed-source models) and DeepSeek-V4-Flash (284 billion parameters). Both are open-source under Apache 2.0 on Hugging Face and both are priced aggressively &mdash; V4-Pro at $3.48 per 1M output tokens, V4-Flash at $0.28 per 1M. The models run on Huawei silicon, sharpening the US-China tech decoupling narrative, and early benchmark leaks place V4-Pro ahead of Claude Sonnet 4.5 on agent tasks. For Deloitte HRSD practitioners this is a pricing floor event: any client negotiating Now Assist Pro Plus or SAP Joule pricing will be armed with "DeepSeek V4-Flash is 10&ndash;30x cheaper." The defensive response is not to concede the frontier, it is to lead with governance, data residency, and support &mdash; and to run a cheap V4-Flash bake-off for mid-market clients where cost is the deciding factor (POC idea this week).</div>
+        <a class="story-link" href="https://www.cnbc.com/2026/04/24/deepseek-v4-llm-preview-open-source-ai-competition-china.html" target="_blank" rel="noopener">CNBC DeepSeek V4 coverage &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Gemini Deep Research Max Launches with 3.1 Pro: The Agent Does the Analyst's Week</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">Google</span>
+          </div>
+        </div>
+        <div class="story-body">Google rolled out two new evolutions of its Deep Research agent this week &mdash; Deep Research and Deep Research Max &mdash; both powered by the newly released Gemini 3.1 Pro, the smarter step up in the Gemini 3 series for complex multi-step reasoning. Deep Research Max is positioned for the kind of multi-hour analyst workflows (market scans, competitive deep dives, vendor evaluations) that, until now, have been where human researchers defended their ground. Google also shipped a native Gemini app for macOS with an Option+Space hot-invoke. For Deloitte HRSD practitioners, the HR-specific read is simple: the cost of producing a high-quality vendor-comparison or HR-market brief is now trending to near-zero incremental effort, which changes both the competitive dynamics for Deloitte research output and the baseline client expectation for discovery deliverables. Start producing Gemini Deep Research-augmented briefs this week and mark them as such to set the expectation.</div>
+        <a class="story-link" href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/" target="_blank" rel="noopener">Google Gemini 3.1 Pro announcement &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">NVIDIA + Google Cloud Announce Agentic/Physical AI Superstack at GTC</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">NVIDIA</span>
+            <span class="badge badge-agentic">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">At GTC (23 April) NVIDIA and Google Cloud formalised a deeper collaboration on agentic AI and physical AI &mdash; Google Cloud will be among the first to deploy Vera Rubin-based instances in 2026 alongside AWS, Microsoft, and OCI, and the two vendors have committed to a unified "AI factory" stack spanning chips, orchestration, and cloud services. Rubin is in full production with products from partners in H2 2026, delivering up to 10x inference token cost reduction and 4x GPU reduction on MoE training vs. Blackwell. For Deloitte HRSD practitioners, the supply-side signal is the only thing that matters here: agentic HR product economics (EmployeeWorks, Now Assist, Joule) get materially cheaper as Rubin deploys, which is why vendor pricing for Pro Plus tiers is holding firm &mdash; they know compute deflation is coming. Use this when clients push on multi-year pricing: "volume discount now, infrastructure deflation through 2027" is a defensible framing.</div>
+        <a class="story-link" href="https://blogs.nvidia.com/blog/google-cloud-agentic-physical-ai-factories/" target="_blank" rel="noopener">NVIDIA GTC Google Cloud announcement &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">xAI Courts Mistral on Partnership; Grok Voice APIs Ship as Standalone Enterprise Products</div>
+          <div class="story-badges">
+            <span class="badge badge-watch">WATCH</span>
+            <span class="badge badge-genai">xAI</span>
+          </div>
+        </div>
+        <div class="story-body">Two xAI stories worth tracking. First, Euronews (24 April) reported Elon Musk's xAI has held talks with Mistral about a partnership to rival OpenAI and Anthropic &mdash; xAI having just closed a $20B Series E and Mistral holding the strongest European open-weight position &mdash; though neither party has confirmed. Second, xAI launched standalone Grok Speech-to-Text and Text-to-Speech APIs (18 April), moving into the enterprise voice API market where ElevenLabs, Deepgram, and Google Cloud are entrenched. For Deloitte HRSD practitioners, the xAI/Mistral rumour is noise-for-now but would be a significant restructuring of the frontier-model landscape if it lands; Grok voice APIs are more immediately relevant as a potential cost-down option for voice-agent-heavy HR deployments (Voice Agent V3.0 rollouts, multilingual HR assistants). Nothing to act on this week, but flag both for clients asking "who else is serious in voice AI?"</div>
+        <a class="story-link" href="https://www.euronews.com/next/2026/04/24/elon-musks-xai-discussed-partnership-with-mistral-to-try-and-rival-openai-and-anthropic-re" target="_blank" rel="noopener">Euronews xAI/Mistral report &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Ofcom 30 April Deadline + EU AI Act 2 August: Regulatory Calendar Now Driving HR Buying</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">Governance</span>
+            <span class="badge badge-watch">Regulatory</span>
+          </div>
+        </div>
+        <div class="story-body">Two regulatory milestones bite in the next 100 days. The UK Ofcom has notified major platforms that stronger age-gating and child-safety controls must be in place by 30 April 2026, a lever that is already pulling through to workforce platforms deploying AI on minor-adjacent data (education, healthcare, government services). The EU AI Act's high-risk transparency obligations then bite on 2 August &mdash; 14 weeks away &mdash; with HR-specific high-risk use cases (recruitment screening, performance evaluation, promotion/dismissal decisions, access to essential services) squarely in scope. For Deloitte HRSD practitioners the Q2 priority is unmissable: every client discovery this quarter needs a 2 August conformity question on the agenda and an answer ready. Pair the GAO federal AI acquisitions report from last week with the EU AI Act citation for a one-page governance reference clients will actually use.</div>
+        <a class="story-link" href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU AI Act official portal &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-header">
+      <span class="section-title">Team Submissions</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="empty-state">
+      No new submissions this week. Got a POC idea or investigation request? Head to the <strong>Submit Idea</strong> tab.
+    </div>
+
+    <div class="poc-highlight">
+      <div class="poc-highlight-head">
+        <div class="poc-highlight-title">&#129514; This Week's POC Ideas</div>
+        <span class="poc-highlight-note">Promoted to POC Lab &middot; persists until retired</span>
+      </div>
+      <div class="poc-idea-list">
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">1</div>
+          <div>
+            <div class="poc-idea-text">GPT-5.5 Pro via Codex: Accelerated ServiceNow Script &amp; Update-Set Sprint</div>
+            <div class="poc-idea-sub">Wire GPT-5.5 Pro through Codex against a Deloitte PDI and measure how many routine ServiceNow scripting/update-set tasks it closes vs. a human consultant across 20 real backlog items. Agentic coding and computer use are the headline gains; prove the productivity delta on our day-to-day HRSD work before clients ask. Also use the run to compare quality against Claude Opus 4.7 on identical prompts.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">GPT-5.5 Pro &middot; ServiceNow</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">2</div>
+          <div>
+            <div class="poc-idea-text">DeepSeek V4-Flash for Budget HR Chat: $0.28/M Token Feasibility Cut</div>
+            <div class="poc-idea-sub">Self-host DeepSeek V4-Flash (Apache 2.0) on a single GPU and benchmark it against Now Assist NLU and Gemma 4 on a 1,000-utterance HR triage dataset. Report accuracy, latency, 12-month TCO, and a concrete residency posture for clients on Huawei-silicon hosting. Target: a defensible answer for mid-market and cost-conscious clients who will ask "why not just use DeepSeek?" inside Q2.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">DeepSeek V4-Flash &middot; ServiceNow</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">3</div>
+          <div>
+            <div class="poc-idea-text">ServiceNow Q1 EmployeeWorks Evidence Pack for Deloitte Sellers</div>
+            <div class="poc-idea-sub">Package the Q1 2026 earnings datapoints (5x YoY EmployeeWorks, more deals than all of Moveworks 2025, 90% IT request automation) into a Deloitte-branded one-pager plus a 60-second video for sellers to drop into live pipe conversations this week. Quick, high-leverage &mdash; converts a news story into closeable pitch ammunition before the signal fades.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-beginner">Beginner</span>
+              <span class="chip chip-platform">EmployeeWorks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section><!-- /tab-latest -->
+
+
+  <div class="footer">
+    <div class="footer-badge">
+      <div class="footer-dot"></div>
+      Powered by Agentic AI &mdash; Claude on Cowork
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>
