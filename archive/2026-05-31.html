@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; HR Tech Weekly — Issue #19 (Archived) | 31 May 2026</title>
+<style>
+  :root {
+    /* Deep, slightly-cool base surfaces */
+    --bg: #07080c;
+    --bg-grad-1: rgba(0,229,160,0.06);
+    --bg-grad-2: rgba(90,169,255,0.05);
+    --surface: #0d0e15;
+    --surface2: #12131c;
+    --surface3: #191b25;
+    --surface4: #222431;
+    /* Hairline borders (translucent for consistent depth) */
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.14);
+    /* Text */
+    --text: #f3f4f9;
+    --text-dim: #c6c8d6;
+    --muted: #8a8d9f;
+    --muted-dim: #61647a;
+    /* Accent palette (names preserved for inline use) */
+    --green: #00e5a0;
+    --green-bright: #4dffc4;
+    --blue: #5aa9ff;
+    --purple: #b98cff;
+    --orange: #ff9a52;
+    --red: #ff6b6b;
+    --yellow: #ffd166;
+    --pink: #ff7da6;
+    /* Signature gradient + effects */
+    --accent: linear-gradient(90deg, #00e5a0 0%, #2fd9c4 45%, #5aa9ff 100%);
+    --ring: rgba(0,229,160,0.5);
+    --shadow-card: 0 1px 0 rgba(255,255,255,0.03) inset, 0 14px 32px -20px rgba(0,0,0,0.85);
+    --shadow-lift: 0 22px 50px -24px rgba(0,0,0,0.9);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --sans: 'Inter', 'SF Pro Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --max: 1080px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1100px 520px at 80% -10%, var(--bg-grad-1), transparent 60%),
+      radial-gradient(900px 480px at 8% 2%, var(--bg-grad-2), transparent 55%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15.5px;
+    line-height: 1.7;
+    min-height: 100vh;
+    scrollbar-width: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+  body::-webkit-scrollbar { display: none; }
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent);
+    z-index: 200;
+  }
+  ::selection { background: rgba(0,229,160,0.28); color: #fff; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 4px; }
+  button { font-family: inherit; }
+  a { color: inherit; }
+
+  /* Header / masthead */
+  .header {
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), transparent 55%), var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 44px 24px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -150px; right: -90px;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(0,229,160,0.13) 0%, transparent 66%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -180px; left: 24%;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(90,169,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: var(--max); margin: 0 auto; position: relative; z-index: 1; }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .issue-badge { background: var(--accent); color: #00140d; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; padding: 4px 13px; border-radius: 100px; text-transform: uppercase; box-shadow: 0 4px 16px -4px rgba(0,229,160,0.5); }
+  .auto-badge { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 4px 13px; border-radius: 100px; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  h1 { font-size: clamp(34px, 6vw, 58px); font-weight: 800; color: var(--text); margin-bottom: 20px; line-height: 1.04; letter-spacing: -0.03em; }
+  .header-meta { color: var(--muted); font-size: 13px; display: flex; gap: 22px; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid var(--border); }
+  .header-meta span { display: flex; align-items: center; gap: 7px; }
+
+  /* Tab nav */
+  .tab-nav { background: rgba(13,14,21,0.72); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); }
+  .tab-nav-inner { max-width: var(--max); margin: 0 auto; display: flex; gap: 2px; padding: 0 24px; overflow-x: auto; scrollbar-width: none; }
+  .tab-nav-inner::-webkit-scrollbar { display: none; }
+  .tab-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; font-weight: 600; padding: 16px 16px; white-space: nowrap; position: relative; transition: color 0.2s; display: inline-flex; align-items: center; gap: 7px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn[aria-selected="true"] { color: var(--text); }
+  .tab-btn[aria-selected="true"]::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: var(--accent); border-radius: 2px 2px 0 0; box-shadow: 0 0 12px rgba(0,229,160,0.6); }
+  .tab-btn .kbd-hint { font-size: 10px; color: var(--muted-dim); background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-weight: 700; font-family: ui-monospace, monospace; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+  .tab-btn[aria-selected="true"] .kbd-hint { color: var(--green); border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.1); }
+
+  /* Main */
+  .main { max-width: var(--max); margin: 0 auto; padding: 40px 24px 80px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fade 0.3s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* Section headers */
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; margin-top: 48px; }
+  .section-header:first-child { margin-top: 0; }
+  .section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); position: relative; padding-left: 16px; }
+  .section-title::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 15px; border-radius: 2px; background: var(--accent); }
+  .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-strong), transparent); }
+  .section-hint { font-size: 12px; color: var(--muted-dim); }
+
+  /* Velocity / by-the-numbers */
+  .velocity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 40px; }
+  .velocity-card { background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 42%), var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: relative; overflow: hidden; box-shadow: var(--shadow-card); transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+  .velocity-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+  .velocity-label { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; font-weight: 700; }
+  .velocity-value { font-size: 30px; font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; }
+  .velocity-sub { font-size: 12.5px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+  /* Story cards */
+  .story-grid { display: flex; flex-direction: column; gap: 14px; }
+  .story-card { background: linear-gradient(180deg, rgba(255,255,255,0.022), transparent 30%), var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow-card); transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+  .story-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+  .story-grid .story-card:first-child { background: radial-gradient(640px 220px at 0% 0%, rgba(0,229,160,0.07), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.03), transparent 30%), var(--surface2); border-color: rgba(0,229,160,0.2); padding: 26px 26px; }
+  .story-grid .story-card:first-child .story-title { font-size: 19px; letter-spacing: -0.02em; }
+  .story-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+  .story-badges { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+  .badge { font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 100px; text-transform: uppercase; }
+  .badge-new { background: rgba(0,229,160,0.14); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .badge-hot { background: rgba(255,154,82,0.14); color: var(--orange); border: 1px solid rgba(255,154,82,0.3); }
+  .badge-servicenow { background: rgba(90,169,255,0.13); color: var(--blue); border: 1px solid rgba(90,169,255,0.28); }
+  .badge-genai { background: rgba(185,140,255,0.13); color: var(--purple); border: 1px solid rgba(185,140,255,0.28); }
+  .badge-agentic { background: rgba(255,125,166,0.13); color: var(--pink); border: 1px solid rgba(255,125,166,0.28); }
+  .badge-watch { background: rgba(255,209,102,0.13); color: var(--yellow); border: 1px solid rgba(255,209,102,0.28); }
+  .badge-breaking { background: rgba(255,107,107,0.16); color: var(--red); border: 1px solid rgba(255,107,107,0.32); }
+  .story-title { font-size: 16.5px; font-weight: 700; color: var(--text); line-height: 1.4; flex: 1; min-width: 260px; letter-spacing: -0.01em; }
+  .story-body { font-size: 14px; color: var(--text-dim); line-height: 1.72; margin-bottom: 14px; }
+  .story-link { font-size: 12px; color: var(--green); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding-top: 13px; border-top: 1px solid var(--border); transition: gap 0.18s, color 0.18s; }
+  .story-link:hover { color: var(--green-bright); gap: 9px; }
+
+  /* Weekly POC ideas highlight */
+  .poc-highlight { background: radial-gradient(720px 240px at 100% 0%, rgba(185,140,255,0.1), transparent 60%), linear-gradient(135deg, rgba(0,229,160,0.07) 0%, rgba(90,169,255,0.05) 100%), var(--surface2); border: 1px solid rgba(0,229,160,0.24); border-radius: var(--radius); padding: 26px 28px; margin-top: 44px; position: relative; overflow: hidden; box-shadow: var(--shadow-card); }
+  .poc-highlight-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .poc-highlight-title { font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 10px; }
+  .poc-highlight-note { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; }
+  .poc-idea-list { display: flex; flex-direction: column; gap: 18px; }
+  .poc-idea-item { display: flex; gap: 14px; align-items: flex-start; }
+  .poc-idea-num { background: var(--accent); color: #00140d; font-size: 12px; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; box-shadow: 0 4px 12px -3px rgba(0,229,160,0.5); }
+  .poc-idea-text { font-size: 15px; color: var(--text); line-height: 1.5; font-weight: 700; }
+  .poc-idea-sub { font-size: 13px; color: var(--text-dim); margin-top: 5px; line-height: 1.6; }
+  .poc-idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+  /* POC Lab: toolbar */
+  .poc-toolbar { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 22px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 50px; z-index: 90; backdrop-filter: blur(8px); }
+  .poc-search-row { display: flex; gap: 10px; align-items: center; }
+  .poc-search { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 13px; font-size: 14px; transition: border-color 0.18s; }
+  .poc-search::placeholder { color: var(--muted-dim); }
+  .poc-search:focus { outline: none; border-color: var(--green); }
+  .poc-results { font-size: 12px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .poc-filters { display: flex; flex-direction: column; gap: 8px; }
+  .filter-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .filter-label { font-size: 10px; color: var(--muted-dim); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; min-width: 62px; }
+  .filter-chip { background: var(--surface3); border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 16px; cursor: pointer; transition: color 0.15s, background 0.15s, border-color 0.15s; }
+  .filter-chip:hover { color: var(--text); border-color: var(--border-strong); }
+  .filter-chip.active { background: rgba(0,229,160,0.12); color: var(--green); border-color: rgba(0,229,160,0.35); }
+  .filter-chip-count { opacity: 0.7; font-weight: 700; margin-left: 4px; font-variant-numeric: tabular-nums; }
+  .poc-clear { background: none; border: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; padding: 5px 9px; border-radius: 6px; }
+  .poc-clear:hover { color: var(--text); background: var(--surface3); }
+  .poc-clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* POC groups */
+  .poc-group { margin-bottom: 28px; }
+  .poc-group[hidden] { display: none; }
+  .poc-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .poc-group-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .poc-group-title.group-building { color: var(--orange); }
+  .poc-group-title.group-idea { color: var(--muted); }
+  .poc-group-title.group-done { color: var(--green); }
+  .poc-group-title.group-parked { color: var(--muted-dim); }
+  .poc-group-count { background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 1px 9px; font-size: 11px; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+  .poc-group-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* POC cards */
+  .poc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .poc-card { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 12px; padding: 18px 20px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 10px; }
+  .poc-card:hover { border-color: var(--border-strong); transform: translateY(-1px); box-shadow: 0 8px 24px -12px rgba(0,0,0,0.5); }
+  .poc-card[hidden] { display: none; }
+  .poc-card[data-status="building"] { border-left-color: var(--orange); }
+  .poc-card[data-status="done"] { border-left-color: var(--green); }
+  .poc-card[data-status="parked"] { border-left-color: var(--muted-dim); opacity: 0.75; }
+  .poc-card.new-this-week { box-shadow: 0 0 0 1px rgba(0,229,160,0.18); }
+  .poc-card-head { display: flex; flex-direction: column; gap: 8px; }
+  .poc-card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .poc-card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.005em; }
+  .poc-status { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.04em; text-transform: uppercase; }
+  .status-idea { background: rgba(139,141,158,0.15); color: var(--muted); border: 1px solid rgba(139,141,158,0.25); }
+  .status-building { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+  .status-done { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); }
+  .status-parked { background: rgba(107,109,126,0.15); color: var(--muted-dim); border: 1px solid rgba(107,109,126,0.3); }
+  .poc-card-hook { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+  .poc-card-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .chip { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 16px; letter-spacing: 0.04em; }
+  .chip-diff.diff-beginner { background: rgba(0,229,160,0.1); color: var(--green); border: 1px solid rgba(0,229,160,0.22); text-transform: uppercase; }
+  .chip-diff.diff-intermediate { background: rgba(77,166,255,0.1); color: var(--blue); border: 1px solid rgba(77,166,255,0.22); text-transform: uppercase; }
+  .chip-diff.diff-advanced { background: rgba(255,85,85,0.1); color: var(--red); border: 1px solid rgba(255,85,85,0.22); text-transform: uppercase; }
+  .chip-platform { background: var(--surface3); color: var(--muted); border: 1px solid var(--border); }
+  .chip-date { background: transparent; color: var(--muted-dim); border: 1px solid transparent; padding-left: 0; padding-right: 0; }
+  .chip-new { background: rgba(0,229,160,0.15); color: var(--green); border: 1px solid rgba(0,229,160,0.3); text-transform: uppercase; }
+  .poc-expand-btn { background: none; border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; transition: color 0.18s, border-color 0.18s, background 0.18s; align-self: flex-start; }
+  .poc-expand-btn:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface3); }
+  .poc-expand-btn .expand-icon { transition: transform 0.2s; display: inline-block; font-family: ui-monospace, monospace; }
+  .poc-expand-btn[aria-expanded="true"] .expand-icon { transform: rotate(90deg); }
+  .poc-expand-btn[aria-expanded="true"] { color: var(--green); border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.05); }
+  .poc-card-detail { margin-top: 2px; border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .poc-card-detail[hidden] { display: none; }
+  .poc-sec h4 { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .poc-sec p, .poc-sec li { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .poc-sec ol, .poc-sec ul { padding-left: 20px; }
+  .poc-sec li { margin-bottom: 3px; }
+  .poc-sec li::marker { color: var(--muted-dim); font-size: 11px; }
+
+  .poc-empty { background: var(--surface2); border: 1px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; color: var(--muted); font-size: 14px; }
+  .poc-empty[hidden] { display: none; }
+
+  /* Archive */
+  .archive-list { display: flex; flex-direction: column; gap: 14px; }
+  .archive-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; transition: border-color 0.2s, transform 0.2s; }
+  .archive-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .archive-card.archive-pending { opacity: 0.65; }
+  .archive-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .archive-issue { font-size: 13px; font-weight: 700; color: var(--green); }
+  .archive-date { font-size: 12px; color: var(--muted); }
+  .archive-link { font-size: 12px; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .archive-link:hover { text-decoration: underline; }
+  .archive-link-pending { font-size: 12px; color: var(--muted-dim); font-weight: 600; background: var(--surface3); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; }
+  .archive-headlines { display: flex; flex-direction: column; gap: 4px; }
+  .archive-headline { font-size: 13px; color: var(--muted); padding-left: 14px; position: relative; line-height: 1.55; }
+  .archive-headline::before { content: '\203A'; position: absolute; left: 0; color: var(--border-strong); }
+
+  /* Submit */
+  .submit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 8px; }
+  .submit-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 26px 22px; text-align: center; transition: border-color 0.2s, transform 0.2s; }
+  .submit-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .submit-icon { font-size: 34px; margin-bottom: 12px; }
+  .submit-card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .submit-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .btn { display: inline-block; font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-green { background: var(--green); color: #000; }
+  .btn-blue { background: var(--blue); color: #000; }
+  .btn-purple { background: var(--purple); color: #fff; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 28px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 28px; }
+  .footer-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .footer-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+  .empty-state { background: var(--surface2); border: 1px dashed var(--border); border-radius: 12px; padding: 20px; text-align: center; color: var(--muted); font-size: 14px; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header { padding: 22px 18px 18px; }
+    .main { padding: 24px 18px 48px; }
+    .tab-nav-inner { padding: 0 18px; }
+    .tab-btn { padding: 12px 14px; font-size: 13px; }
+    .poc-toolbar { position: static; padding: 14px; }
+    .filter-label { min-width: auto; }
+    .poc-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <span class="issue-badge">Issue #19</span>
+      <span class="auto-badge">&#x26A1; Auto-compiled by Claude on Cowork</span>
+      <span style="background:#ffd166;color:#3a2e00;font-size:11px;font-weight:800;letter-spacing:0.1em;padding:4px 13px;border-radius:100px;text-transform:uppercase;box-shadow:0 4px 16px -4px rgba(255,209,102,0.5);">&#128229; Archive</span>
+    </div>
+    <h1>AI &amp; HR Tech Weekly</h1>
+    <div class="header-meta">
+      <span>&#128197; 31 May 2026</span>
+      <span>&#127970; Deloitte HRSD Practice (Australia)</span>
+      <span>&#129302; ServiceNow &middot; GenAI &middot; HR Technology</span>
+    </div>
+  </div>
+</header>
+<div style="background:var(--surface2);border-bottom:1px solid var(--border);padding:12px 24px;">
+  <div style="max-width:var(--max);margin:0 auto;">
+    <a href="../index.html" style="color:var(--green);text-decoration:none;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:7px;">&#8592; Back to Latest Issue</a>
+  </div>
+</div>
+
+
+
+<main class="main">
+
+
+
+  <!-- TAB: LATEST -->
+  <section id="tab-latest" class="tab-content active" role="tabpanel" aria-labelledby="tab-btn-latest">
+
+    <div class="velocity-grid">
+      <div class="velocity-card">
+        <div class="velocity-label">Anthropic Record Raise</div>
+        <div class="velocity-value" style="color: var(--green);">US$965B</div>
+        <div class="velocity-sub">$65B round closed 28 May &mdash; Claude Opus 4.8 shipped the same day; Mythos to wide release &ldquo;in coming weeks&rdquo;</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Gemini App Reach &mdash; Google I/O</div>
+        <div class="velocity-value" style="color: var(--blue);">900M</div>
+        <div class="velocity-sub">Monthly active users; Gemini 3.5 Flash is now the default model (19 May)</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">EU AI Act &mdash; HR High-Risk Date</div>
+        <div class="velocity-value" style="color: var(--orange);">2 Dec 2027</div>
+        <div class="velocity-sub">Employment obligations now land here under the 7 May deal &mdash; but worker-consultation duties already apply</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Workday Sana &times; M365 Copilot</div>
+        <div class="velocity-value" style="color: var(--purple);">13 May</div>
+        <div class="velocity-sub">HR &amp; finance self-service agent now answers and acts inside Microsoft 365 Copilot</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">HR &amp; ServiceNow Intelligence</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Workday Puts Its Sana Self-Service Agent Inside Microsoft 365 Copilot &mdash; the HR Front Door Just Moved Into the Collaboration Layer</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">Workday</span>
+            <span class="badge badge-agentic">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">On 13 May Workday made its Sana Self-Service Agent generally available inside Microsoft 365 Copilot, so employees can ask HR and finance questions &mdash; leave balance, time-off requests, expense status, review tasks, policy look-ups &mdash; and have them actioned without leaving Microsoft 365. The design choice is the story: Copilot is the conversational surface, but the transaction still runs through Workday&rsquo;s deterministic business processes, approvals and permissions, so the system of record stays authoritative. Turning it on is a configuration step &mdash; a single app in the Microsoft Marketplace, no new login, deployment or licence. For Deloitte HRSD practitioners this is the clearest signal yet that the employee &ldquo;front door&rdquo; is migrating into the collaboration layer (Copilot, Teams, Slack) &mdash; exactly the surface ServiceNow EmployeeWorks and Otto also contest. The live client question is no longer &ldquo;which chatbot?&rdquo; but &ldquo;which orchestration layer owns the front door, and where does governed execution actually run?&rdquo; &mdash; build a one-page front-door map for every Workday-plus-ServiceNow-plus-Microsoft account this quarter.</div>
+        <a class="story-link" href="https://newsroom.workday.com/2026-05-13-Workday-Brings-Sana-Self-Service-Agent-for-HR-and-Finance-Into-Microsoft-365-Copilot" target="_blank" rel="noopener">Workday Newsroom &mdash; Sana in Microsoft 365 Copilot &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow AI Control Tower Adds Out-of-the-Box EU AI Act &amp; NIST Risk Frameworks; AI Agent Advisor and Intelligent Approvals Hit GA in the Australia Release</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-watch">Governance</span>
+          </div>
+        </div>
+        <div class="story-body">ServiceNow has expanded AI Control Tower to discover, observe, govern, secure and measure AI across any system &mdash; with five new risk frameworks aligned to NIST and EU AI Act standards shipped as out-of-the-box compliance controls, runtime agent observability via the Traceloop acquisition, and identity/least-privilege governance via Veza. On the local timeline that matters: per the ServiceNow AI Platform Australia release, AI Agent Advisor and Intelligent Approvals are generally available in May 2026, while the AI Control Tower enhancements enter Innovation Lab in May with GA expected in August 2026. For a Deloitte HRSD practice operating in Australia, the combination of the Australia-release cadence and baked-in EU AI Act / NIST frameworks turns &ldquo;how will you govern agentic HR?&rdquo; from slideware into a configurable control you can demo. Lead H2 governance discovery with AI Control Tower&rsquo;s Govern frameworks, and pair it with the conformity sprint in this week&rsquo;s POC #3.</div>
+        <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-expands-AI-Control-Tower-to-discover-observe-govern-secure-and-measure-AI-deployed-across-any-system-in-the-enterprise/default.aspx" target="_blank" rel="noopener">ServiceNow Newsroom &mdash; AI Control Tower expansion &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow &times; Experian: Ascend Decisioning Wired Into the AI Platform &mdash; and Employee Onboarding Is an Explicit Launch Use Case</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-agentic">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">On 15 May Experian and ServiceNow unveiled a global, multi-year partnership that connects the Experian Ascend Platform natively to the ServiceNow AI Platform, so AI agents can reach trusted decisioning data directly inside workflows. The named launch use cases are pointed: employee onboarding, third-party risk management and model life-cycle governance, with fraud and identity verification aimed at highly regulated environments. The framing is &ldquo;trusted data is the missing fuel&rdquo; &mdash; the companies cite research that data limitations are the primary barrier for eight in ten organisations scaling agentic AI past pilots. For Deloitte HRSD practitioners, Experian-grade identity and screening data flowing straight into an onboarding journey is a concrete pre-boarding play for regulated Australian clients (banks, government, healthcare). Scope an onboarding-screening agent POC that calls Experian decisioning inside an EmployeeWorks/HRSD onboarding workflow, with the audit trail kept in ServiceNow.</div>
+        <a class="story-link" href="https://www.experianplc.com/newsroom/press-releases/2026/experian-partners-with-servicenow-to-scale-trusted-decisioning-t" target="_blank" rel="noopener">Experian Newsroom &mdash; ServiceNow partnership &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow Build Agent Goes GA Inside Cursor, Windsurf, Claude Code &amp; GitHub Copilot &mdash; Governed by Default and Powered by Anthropic Models</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-genai">Anthropic</span>
+          </div>
+        </div>
+        <div class="story-body">At Knowledge 2026 ServiceNow made Build Agent generally available in ServiceNow Studio and extended its core skills into Cursor, Windsurf, Claude Code and GitHub Copilot, so developers can build from whatever environment they like with full platform context and governance. Everything built inherits enterprise audit trails, security checks and compliance once deployed, App Engine Management Center governs apps before go-live, and on-platform Build Agent is now powered by Anthropic models for longer-context sessions that hold continuity across a whole application build. For Deloitte HRSD delivery teams, this is governed &ldquo;vibe coding&rdquo; of HRSD update sets and Now Assist skills from the tools engineers already use &mdash; collapsing build time without the shadow-IT and technical-debt risk that ungoverned AI coding creates. Stand up a Build Agent plus Claude Code workflow on a Deloitte PDI and benchmark it against manual HRSD configuration on real backlog items.</div>
+        <a class="story-link" href="https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-Build-Agent-now-works-inside-every-major-AI-coding-tool-governed-by-default/default.aspx" target="_blank" rel="noopener">ServiceNow Newsroom &mdash; Build Agent in every coding tool &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Accenture and ServiceNow Launch a Forward-Deployed Engineering Program to Take Agentic AI From Pilot to Production &mdash; Read It as Competitive Intel</div>
+          <div class="story-badges">
+            <span class="badge badge-watch">WATCH</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-agentic">SI Play</span>
+          </div>
+        </div>
+        <div class="story-body">On 6 May ServiceNow and Accenture announced a forward-deployed engineering (FDE) program in which ServiceNow&rsquo;s AI-native FDE team works alongside Accenture FDEs inside mutual customers&rsquo; environments, building agentic AI workflows natively on the platform and delivering value in production before a broader rollout begins. The model is deliberately &ldquo;engineers embedded in the client, value live first&rdquo; &mdash; an answer to the number-one objection on every agentic-AI pursuit: &ldquo;show me it works in our environment, not a demo.&rdquo; For a Deloitte HRSD practice, this is direct competitive intelligence: a rival SI is being designed into ServiceNow&rsquo;s production motion. The counter-play is a visible &ldquo;production-in-flow&rdquo; pursuit pattern &mdash; a reusable agentic-HR accelerator plus an embedded-engineer offer &mdash; so Deloitte owns the &ldquo;who gets it live?&rdquo; conversation rather than ceding it.</div>
+        <a class="story-link" href="https://newsroom.accenture.com/news/2026/servicenow-and-accenture-launch-forward-deployed-engineering-program-to-scale-agentic-ai-across-the-enterprise" target="_blank" rel="noopener">Accenture Newsroom &mdash; ServiceNow FDE program &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="section-header" style="margin-top: 40px;">
+      <span class="section-title">General AI Hot News</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Anthropic Ships Claude Opus 4.8 &mdash; Tuned for Honesty and &ldquo;Flagging Uncertainty&rdquo; &mdash; the Same Day It Raises $65B at a $965B Valuation</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">Anthropic</span>
+          </div>
+        </div>
+        <div class="story-body">On 28 May Anthropic released Claude Opus 4.8, describing it as having sharper judgement and &ldquo;more honesty about its progress&rdquo; &mdash; early testers report it is more likely to flag uncertainty and less likely to make unsupported claims, with misaligned-behaviour rates substantially below Opus 4.7. It is the same price as 4.7 ($5/$25 per million in/out tokens), with fast mode now roughly three times cheaper, and benchmarks tick up (agentic coding 64.3% &rarr; 69.2%; knowledge work 1753 &rarr; 1890). The same day Anthropic closed a $65B round at a $965B valuation on ~$47B annualised run-rate revenue, and said its cyber-capable Mythos model is heading to wide release &ldquo;in coming weeks.&rdquo; For Deloitte HRSD practitioners the honesty tuning is the most relevant shift this fortnight: high-stakes HR prompts (termination, pay, discipline, leave) are precisely where a model that says &ldquo;I&rsquo;m not certain &mdash; escalate&rdquo; beats one that confabulates a policy answer. With ServiceNow Action Fabric able to pin Claude behind Now Assist, run the Opus-4.8 honesty bake-off in POC #2 and use the escalation delta in audit-readiness conversations.</div>
+        <a class="story-link" href="https://fortune.com/2026/05/29/anthropic-raises-65-billion-at-record-965-billion-valuation-promises-mythos-ai-model-in-wide-release-in-coming-weeks-releases-claude-opus-4-8/" target="_blank" rel="noopener">Fortune &mdash; Anthropic raise + Opus 4.8 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Google I/O: Gemini 3.5 Flash Lands as the New Default &mdash; Frontier-Grade Agentic Performance at ~4&times; the Speed and Under Half the Cost</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">Google</span>
+          </div>
+        </div>
+        <div class="story-body">At Google I/O on 19 May, Google introduced the Gemini 3.5 family &mdash; &ldquo;frontier intelligence with action&rdquo; &mdash; and released 3.5 Flash as the default model in the Gemini app and AI Mode in Search. It beats Gemini 3.1 Pro on key agentic and coding benchmarks (Terminal-Bench 2.1 76.2%, MCP Atlas 83.6%, CharXiv 84.2%) while running about four times faster and often at less than half the cost of comparable models, and Google says the Gemini app now has over 900 million monthly active users. Alongside it: Gemini Spark, a 24/7 personal agent, and confirmation that Apple&rsquo;s Siri will run on Gemini in 2026. For Deloitte HRSD practitioners, Flash 3.5 resets the price/performance floor for the cheap, fast NLU and routing layer behind HR chat and case triage &mdash; refresh any cost-sensitive Now Assist alternative or mid-market HR-bot scoping against it. The bigger signal is distribution: with Gemini heading into every iPhone, employee expectations of the corporate HR assistant are about to rise sharply.</div>
+        <a class="story-link" href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/" target="_blank" rel="noopener">Google &mdash; Gemini 3.5 announcement &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">EU AI Act: 7 May Political Deal Pushes High-Risk Employment Obligations to 2 December 2027 &mdash; Classification Guidance Now Out for Consultation</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">Regulatory</span>
+            <span class="badge badge-watch">EU</span>
+          </div>
+        </div>
+        <div class="story-body">Following the 7 May political agreement to simplify the AI Act, the Commission has set a clear timeline: rules for high-risk areas including employment now apply from 2 December 2027 (product-embedded systems from 2 August 2028) &mdash; a meaningful slip from the August 2026 date this digest flagged a fortnight ago. On 19 May the Commission opened consultation on draft guidelines for classifying high-risk AI systems, following an 8 May consultation on transparency obligations. The relief is real but partial: legal commentators stress the omnibus is still being finalised, and Article 26(7) worker information-and-consultation duties already apply before any new HR AI goes live. For Deloitte HRSD practitioners the message is &ldquo;don&rsquo;t down tools&rdquo; &mdash; worker consultation bites today, the classification rulebook is being written now (your window to scope systems against it), and the Brussels effect still pulls Australian multinationals into scope. Reframe the conformity work in POC #3 from deadline-panic to &ldquo;use the runway to inventory systems and design human oversight properly.&rdquo;</div>
+        <a class="story-link" href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">European Commission &mdash; AI Act timeline &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">OpenAI and Dell Bring Codex to Hybrid and On-Premises Environments &mdash; an Agentic Coding Runtime Inside the Client&rsquo;s Own Boundary</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">OpenAI</span>
+          </div>
+        </div>
+        <div class="story-body">On 18 May OpenAI and Dell announced a partnership to bring Codex to hybrid and on-premises enterprise environments, and across May OpenAI hardened Codex CLI into a persistent autonomous agent runtime &mdash; Goal mode on by default, conversation-history search, richer MCP support. The point is deployment topology: a capable coding agent that can run inside the customer&rsquo;s own data boundary rather than only in a public cloud. For Deloitte HRSD practitioners this is the unlock for regulated clients (APRA-supervised banks, federal agencies, defence primes) who have blocked cloud coding assistants &mdash; the same audience that wants Claude-on-AWS behind Now Assist. An air-gapped or hybrid Codex makes &ldquo;AI-accelerated ServiceNow build inside the client&rsquo;s perimeter&rdquo; a procurement-survivable pitch; flag it for any account that has banned cloud-hosted dev tooling.</div>
+        <a class="story-link" href="https://openai.com/news/" target="_blank" rel="noopener">OpenAI News &mdash; Codex on-prem with Dell (18 May) &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">xAI&rsquo;s Busiest Month: Grok Build Coding Agent, Custom Skills and App Connectors Land &mdash; as xAI Folds Into SpaceX as &ldquo;SpaceXAI&rdquo;</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">xAI</span>
+          </div>
+        </div>
+        <div class="story-body">May was xAI&rsquo;s most active release run yet: Grok Build 0.1, a purpose-built agentic coding model, shipped in early access on 14 May ($1/$2 per million tokens, 256K context), Custom Skills launched on 26 May, and Connectors now wire Grok into SharePoint, Outlook, OneDrive, Google Workspace, Notion, GitHub and Linear (plus bring-your-own MCP). Structurally, xAI ceased to exist as a standalone company, folding into SpaceX as &ldquo;SpaceXAI&rdquo; with further restructuring. For Deloitte HRSD practitioners, Grok&rsquo;s Connectors-plus-Skills push it toward a workplace &ldquo;do-the-work&rdquo; layer competing with Copilot and Gemini &mdash; but the SpaceX absorption, layoffs and still-unresolved training-data questions keep Grok off bank, defence and APS shortlists for now. Track it as a fast-moving consumer-distribution threat, not yet an enterprise HR option for regulated Australian clients.</div>
+        <a class="story-link" href="https://www.basenor.com/blogs/news/5-xai-grok-updates-you-may-have-missed-this-may" target="_blank" rel="noopener">Basenor &mdash; xAI&rsquo;s May releases roundup &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-header">
+      <span class="section-title">Team Submissions</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="empty-state">
+      No new submissions this week. Got a POC idea or investigation request? Head to the <strong>Submit Idea</strong> tab.
+    </div>
+
+    <div class="poc-highlight">
+      <div class="poc-highlight-head">
+        <div class="poc-highlight-title">&#129514; This Week's POC Ideas</div>
+        <span class="poc-highlight-note">Promoted to POC Lab &middot; persists until retired</span>
+      </div>
+      <div class="poc-idea-list">
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">1</div>
+          <div>
+            <div class="poc-idea-text">Front-Door Bake-Off: ServiceNow EmployeeWorks vs. Workday Sana-in-Copilot for the Same 30 HR Intents</div>
+            <div class="poc-idea-sub">With Workday&rsquo;s Sana agent now live inside Microsoft 365 Copilot (13 May), run the same 30 HR intents &mdash; leave balance, payslip, time-off request, policy look-up, onboarding status &mdash; through two paths: (a) Copilot &rarr; Sana &rarr; Workday, and (b) ServiceNow EmployeeWorks. Score task-completion rate, where governed execution actually happens, audit-trail completeness and latency, then map where the &ldquo;system of action&rdquo; sits in each. The deliverable is an orchestration-layer decision matrix Deloitte can take into any Workday-plus-ServiceNow-plus-Microsoft account &mdash; the single most-asked architecture question this quarter, answered with evidence instead of vendor slides.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow EmployeeWorks &middot; Workday Sana &middot; M365 Copilot</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">2</div>
+          <div>
+            <div class="poc-idea-text">Audit-Grade HR Policy Assistant on Claude Opus 4.8&rsquo;s Honesty Gains, via ServiceNow Action Fabric</div>
+            <div class="poc-idea-sub">Opus 4.8 (28 May) is explicitly tuned to flag uncertainty and avoid unsupported claims &mdash; the exact behaviour HR compliance needs. Using ServiceNow&rsquo;s bring-your-own-model path and Action Fabric to pin Claude behind Now Assist, build an HRSD policy Q&amp;A agent that, for high-stakes prompts (termination, leave, pay, discipline), either cites the governing policy clause or explicitly escalates to a human &mdash; then benchmark its &ldquo;I&rsquo;m not certain&rdquo; / escalation rate against the production Now Assist HR chat on a 50-prompt set. Package the result as an audit-readiness evidence pack mapped to EU AI Act Article 14 human-oversight requirements, ready for Q3 client renewals.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-advanced">Advanced</span>
+              <span class="chip chip-platform">ServiceNow Now Assist &middot; Action Fabric &middot; Claude Opus 4.8</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">3</div>
+          <div>
+            <div class="poc-idea-text">EU AI Act Annex III Conformity Workbench for HR: Auto-Inventory + FRIA Generator on AI Control Tower</div>
+            <div class="poc-idea-sub">With the high-risk classification guidelines now out for consultation (19 May) and the employment deadline landing 2 December 2027 &mdash; yet worker-consultation duties live today &mdash; build a ServiceNow-native intake that inventories every HR AI system, auto-classifies it against Annex III point 4 (recruitment, performance, promotion/dismissal, access to services), and drafts a Fundamental Rights Impact Assessment plus a human-oversight log. Wire it to AI Control Tower&rsquo;s new EU AI Act / NIST risk frameworks so the controls are configured, not described. Output: a Deloitte-branded conformity workbench plus a client one-pager that converts the extended runway into a paid readiness engagement rather than a deadline scramble.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow AI Control Tower &middot; HRSD Governance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  </section><!-- /tab-latest -->
+
+  
+
+  <div class="footer">
+    <div class="footer-badge">
+      <div class="footer-dot"></div>
+      Powered by Agentic AI &mdash; Claude on Cowork
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var TABS = ['latest', 'poc', 'archive', 'submit'];
+
+  function switchTab(tabId, opts) {
+    opts = opts || {};
+    if (TABS.indexOf(tabId) === -1) tabId = 'latest';
+
+    document.querySelectorAll('.tab-btn').forEach(function (btn) {
+      var active = btn.getAttribute('data-tab') === tabId;
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      btn.classList.toggle('active', active);
+      btn.setAttribute('tabindex', active ? '0' : '-1');
+    });
+    document.querySelectorAll('.tab-content').forEach(function (content) {
+      var active = content.id === 'tab-' + tabId;
+      content.classList.toggle('active', active);
+      if (active) { content.removeAttribute('hidden'); } else { content.setAttribute('hidden', ''); }
+    });
+
+    if (opts.updateHash !== false) {
+      var newHash = '#' + tabId;
+      if (window.location.hash !== newHash) {
+        history.replaceState(null, '', newHash);
+      }
+    }
+    if (opts.scroll !== false) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Tab click
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      switchTab(btn.getAttribute('data-tab'));
+    });
+  });
+
+  // Hash routing
+  function handleHashChange() {
+    var hash = (window.location.hash || '').replace('#', '');
+    if (TABS.indexOf(hash) !== -1) {
+      switchTab(hash, { updateHash: false, scroll: false });
+    }
+  }
+  window.addEventListener('hashchange', handleHashChange);
+  handleHashChange();
+
+  // Keyboard shortcuts (1-4) + arrow nav across tabs
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var active = document.activeElement;
+    if (active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)) return;
+    if (/^[1-4]$/.test(e.key)) {
+      switchTab(TABS[parseInt(e.key, 10) - 1]);
+      e.preventDefault();
+    }
+  });
+
+  // Arrow-key nav when focus is on a tab
+  var tabList = document.querySelector('[role="tablist"]');
+  if (tabList) {
+    tabList.addEventListener('keydown', function (e) {
+      var btns = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+      var idx = btns.indexOf(document.activeElement);
+      if (idx === -1) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        var next = e.key === 'ArrowRight' ? (idx + 1) % btns.length : (idx - 1 + btns.length) % btns.length;
+        btns[next].focus();
+        switchTab(btns[next].getAttribute('data-tab'), { scroll: false });
+        e.preventDefault();
+      }
+    });
+  }
+
+  // POC expand/collapse
+  document.querySelectorAll('.poc-expand-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      var panelId = btn.getAttribute('aria-controls');
+      var panel = document.getElementById(panelId);
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      btn.querySelector('span').textContent = expanded ? 'Show full brief' : 'Hide brief';
+      if (panel) {
+        if (expanded) { panel.setAttribute('hidden', ''); } else { panel.removeAttribute('hidden'); }
+      }
+    });
+  });
+
+  // POC filters
+  var filters = { status: 'all', difficulty: 'all', platform: 'all', search: '' };
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.poc-card'));
+  var searchInput = document.getElementById('poc-search');
+  var resultsEl = document.getElementById('poc-results');
+  var clearBtn = document.getElementById('poc-clear');
+  var emptyClearBtn = document.getElementById('poc-empty-clear');
+  var emptyState = document.getElementById('poc-empty');
+
+  function filtersActive() {
+    return filters.status !== 'all' || filters.difficulty !== 'all' || filters.platform !== 'all' || filters.search !== '';
+  }
+
+  function applyFilters() {
+    var visibleTotal = 0;
+    var q = filters.search.toLowerCase().trim();
+    cards.forEach(function (card) {
+      var status = card.getAttribute('data-status');
+      var diff = card.getAttribute('data-difficulty');
+      var plats = card.getAttribute('data-platforms') || '';
+      var hay = (card.textContent + ' ' + (card.getAttribute('data-search') || '')).toLowerCase();
+      var ok = true;
+      if (filters.status !== 'all' && status !== filters.status) ok = false;
+      if (filters.difficulty !== 'all' && diff !== filters.difficulty) ok = false;
+      if (filters.platform !== 'all' && plats.indexOf(filters.platform) === -1) ok = false;
+      if (q && hay.indexOf(q) === -1) ok = false;
+      if (ok) { card.removeAttribute('hidden'); visibleTotal++; } else { card.setAttribute('hidden', ''); }
+    });
+
+    // Hide empty groups
+    document.querySelectorAll('.poc-group').forEach(function (group) {
+      var visible = group.querySelectorAll('.poc-card:not([hidden])').length;
+      var countEl = group.querySelector('[data-group-count]');
+      if (countEl) countEl.textContent = visible;
+      if (visible === 0) { group.setAttribute('hidden', ''); } else { group.removeAttribute('hidden'); }
+    });
+
+    if (emptyState) {
+      if (visibleTotal === 0) { emptyState.removeAttribute('hidden'); } else { emptyState.setAttribute('hidden', ''); }
+    }
+    if (resultsEl) resultsEl.textContent = visibleTotal + ' of ' + cards.length;
+    if (clearBtn) clearBtn.disabled = !filtersActive();
+  }
+
+  function setFilterCounts() {
+    var statusCounts = { all: cards.length, building: 0, idea: 0, done: 0, parked: 0 };
+    cards.forEach(function (c) { statusCounts[c.getAttribute('data-status')] = (statusCounts[c.getAttribute('data-status')] || 0) + 1; });
+    document.querySelectorAll('.filter-group[data-filter="status"] .filter-chip').forEach(function (chip) {
+      var v = chip.getAttribute('data-filter-value');
+      var countSpan = chip.querySelector('.filter-chip-count');
+      if (countSpan) countSpan.textContent = statusCounts[v] != null ? '(' + statusCounts[v] + ')' : '';
+    });
+  }
+
+  document.querySelectorAll('.filter-group').forEach(function (group) {
+    var type = group.getAttribute('data-filter');
+    group.querySelectorAll('.filter-chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        group.querySelectorAll('.filter-chip').forEach(function (c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        filters[type] = chip.getAttribute('data-filter-value');
+        applyFilters();
+      });
+    });
+  });
+
+  if (searchInput) {
+    var t;
+    searchInput.addEventListener('input', function () {
+      clearTimeout(t);
+      t = setTimeout(function () {
+        filters.search = searchInput.value;
+        applyFilters();
+      }, 100);
+    });
+  }
+
+  function clearAll() {
+    filters = { status: 'all', difficulty: 'all', platform: 'all', search: '' };
+    if (searchInput) searchInput.value = '';
+    document.querySelectorAll('.filter-group').forEach(function (group) {
+      group.querySelectorAll('.filter-chip').forEach(function (c) { c.classList.remove('active'); });
+      var first = group.querySelector('.filter-chip[data-filter-value="all"]');
+      if (first) first.classList.add('active');
+    });
+    applyFilters();
+  }
+  if (clearBtn) clearBtn.addEventListener('click', clearAll);
+  if (emptyClearBtn) emptyClearBtn.addEventListener('click', clearAll);
+
+  setFilterCounts();
+  applyFilters();
+})();
+</script>
+
+</body>
+</html>
