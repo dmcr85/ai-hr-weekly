@@ -140,7 +140,7 @@ The accent is deliberately **deep** emerald (not neon mint) so small mono text s
 - Modern "wire" masthead: left-aligned grotesk `.nameplate` over a mono `.wire` metadata bar with `//` separators and a live accent dot.
 - Mono "wire" system threaded through the page: indexed section eyebrows (`.section-title::before` auto-numbers `01 / 02 / 03` via a CSS counter), mono kickers, `↳` source credits (`.story-link::before`).
 - Indicators are **white cards** (`--r` radius) with a small accent top-tab and big grotesk figures.
-- Stories are a **ruled column, not boxes**. The **first story in each section is the lead**: bigger grotesk headline + a vertical **accent bar** on its left (`.story-card:first-child::after`) — NOT a drop cap.
+- On **Latest**, articles sit in a fixed **reading column** (`--col`, ~672px): the headline, body, and the dividing rules all share that width and align — never a full-width headline over a narrow paragraph. The indicators strip and the POC flagship stay full-width. Stories are a **ruled column, not boxes**. The **first story in each section is the lead**: bigger grotesk headline + a vertical **accent bar** on its left (`.story-card:first-child::after`) — NOT a drop cap.
 - Badges are mono **kickers** in `[ brackets ]` above each headline; `NEW/HOT/BREAKING` in accent, the rest muted.
 - POC flagship: a white card with a solid **accent header bar** (white text) and large grotesk numerals.
 - Footer is a mono **colophon**. Subtle radius on feature cards (anti-broadsheet); NO emoji anywhere.
