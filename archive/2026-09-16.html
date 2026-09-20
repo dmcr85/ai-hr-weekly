@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; HR Tech Weekly &mdash; Issue #33 | 16 September 2026</title>
+<style>
+  /* ============================================================
+     AI & HR Tech Weekly — "The Wire"
+     Modern intelligence-brief aesthetic. Cool near-white, one
+     electric-blue signal accent, grotesk display + mono wire.
+     Built per anthropics/skills:frontend-design (two-pass, anti-default).
+     ============================================================ */
+  :root {
+    --paper:   #f5f5f3;   /* cool near-white canvas */
+    --paper-2: #eeeeec;
+    --card:    #ffffff;   /* white cards lift off the canvas */
+    --ink:     #15161a;   /* cool near-black */
+    --ink-2:   #33353c;
+    --steel:   #565a63;   /* secondary text */
+    --mist:    #8a8f99;   /* metadata */
+    --faint:   #b6bac1;
+    --line:    #e4e4e7;   /* hairline */
+    --line-2:  #d2d4d9;
+    --muted:   #565a63;   /* alias for legacy inline styles */
+    --accent:      #0a7d54;   /* deep emerald — the ONLY bold note (legible on white) */
+    --accent-deep: #07623f;
+    --accent-wash: #e7f3ed;   /* faint accent tint for feature zones */
+
+    --display: 'Space Grotesk', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --sans:    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+    --max: 1120px;
+    --measure: 70ch;
+    --col: 48rem;   /* article reading column — ~80 char measure at 18px; centered */
+    --r:   12px;   /* feature radius — deliberately NOT zero (anti-broadsheet) */
+    --r-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'ss01' 1;
+  }
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent); z-index: 200;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+
+  /* ---------- Masthead — terminal "wire" header ---------- */
+  .masthead { padding: 34px 24px 0; }
+  .masthead-inner { max-width: var(--max); margin: 0 auto; }
+  .wire {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--mist);
+    padding-bottom: 16px;
+  }
+  .wire span { display: inline-flex; align-items: center; }
+  .wire span + span::before { content: '//'; color: var(--line-2); margin: 0 12px; }
+  .wire .wire-issue { color: var(--accent); font-weight: 600; }
+  .wire .wire-live { color: var(--ink); }
+  .wire .wire-live::after { content: ''; width: 6px; height: 6px; margin-left: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  .nameplate {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(40px, 7.5vw, 78px); line-height: 0.96; letter-spacing: -0.035em;
+    color: var(--ink); padding: 6px 0 0; max-width: 14ch;
+  }
+  .standfirst {
+    font-family: var(--sans); font-size: clamp(15px, 1.9vw, 18px); line-height: 1.5;
+    color: var(--steel); max-width: 60ch; padding: 18px 0 22px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  /* ---------- Section nav ---------- */
+  .tab-nav { background: rgba(245,245,243,0.85); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .tab-nav-inner { max-width: var(--max); margin: 0 auto; display: flex; gap: 4px; padding: 0 24px; overflow-x: auto; scrollbar-width: none; }
+  .tab-nav-inner::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none; border: none; cursor: pointer; color: var(--steel);
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 15px 14px; white-space: nowrap; position: relative;
+    display: inline-flex; align-items: baseline; gap: 6px; transition: color 0.15s;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn[aria-selected="true"] { color: var(--accent); }
+  .tab-btn[aria-selected="true"]::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: -1px; height: 2px; background: var(--accent); }
+  .kbd-hint { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--faint); }
+  .tab-btn[aria-selected="true"] .kbd-hint { color: var(--accent); }
+
+  /* ---------- Main ---------- */
+  .main { max-width: var(--max); margin: 0 auto; padding: 40px 24px 72px; }
+  .tab-content { display: none; counter-reset: section; }
+  .tab-content.active { display: block; animation: fade 0.25s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---------- Section headers — indexed eyebrow ---------- */
+  .section-header { display: flex; align-items: center; gap: 16px; margin: 56px 0 24px; }
+  .section-header:first-child { margin-top: 0; }
+  /* The reading column applies ONLY to the Latest tab's article sections; centered */
+  #tab-latest .section-header { max-width: var(--col); margin-inline: auto; }
+  .section-title {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+    white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: baseline; gap: 10px;
+  }
+  .section-title::before {
+    counter-increment: section; content: counter(section, decimal-leading-zero);
+    font-family: var(--mono); font-weight: 600; color: var(--accent); letter-spacing: 0;
+  }
+  .section-line { flex: 1; height: 0; border-top: 1px solid var(--line); }
+  .section-hint { font-family: var(--mono); font-size: 11px; color: var(--mist); flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ---------- Indicators ---------- */
+  .kicker-numbers {
+    font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--mist); margin: 0 0 14px;
+  }
+  .kicker-numbers b { color: var(--accent); font-weight: 600; }
+  .velocity-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin: 0 0 16px;
+  }
+  .velocity-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 20px 22px; position: relative; overflow: hidden; transition: border-color 0.18s;
+  }
+  .velocity-card:hover { border-color: var(--line-2); }
+  .velocity-card::before { content: ''; position: absolute; top: 0; left: 0; width: 28px; height: 3px; background: var(--accent); }
+  .velocity-label {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--mist); margin: 6px 0 12px; line-height: 1.4; min-height: 2.8em;
+  }
+  .velocity-value {
+    font-family: var(--display); font-weight: 600; font-size: 38px; line-height: 0.95;
+    letter-spacing: -0.03em; color: var(--ink); font-variant-numeric: tabular-nums lining-nums;
+  }
+  .velocity-sub { font-size: 13px; color: var(--steel); margin-top: 10px; line-height: 1.5; }
+
+  /* ---------- Stories ---------- */
+  .story-grid { display: flex; flex-direction: column; }
+  .story-card { background: none; border: none; border-radius: 0; box-shadow: none; padding: 28px 0; border-bottom: 1px solid var(--line); max-width: var(--col); margin-inline: auto; }
+  .story-card:last-child { border-bottom: none; }
+  .story-top { display: flex; flex-direction: column; gap: 11px; margin-bottom: 12px; }
+  .story-badges { order: -1; display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+  .badge {
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--mist);
+    background: none; border: none; border-radius: 0; padding: 0; position: relative;
+  }
+  .badge::before { content: '['; color: var(--line-2); margin-right: 1px; }
+  .badge::after { content: ']'; color: var(--line-2); margin-left: 1px; }
+  .badge-new, .badge-hot, .badge-breaking { color: var(--accent); }
+  .badge-new::before, .badge-hot::before, .badge-breaking::before,
+  .badge-new::after, .badge-hot::after, .badge-breaking::after { color: var(--accent); opacity: 0.5; }
+  .story-title { font-family: var(--display); font-weight: 600; font-size: 23px; line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); max-width: var(--col); }
+  .story-body { font-family: var(--sans); font-size: 18px; color: var(--ink-2); line-height: 1.62; margin-bottom: 16px; max-width: var(--col); }
+  .story-link {
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--accent); display: inline-flex; align-items: center; gap: 7px;
+  }
+  .story-link::before { content: '\21B3'; color: var(--accent); font-weight: 600; }
+  .story-link:hover { color: var(--accent-deep); }
+
+  /* Lead story — accent bar + scale, no drop cap */
+  .story-grid > .story-card:first-child { position: relative; padding-left: 24px; padding-top: 6px; padding-bottom: 32px; }
+  .story-grid > .story-card:first-child::after { content: ''; position: absolute; left: 0; top: 8px; bottom: 32px; width: 4px; background: var(--accent); border-radius: 4px; }
+  .story-grid > .story-card:first-child .story-title { font-size: clamp(26px, 3.6vw, 36px); line-height: 1.08; letter-spacing: -0.03em; }
+  .story-grid > .story-card:first-child .story-body { font-size: 20px; line-height: 1.6; }
+
+  /* ---------- Weekly POC ideas — flagship feature ---------- */
+  .poc-highlight {
+    background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
+    padding: 0; margin-top: 56px; overflow: hidden; box-shadow: 0 1px 2px rgba(20,22,30,0.04);
+  }
+  .poc-highlight-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 20px 26px; background: var(--accent); }
+  .poc-highlight-title { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+  .poc-highlight-note { font-family: var(--mono); font-size: 10.5px; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.4); border-radius: 100px; padding: 4px 11px; }
+  .poc-idea-list { display: flex; flex-direction: column; padding: 4px 26px 22px; }
+  .poc-idea-item { display: flex; gap: 22px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .poc-idea-item:last-child { border-bottom: none; padding-bottom: 4px; }
+  .poc-idea-num { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 0.9; color: var(--accent); background: none; width: auto; height: auto; min-width: 40px; border-radius: 0; box-shadow: none; display: block; margin-top: 2px; letter-spacing: -0.03em; font-variant-numeric: lining-nums; }
+  .poc-idea-text { font-family: var(--display); font-size: 19px; font-weight: 600; color: var(--ink); line-height: 1.28; letter-spacing: -0.01em; }
+  .poc-idea-sub { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; line-height: 1.6; max-width: var(--measure); }
+  .poc-idea-tags { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+
+  /* ---------- POC Lab: toolbar ---------- */
+  .poc-toolbar { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 49px; z-index: 90; }
+  .poc-search-row { display: flex; gap: 10px; align-items: center; }
+  .poc-search { flex: 1; background: var(--paper); border: 1px solid var(--line-2); border-radius: var(--r-sm); color: var(--ink); padding: 9px 13px; font-size: 14px; font-family: var(--sans); transition: border-color 0.18s; }
+  .poc-search::placeholder { color: var(--faint); }
+  .poc-search:focus { outline: none; border-color: var(--accent); }
+  .poc-results { font-family: var(--mono); font-size: 11.5px; color: var(--mist); white-space: nowrap; }
+  .poc-filters { display: flex; flex-direction: column; gap: 8px; }
+  .filter-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .filter-label { font-family: var(--mono); font-size: 10px; color: var(--mist); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; min-width: 62px; }
+  .filter-chip { background: var(--paper); border: 1px solid var(--line-2); color: var(--steel); font-size: 12px; font-weight: 500; font-family: var(--sans); padding: 5px 12px; border-radius: 100px; cursor: pointer; transition: color 0.15s, background 0.15s, border-color 0.15s; }
+  .filter-chip:hover { color: var(--ink); border-color: var(--mist); }
+  .filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-chip-count { opacity: 0.7; font-weight: 600; margin-left: 4px; }
+  .poc-clear { background: none; border: none; color: var(--mist); font-size: 12px; font-weight: 500; cursor: pointer; padding: 5px 9px; border-radius: var(--r-sm); }
+  .poc-clear:hover { color: var(--accent); }
+  .poc-clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ---------- POC groups ---------- */
+  .poc-group { margin-bottom: 32px; }
+  .poc-group[hidden] { display: none; }
+  .poc-group-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .poc-group-title { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 9px; flex-shrink: 0; white-space: nowrap; }
+  .poc-group-title.group-building { color: var(--accent); }
+  .poc-group-title.group-idea { color: var(--ink); }
+  .poc-group-title.group-done { color: var(--steel); }
+  .poc-group-title.group-parked { color: var(--faint); }
+  .poc-group-count { background: var(--paper); border: 1px solid var(--line-2); border-radius: 100px; padding: 1px 9px; font-family: var(--mono); font-size: 11px; color: var(--mist); font-weight: 500; }
+  .poc-group-line { flex: 1; height: 0; border-top: 1px solid var(--line); }
+
+  /* ---------- POC cards ---------- */
+  .poc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+  .poc-card { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--line-2); border-radius: var(--r-sm); padding: 18px 20px; transition: border-color 0.18s, box-shadow 0.18s; display: flex; flex-direction: column; gap: 10px; }
+  .poc-card:hover { border-color: var(--line-2); box-shadow: 0 4px 16px -10px rgba(20,22,30,0.25); }
+  .poc-card[hidden] { display: none; }
+  .poc-card[data-status="building"] { border-left-color: var(--accent); }
+  .poc-card[data-status="done"] { border-left-color: var(--ink); }
+  .poc-card[data-status="parked"] { border-left-color: var(--faint); opacity: 0.72; }
+  .poc-card.new-this-week { box-shadow: inset 3px 0 0 var(--accent); }
+  .poc-card-head { display: flex; flex-direction: column; gap: 8px; }
+  .poc-card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .poc-card-title { font-family: var(--display); font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.25; letter-spacing: -0.01em; }
+  .poc-status { font-family: var(--mono); font-size: 9.5px; font-weight: 500; padding: 3px 8px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid; }
+  .status-idea { background: none; color: var(--mist); border-color: var(--line-2); }
+  .status-building { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .status-done { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .status-parked { background: none; color: var(--faint); border-color: var(--line); }
+  .poc-card-hook { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; }
+  .poc-card-meta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .chip { font-family: var(--mono); font-size: 10px; font-weight: 500; padding: 0; border-radius: 0; letter-spacing: 0.04em; text-transform: uppercase; color: var(--mist); }
+  .chip-diff.diff-beginner, .chip-diff.diff-intermediate { color: var(--steel); }
+  .chip-diff.diff-advanced { color: var(--accent); }
+  .chip-platform { color: var(--mist); }
+  .chip-date { color: var(--faint); }
+  .chip-new { color: var(--accent); }
+  .poc-expand-btn { background: none; border: 1px solid var(--line-2); color: var(--steel); cursor: pointer; font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 7px 12px; border-radius: var(--r-sm); display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; transition: color 0.18s, border-color 0.18s; align-self: flex-start; }
+  .poc-expand-btn:hover { color: var(--ink); border-color: var(--mist); }
+  .poc-expand-btn .expand-icon { transition: transform 0.2s; display: inline-block; font-family: var(--mono); }
+  .poc-expand-btn[aria-expanded="true"] .expand-icon { transform: rotate(90deg); }
+  .poc-expand-btn[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
+  .poc-card-detail { margin-top: 2px; border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .poc-card-detail[hidden] { display: none; }
+  .poc-sec h4 { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .poc-sec p, .poc-sec li { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+  .poc-sec ol, .poc-sec ul { padding-left: 20px; }
+  .poc-sec li { margin-bottom: 3px; }
+  .poc-sec li::marker { color: var(--faint); font-size: 11px; }
+  .poc-empty { background: var(--card); border: 1px dashed var(--line-2); border-radius: var(--r); padding: 28px; text-align: center; color: var(--mist); font-size: 14px; }
+  .poc-empty[hidden] { display: none; }
+
+  /* ---------- Archive ---------- */
+  .archive-list { display: flex; flex-direction: column; }
+  .archive-card { background: none; border: none; border-bottom: 1px solid var(--line); border-radius: 0; padding: 22px 0; transition: none; }
+  .archive-card:hover { background: none; }
+  .archive-card.archive-pending { opacity: 0.55; }
+  .archive-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .archive-issue { font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
+  .archive-date { font-family: var(--display); font-size: 19px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .archive-link { font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+  .archive-link:hover { color: var(--accent-deep); }
+  .archive-link::before { content: '\21B3 '; }
+  .archive-link-pending { font-family: var(--mono); font-size: 10.5px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid var(--line); border-radius: 100px; padding: 3px 10px; }
+  .archive-headlines { display: flex; flex-direction: column; gap: 6px; }
+  .archive-headline { font-size: 14px; color: var(--ink-2); padding-left: 18px; position: relative; line-height: 1.5; }
+  .archive-headline::before { content: '\2014'; position: absolute; left: 0; color: var(--accent); }
+
+  /* ---------- Submit ---------- */
+  .submit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 8px; }
+  .submit-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 26px 24px; text-align: left; transition: border-color 0.18s, box-shadow 0.18s; }
+  .submit-card:hover { border-color: var(--line-2); box-shadow: 0 4px 16px -10px rgba(20,22,30,0.25); }
+  .submit-icon { display: none; }
+  .submit-card-title { font-family: var(--display); font-size: 19px; font-weight: 600; margin-bottom: 10px; color: var(--ink); letter-spacing: -0.01em; }
+  .submit-card-desc { font-size: 14px; color: var(--ink-2); margin-bottom: 20px; line-height: 1.55; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 11px 18px; border-radius: var(--r-sm); text-decoration: none; border: 1px solid var(--accent); background: var(--accent); color: #fff; transition: background 0.18s, border-color 0.18s; }
+  .btn:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+  .btn-green, .btn-blue, .btn-purple { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ---------- Footer / colophon ---------- */
+  .footer { padding: 40px 24px 52px; border-top: 1px solid var(--line-2); margin-top: 60px; }
+  .footer-inner { max-width: var(--max); margin: 0 auto; }
+  .footer-wordmark { font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 10px; }
+  .footer-tagline { font-family: var(--sans); font-size: 15px; color: var(--steel); margin-bottom: 18px; }
+  .footer-colophon { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mist); line-height: 1.9; }
+  .footer-colophon .sep { color: var(--line-2); margin: 0 10px; }
+  .divider { height: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+  .empty-state { background: var(--card); border: 1px dashed var(--line-2); border-radius: var(--r); padding: 22px; text-align: center; color: var(--mist); font-size: 14px; max-width: var(--col); margin-inline: auto; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 640px) {
+    .masthead { padding: 24px 18px 0; }
+    .main { padding: 28px 18px 52px; }
+    .tab-nav-inner { padding: 0 18px; }
+    .tab-btn { padding: 13px 12px; }
+    .nameplate { font-size: clamp(34px, 12vw, 50px); max-width: none; }
+    .story-body { font-size: 16.5px; }
+    .story-grid > .story-card:first-child .story-body { font-size: 17.5px; }
+    .velocity-grid { grid-template-columns: 1fr 1fr; }
+    .poc-toolbar { position: static; }
+    .filter-label { min-width: auto; }
+    .poc-grid { grid-template-columns: 1fr; }
+    .submit-grid { grid-template-columns: 1fr; }
+    .poc-highlight-head { padding: 16px 18px; }
+    .poc-idea-list { padding: 4px 18px 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="wire">
+      <span class="wire-issue">Issue 33</span>
+      <span>16 Sep 2026</span>
+      <span>Deloitte HRSD Practice</span>
+      <span class="wire-live">Archived Issue</span>
+    </div>
+    <h1 class="nameplate">AI &amp; HR Tech Weekly</h1>
+    <p class="standfirst">Curated signal on ServiceNow HRSD and frontier AI &mdash; the week&rsquo;s developments, read for the Deloitte HRSD Practice with the consulting angle attached.</p>
+  </div>
+</header>
+
+<div style="background:var(--card);border-bottom:1px solid var(--line);">
+  <div style="max-width:var(--max);margin:0 auto;padding:14px 24px;">
+    <a href="../index.html" style="font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;font-weight:600;">&#8592;&nbsp;Back to Latest Issue</a>
+  </div>
+</div>
+
+
+
+<main class="main">
+
+
+
+
+  <!-- TAB: LATEST -->
+  <section id="tab-latest" class="tab-content active">
+    <p class="kicker-numbers">This Week <b>/</b> By the Numbers</p>
+    <div class="velocity-grid">
+      <div class="velocity-card">
+        <div class="velocity-label">AI Compute NVIDIA and Eight Australian Partners Will Build by 2027</div>
+        <div class="velocity-value">2 GW</div>
+        <div class="velocity-sub">Announced 9 September with Firmus, Sharon AI, IREN, ResetData, Megaport, CDC, NEXTDC and AirTrunk &mdash; against a national data-centre footprint of roughly 1.6&nbsp;GW today, so the commitment alone more than doubles Australian capacity</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Fortune 500 Companies Using AI to Filter Job Applicants</div>
+        <div class="velocity-value">99%</div>
+        <div class="velocity-sub">With roughly 40% expecting to run AI-conducted screening interviews this year &mdash; deployment is effectively universal, while the notification, verification and causation duties arriving this quarter are not</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Days Left on Newsom&rsquo;s Desk for the No Robo Bosses Act</div>
+        <div class="velocity-value">14</div>
+        <div class="velocity-sub">SB 947 cleared the Senate 28&ndash;10 and the Assembly 53&ndash;14 and must be signed or vetoed by 30 September; if enacted it becomes operative 1 July 2027 and bars any employer relying solely on an automated system to fire or discipline</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Jurisdictions Whose HR-AI Obligations Move Inside Sixteen Days</div>
+        <div class="velocity-value">3</div>
+        <div class="velocity-sub">Brazil&rsquo;s Senate takes the final floor vote on Bill 2338/2023 today, California&rsquo;s SB 947 decision falls on 30 September, and Connecticut&rsquo;s AI-causation disclosure on mass-layoff filings starts 1 October &mdash; three instruments, one underlying record</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">HR &amp; ServiceNow Intelligence</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">From 1 October, Connecticut Makes &ldquo;Was It the AI?&rdquo; a Question Every Mass Layoff Has to Answer in Writing</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">Regulation</span>
+            <span class="badge badge-servicenow">HR Tech</span>
+          </div>
+        </div>
+        <div class="story-body">Connecticut&rsquo;s SB 5 takes effect on 1 October 2026, and one provision inside it is a genuine first. Any Connecticut employer filing a WARN notice with the state Department of Labour must disclose whether the layoffs were caused or contributed to by the employer&rsquo;s use of artificial intelligence or other technological change. It binds employers with 100 or more employees &mdash; the existing WARN threshold &mdash; and triggers on the usual qualifying event of 50 or more job losses inside 90 days. The Attorney General enforces it as an unfair or deceptive trade practice, which means an evasive or unsupportable answer is its own exposure, separate from the layoff itself. Note that this is a standalone duty: the bill&rsquo;s automated employment decision technology provisions do not commence until 1 October 2027, so nobody gets to bundle the two into one 2027 programme. So what for a Deloitte HRSD practitioner: every other instrument this digest has tracked asks an employer to document a process. This one asks an employer to attribute causation, under penalty, about a decision that was made months earlier by people who have since moved on &mdash; and no HR estate in the country records it. HRSD holds the case, the lifecycle event, the position record and the termination reason, but there is no field anywhere in the standard data model that says &ldquo;this role was eliminated because a system took the work.&rdquo; Reconstructing that after an AG letter arrives means interviewing the transformation programme, and the answer will be contested internally before it is ever contested externally. The buildable artefact is a technology-causation record captured at decision time: when a role is eliminated, the workflow asks whether automation, AI or a technology change contributed, requires the named accountable executive to attest, and links the answer to the specific programme or system. It is a small configuration change with a fifteen-day runway and an Attorney General attached, which makes it the easiest compliance conversation you will have this quarter.</div>
+        <a class="story-link" href="https://ogletree.com/insights-resources/blog-posts/new-connecticut-law-restricts-employer-ai-use-mandates-notice-for-ai-caused-rifs/" target="_blank" rel="noopener">Ogletree Deakins &mdash; New Connecticut Law Restricts Employer AI Use, Mandates Notice for AI-Caused RIFs &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">The No Robo Bosses Act Is on Newsom&rsquo;s Desk With Fourteen Days to Run &mdash; and It Wants a Verification, Not an Approval</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">Regulation</span>
+            <span class="badge badge-servicenow">HRSD</span>
+          </div>
+        </div>
+        <div class="story-body">California SB 947, the No Robo Bosses Act, passed the Senate 28&ndash;10 and the Assembly 53&ndash;14 in late August, and Governor Newsom must sign or veto by 30 September. It is Senator McNerney&rsquo;s reintroduction of SB 7, which Newsom vetoed in October 2025, revised to address his stated objections. If enacted on 1 July 2027 it would bar employers from relying solely on an automated decision system to fire or discipline a worker, require human oversight and independent verification before those decisions, prohibit the use of ADS for predictive behaviour analysis of workers, require post-use notice when ADS informed a termination or disciplinary decision, and extend all of it to independent contractors as well as employees. So what for a Deloitte HRSD practitioner: read the words &ldquo;independent verification&rdquo; carefully, because they are not satisfied by the approval step you already have. An approval records that a human clicked; a verification records that a human looked at evidence independent of the system&rsquo;s own output and could have reached a different conclusion. In HRSD terms that is a different record with different fields &mdash; what the reviewer was shown, what they consulted outside the recommendation, how long they held it, and what the outcome was when they disagreed. If your disagreement rate is zero across a year, you do not have a verification control, you have a rubber stamp with a timestamp, and that will be the first statistic anyone asks for. The second sleeper is the predictive behaviour analysis prohibition. Flight-risk scoring, attrition prediction and engagement-signal models are standard in workforce analytics and most clients have never classified them as ADS at all, let alone asked whether predicting a worker&rsquo;s future conduct is the thing this bill forbids. That scoping question is worth putting to every Californian client now, while the answer is still cheap to act on.</div>
+        <a class="story-link" href="https://www.cdflaborlaw.com/blog/robots-can-recommend-but-real-people-must-pull-the-trigger-inside-sb-947" target="_blank" rel="noopener">CDF Labor Law &mdash; Robots Can Recommend, But Real People Must Pull the Trigger: Inside SB 947 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">ServiceNow&rsquo;s Brazil Release Hit Early Availability This Week &mdash; Studio Rebuilt, and Fluent Finally Understands Domain Separation</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-genai">Platform</span>
+          </div>
+        </div>
+        <div class="story-body">Brazil reached Early Availability in mid-September with full release notes published and Developer Passport deep-dive sessions running 14&ndash;18 September; general availability is November 2026. The September store release rebuilds Studio around a shorter path from idea to deployed agent: the ServiceNow IDE is merged into Studio, Build Agent gains automatic upgrades and playbook generation, the activity bar becomes configurable, and Box joins the MCP servers Build Agent can connect to. Two new build-time models are supported, Azure OpenAI GPT-5.6 Sol and Anthropic Claude on AWS Opus 5. The quiet item is ServiceNow Fluent gaining domain separation support on records and APIs, including the ability to set sys_domain and use sys_override fields so generated applications behave correctly in a domain-separated instance. So what for a Deloitte HRSD practitioner: the domain separation change is the one that matters and nobody will lead with it. Multi-entity HR clients &mdash; shared service centres running several legal entities, government departments with separated agencies, anyone whose HR data is partitioned rather than filtered &mdash; have been quietly unable to trust generated or low-code artefacts across domains, which has pushed work back to hand-written script and made the AI build tooling unusable exactly where the data model is most complex. This is the first release where that stops being true, and it is worth testing in EA rather than taking the release note&rsquo;s word for it. Second, model choice at build time is now a client decision with a residency dimension attached: Azure and AWS are different answers to a sovereignty question, and an Australian client with data-residency commitments will want that recorded before someone picks a default. Third, EA plus a Developer Passport week is the cheapest upgrade-impact assessment on HRSD you will get all year &mdash; the November GA scramble is optional and most clients choose it anyway.</div>
+        <a class="story-link" href="https://www.servicenow.com/community/servicenow-otto-for-creator/what-s-new-in-servicenow-otto-for-creator-brazil-ea-release/ta-p/3596068" target="_blank" rel="noopener">ServiceNow Community &mdash; What&rsquo;s New in ServiceNow Otto for Creator: Brazil EA Release &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Mobley v. Workday Survived Dismissal on an Agent Theory &mdash; the HR Tech Vendor Now Shares the Discrimination Exposure</div>
+          <div class="story-badges">
+            <span class="badge badge-genai">WATCH</span>
+            <span class="badge badge-genai">Litigation</span>
+            <span class="badge badge-servicenow">HR Tech</span>
+          </div>
+        </div>
+        <div class="story-body">On 22 June 2026 Judge Rita Lin in the Northern District of California declined to dismiss most of the claims in Mobley v. Workday, including state-law bias claims that reach the software vendor itself under an agent theory &mdash; the AI tool acting on the employer&rsquo;s behalf. Derek Mobley, the lead plaintiff, says he applied for more than 100 roles through employers using Workday&rsquo;s screening tools and was rejected every time; he is Black, over 40, and lives with anxiety and depression. Judge Lin also held that because the tools were designed and maintained in California, Californian civil rights law may reach applicants who applied from other states, which is a considerably larger footprint than the defendant would like. The load-bearing finding is the refusal to accept that a technology provider is insulated simply because it does not make the final hiring decision. So what for a Deloitte HRSD practitioner: this changes the shape of the vendor conversation from procurement to joint liability, and it cuts both ways in a useful manner. A client can no longer point at the vendor&rsquo;s model and call the ranking someone else&rsquo;s problem; the vendor can no longer point at the client&rsquo;s hiring manager and call the outcome someone else&rsquo;s problem. What survives that argument is evidence about configuration, and almost nobody keeps it. The artefact worth building is a provenance record for every surface in the HR estate that scores, ranks or filters a person: which model and version, who set the thresholds and when, what the tuning changed, who approved it, and which outcomes followed. It is the same evidentiary spine the EU Annex IV work needs and the same one SB 947&rsquo;s verification requirement needs. Third time this quarter the same record has answered a different question &mdash; that is the sign to build it once, properly, rather than three times badly.</div>
+        <a class="story-link" href="https://www.seyfarth.com/news-insights/mobley-v-workday-court-holds-ai-service-providers-could-be-directly-liable-for-employment-discrimination-under-agent-theory.html" target="_blank" rel="noopener">Seyfarth Shaw &mdash; Mobley v. Workday: Court Holds AI Service Providers Could Be Directly Liable Under &ldquo;Agent&rdquo; Theory &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">NSW&rsquo;s Digital Work Systems Duties Still Have Not Commenced &mdash; Seven Months On, the Date Is Still a Proclamation Away</div>
+          <div class="story-badges">
+            <span class="badge badge-genai">WATCH</span>
+            <span class="badge badge-genai">Australia</span>
+            <span class="badge badge-genai">Regulation</span>
+          </div>
+        </div>
+        <div class="story-body">The Work Health and Safety Amendment (Digital Work Systems) Act 2026 passed NSW Parliament on 12 February 2026, making NSW the first Australian jurisdiction to regulate the work health and safety hazards of algorithmic management. It defines a digital work system broadly &mdash; &ldquo;an algorithm, artificial intelligence, automation or online platform&rdquo; &mdash; and requires employers to ensure that its use does not put workers&rsquo; health and safety at risk, covering AI-driven work allocation, performance monitoring, automated rostering and algorithmic management generally. As at 8 September the principal duties had still not commenced: commencement is by proclamation and only selected supporting amendments began on assent. The Australian Industry Group has continued to describe the Act as fundamentally flawed and unwarranted, so the delay is political rather than administrative. So what for a Deloitte HRSD practitioner: this is the instrument closest to home and the only one on this page whose start date is genuinely unknown, which makes it a planning problem rather than a compliance problem. Two things are worth saying plainly to Australian clients. First, this is a WHS duty, not a privacy duty &mdash; it is enforced by SafeWork NSW, it attaches to officers personally under the due diligence obligation, and it is a completely different risk conversation from the Privacy Act one most HR teams have already had. Second, a WHS duty is discharged through hazard identification and control, so the preparation is not a policy document but a hazard pass over the algorithmic management surfaces already live in HRSD: rostering, work allocation, case-load balancing, productivity monitoring and any agent that sets the pace of someone&rsquo;s work. That pass has value whether the proclamation lands in November or next July, and it is the rare compliance exercise that produces an operational finding worth having anyway.</div>
+        <a class="story-link" href="https://www.pwc.com.au/legal/workplace-law/when-technology-becomes-a-whs-risk.html" target="_blank" rel="noopener">PwC Australia &mdash; When technology becomes a WHS risk: NSW&rsquo;s landmark Act spotlights digital work systems &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">General AI Hot News</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">NVIDIA and Eight Australian Partners Commit to 2 GW by 2027 &mdash; More Than Doubling the National Data-Centre Footprint</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">Infrastructure</span>
+            <span class="badge badge-genai">Australia</span>
+          </div>
+        </div>
+        <div class="story-body">NVIDIA announced on 9 September a partnership with eight Australian cloud and data centre operators &mdash; Firmus, Sharon AI, IREN, ResetData, Megaport, CDC, NEXTDC and AirTrunk &mdash; targeting up to 2 gigawatts of AI compute capacity by 2027, built on the NVIDIA DSX platform as full-stack AI factories. For scale, Australia&rsquo;s entire existing data centre footprint is roughly 1.6&nbsp;GW, so the commitment alone would more than double it. NVIDIA also flagged expanded access to its accelerated computing and the Nemotron open model family, naming Heidi and Atlassian among the organisations building regional models, applications and agents. So what for a Deloitte HRSD practitioner: this removes an objection that has been doing a lot of quiet work in Australian HR AI conversations. &ldquo;We cannot run that workload onshore&rdquo; has been the polite version of &ldquo;we are not ready,&rdquo; and it has let both sides defer an agentic HR discussion without anyone having to argue the merits. From 2027 that answer stops being available, which means the real objections &mdash; data quality, case taxonomy, entitlement modelling, governance &mdash; surface instead, and they take longer to fix than a hosting decision does. Clients who have been deferring on residency grounds should be told plainly that the runway they think they have is shorter than it looks, and that the work to be ready is not procurement. There is a second-order point for anyone writing sovereignty language into a client architecture: residency claims now need a date and a named facility attached, because &ldquo;onshore capacity is coming&rdquo; is about to become a statement with specific partners and specific timelines behind it rather than a general aspiration.</div>
+        <a class="story-link" href="https://nvidianews.nvidia.com/news/nvidia-expands-ai-infrastructure-capacity-in-partnership-with-australias-data-center-ecosystem" target="_blank" rel="noopener">NVIDIA Newsroom &mdash; NVIDIA Expands AI Infrastructure Capacity in Partnership With Australia&rsquo;s Data Center Ecosystem &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">DeepSeek Shipped V4.1-Flash on 10 September, Open-Sourced Its First Vision Model, and Gave Away the Agent Runtime</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">Open Source</span>
+            <span class="badge badge-genai">Models</span>
+          </div>
+        </div>
+        <div class="story-body">DeepSeek released V4.1-Flash on 10 September, built on a new CED asymmetric architecture and reported to surpass the previous flagship V4-Pro on reasoning, coding and long-horizon agent tasks. Alongside it came V4-Flash-Vision-Exp, the company&rsquo;s first native vision model, published to Hugging Face under the MIT licence, and DeepSeek Harness &mdash; an MIT-licensed open execution runtime for building autonomous agents, released as a developer preview. DeepSeek has now open-sourced six major model series and more than twenty models, all MIT, all free for commercial use. So what for a Deloitte HRSD practitioner: the vision model is the one with the shortest path to an HR use case, and it is a use case clients are unusually nervous about. Document-heavy HR processes &mdash; identity verification, qualification and certificate checks, right-to-work documents, signed forms, medical certificates supporting leave &mdash; involve exactly the data that makes a privacy officer reach for the residency argument, and an open-weight vision model you can self-host inside the client&rsquo;s own boundary changes that calculation rather than arguing with it. Worth a feasibility cut against a real document set before anyone prices a commercial OCR and classification stack. The Harness release is the more interesting structural signal. An MIT-licensed agent runtime unbundles the orchestration loop from the model that fills it, which is the direction this digest has been arguing client architecture should go anyway: if the loop is yours, swapping the model underneath is a configuration change rather than a migration, and the six-week half-life on frontier model versions stops being your problem.</div>
+        <a class="story-link" href="https://www.opensourceforu.com/2026/09/deepseek-opens-its-first-native-vision-model/" target="_blank" rel="noopener">Open Source For You &mdash; DeepSeek Opens Its First Native Vision Model &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">The Frontier Labs Asked Washington to Regulate Them. The President Called It a Conspiracy.</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">Governance</span>
+          </div>
+        </div>
+        <div class="story-body">This week produced a straight inversion of the usual positions in US AI politics. Anthropic&rsquo;s Dario Amodei, OpenAI&rsquo;s Sam Altman and xAI&rsquo;s Elon Musk all pressed for mandatory federal safeguards; President Trump dismissed the effort on Monday as a &ldquo;conspiracy,&rdquo; arguing that regulation risks surrendering the race to China. Vice President Vance has expressed caution, Speaker Johnson has largely deferred to the White House, and House Democrats convened privately on Tuesday to work out a more robust response. The practical read is that a federal preemption framework is further away this week than it was last week. So what for a Deloitte HRSD practitioner: stop modelling a federal floor. If preemption is not coming, the state patchwork in this issue&rsquo;s HR stories is not a transitional inconvenience to be waited out &mdash; it is the operating environment for the next 18 months at least, and a US multinational will be simultaneously subject to Illinois notification duties, Colorado impact assessments, Connecticut causation disclosure, and possibly Californian verification requirements, each with a different trigger and a different regulator. The architectural conclusion is the one this digest keeps arriving at from different directions: build one candidate-notification, verification and provenance pattern in HRSD, configure it once, and put a jurisdiction matrix on top of it. Clients who instead run a compliance project per state will spend three times the money and end up with three inconsistent records, which is worse than one imperfect record because the inconsistency is itself discoverable.</div>
+        <a class="story-link" href="https://www.boston25news.com/news/business/tech-ceos-call-ai/KWW45XZRYQ3X3OVJHMQSUP4I4Q/" target="_blank" rel="noopener">Associated Press via Boston 25 &mdash; Tech CEOs ask for AI regulation. Trump and Congress are not rushing to act &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Brazil&rsquo;s Senate Takes the Final Floor Vote on an EU-Shaped AI Act Today</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">Regulation</span>
+          </div>
+        </div>
+        <div class="story-body">The Brazilian Federal Senate scheduled the final plenary floor vote on Bill 2338/2023 for 16 September 2026 &mdash; today. The bill establishes a comprehensive legal framework for artificial intelligence whose structure is heavily influenced by the EU AI Act, meaning a risk-tier architecture with elevated obligations for high-risk uses. In the same window the United Kingdom&rsquo;s AI Regulation and Safety Bill advances to House of Lords committee stage on 22 September, and the US Department of Commerce has been engaging Ghana&rsquo;s National Communications Authority on oversight design. So what for a Deloitte HRSD practitioner: the significant fact is not that Brazil is regulating, it is that Brazil is regulating in the same shape. Every jurisdiction that adopts the EU&rsquo;s risk-tier structure makes the Annex-III-style classification pass more reusable and the per-jurisdiction compliance project less defensible. If a client with Brazilian operations has already scoped EU work &mdash; the classification of AI touchpoints in the HR estate, the technical file, the human-oversight evidence &mdash; most of it transfers, and the marginal cost of covering a second jurisdiction is the mapping rather than the artefact. That is a genuinely good commercial story to tell a multinational who has been treating the EU programme as a sunk regional cost. It is also worth flagging the converse honestly: convergence on structure does not mean convergence on thresholds, definitions or timelines, and a client who assumes the EU dossier is automatically sufficient in S&atilde;o Paulo will be wrong in the details that matter. Sell the reuse, scope the delta.</div>
+        <a class="story-link" href="https://techieray.substack.com/p/ctrlaireg-14-september-2026" target="_blank" rel="noopener">Ctrl+AI+Reg &mdash; 14 September 2026 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">OpenAI Shipped Full-Duplex Voice and a Faster Image Model in One Week &mdash; the HR Voice Agent Blocker Just Moved</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">Models</span>
+          </div>
+        </div>
+        <div class="story-body">OpenAI launched GPT-Live-1 for full-duplex voice conversations in the API &mdash; simultaneous listening and speaking, twelve new real-time voices, native transcripts, turn detection and production voice features. Separately, ChatGPT Images 2.5 landed on 8 September with a Sketch feature that turns drawings into images and a 50% cut in generation latency, and OpenAI introduced ChatGPT for Financial Services, a tailored Work experience combining built-in financial data with GPT-6 Astra&rsquo;s reasoning. So what for a Deloitte HRSD practitioner: full duplex with real turn detection is the specific thing that separates a tolerable HR voice agent from a demo nobody uses twice. The failure mode of the previous generation was not comprehension, it was the conversational seam &mdash; the half-second of dead air, the caller and the agent talking over each other, the inability to interrupt an agent that has misunderstood. Those are the reasons voice pilots quietly die after the pilot, and they are the reasons an employee calls the HR line instead. There is a card sitting in this newsletter&rsquo;s own POC Lab &mdash; HR Voice Agent for Leave Requests &mdash; that has been parked at Idea largely on this constraint, and the constraint has moved. The right response is to re-scope it rather than re-imagine it: take the existing brief, swap the assumed conversational limitations for what full duplex actually delivers, and re-run the feasibility question with a leave-request flow that a real employee can interrupt mid-sentence. That is a week of work to find out whether a parked idea is now buildable, which is a better use of the week than starting something new.</div>
+        <a class="story-link" href="https://releasebot.io/updates/openai" target="_blank" rel="noopener">Releasebot &mdash; OpenAI Release Notes, September 2026 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Altman Rules Out a 2026 IPO as Beijing Rebukes Amodei &mdash; Two Supply-Chain Signals Dressed as Business News</div>
+          <div class="story-badges">
+            <span class="badge badge-genai">WATCH</span>
+            <span class="badge badge-genai">Business</span>
+          </div>
+        </div>
+        <div class="story-body">Sam Altman told Fortune that OpenAI will not go public in 2026, calling the current moment ill-advised given safety concerns &mdash; a notable statement from a company whose capital requirements have been the subject of persistent speculation. In the same week China&rsquo;s Foreign Ministry used a regular press conference to rebuke Anthropic chief executive Dario Amodei over his call for continued US restrictions on advanced AI chips and chipmaking equipment, putting a model vendor directly into a state-to-state export dispute. So what for a Deloitte HRSD practitioner: neither item is product news and both belong in the same client conversation, because they describe the same exposure. The models underneath a client&rsquo;s HR agents are supplied by a small number of companies whose commercial structures, capital positions and geopolitical entanglements are now material variables in an architecture review &mdash; and none of those variables appear anywhere in a standard HR technology roadmap. The proportionate response is not a strategy, it is a register: for each HR skill or agent in production, which model serves it, which version, hosted in which region, under whose export regime, and what the named fallback is. That is a five-page artefact, it takes a day to build from an instance that is properly documented and a week from one that is not, and it answers the architecture review question before the architecture review asks it. Clients rarely ask for it. They are uniformly glad to have it when a vendor announcement lands mid-programme.</div>
+        <a class="story-link" href="https://aiweekly.co/ai-news-today/edition/2026-09-15" target="_blank" rel="noopener">AI Weekly &mdash; AI News for September 15, 2026 &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">Team Submissions</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="empty-state">
+      No new submissions this week. Got a POC idea or investigation request? Head to the <strong>Submit Idea</strong> tab.
+    </div>
+
+    <div class="poc-highlight">
+      <div class="poc-highlight-head">
+        <div class="poc-highlight-title">This Week's POC Ideas</div>
+        <span class="poc-highlight-note">Promoted to POC Lab &middot; persists until retired</span>
+      </div>
+      <div class="poc-idea-list">
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">1</div>
+          <div>
+            <div class="poc-idea-text">The Technology-Causation Record &mdash; Make &ldquo;Was It the AI?&rdquo; Answerable Before the First WARN Filing Lands</div>
+            <div class="poc-idea-sub">From 1 October, any Connecticut employer with 100 or more staff filing a WARN notice must state whether artificial intelligence or another technological change caused or contributed to the layoffs, with the Attorney General enforcing a bad answer as an unfair or deceptive trade practice. Every other AI-employment instrument asks an employer to document a process. This one asks an employer to attribute causation, in writing, about decisions taken months earlier &mdash; and there is no field in the standard HR data model that records it. Build the record that makes the answer defensible, captured at decision time rather than reconstructed under a regulator&rsquo;s letter. Extend the workforce-change workflow in HRSD so that any position elimination, role redesign or restructure event requires a technology-contribution determination before it can close: a structured classification (no contribution, enabling contribution, direct substitution), a mandatory link to the specific programme, system or agent where one is claimed, the evidence relied on, and an attestation from the named accountable executive rather than from HR operations. Wire it to the position record and the lifecycle event so the attribution survives the departure of everyone who made the decision. Then build the aggregation layer that matters at filing time: given a WARN-qualifying event &mdash; 50 or more separations inside 90 days &mdash; assemble every contributing determination, surface the inconsistencies between them before the regulator does, and produce a filing-ready statement with its evidence trail attached. Add a drift report so a client can see, quarterly, how much of their workforce reduction is being attributed to technology, because that trend line is a board conversation whether or not Connecticut asks for it. Deliver the scoped configuration, the determination taxonomy with worked examples, the filing assembly report, a decision-rights map naming who attests, and a short briefing for the general counsel on the difference between a defensible attribution and a guess. Flagship because the deadline is fifteen days away, because the configuration is small relative to the exposure, and because the artefact generalises &mdash; the same causation record answers the Connecticut question this year and the redundancy-consultation and works-council questions that follow it everywhere else.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow HRSD &middot; Workforce Events &middot; Scoped App</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">2</div>
+          <div>
+            <div class="poc-idea-text">The Verification Record &mdash; Build What SB 947 Actually Asks For, Which Is Not the Approval You Already Have</div>
+            <div class="poc-idea-sub">California&rsquo;s No Robo Bosses Act sits on the Governor&rsquo;s desk with a 30 September decision and a 1 July 2027 operative date, and its central requirement is human oversight with independent verification before an automated system contributes to a termination or disciplinary decision. Approval and verification are different records and most HR estates only hold the first. An approval proves a human clicked; a verification proves a human considered evidence independent of the system&rsquo;s own recommendation and was in a position to reach a different conclusion. Build the second one. Instrument the disciplinary and termination workflow so that where an automated system contributed at any point &mdash; case scoring, policy matching, evidence summarisation, pattern detection across cases &mdash; the reviewer step captures what they were shown, what independent evidence they consulted, what the system recommended, what they decided, and where the two diverged. Make divergence a first-class field rather than an exception, because the single most revealing statistic about any human-in-the-loop control is the rate at which the human disagrees, and a twelve-month disagreement rate of zero is evidence against the control rather than for it. Then run the analysis that tells the client the truth: sample real reviewed decisions, measure median review duration against decision complexity, and establish whether reviewers are verifying or rubber-stamping. Pair it with a scoping pass on predictive behaviour analysis, which the bill prohibits outright &mdash; flight-risk scores, attrition models and engagement-signal analytics are standard in workforce analytics and most clients have never classified them as automated decision systems at all, which makes this the cheapest high-value question in the engagement. Deliver the verification record configuration, the divergence-rate dashboard, a rubber-stamp diagnostic with findings from real data, the predictive-analytics classification register, and a post-use notice template. Flagship because the same record satisfies EU Article 14 human-oversight evidence and the configuration provenance the Mobley agent theory now makes discoverable &mdash; one artefact, three regulators, and a finding the client cannot get from a policy review.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-advanced">Advanced</span>
+              <span class="chip chip-platform">ServiceNow HRSD &middot; Case Management &middot; AI Control Tower</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">3</div>
+          <div>
+            <div class="poc-idea-text">The Brazil EA Domain-Separation Proof &mdash; Settle Whether Fluent Now Works in a Multi-Entity HR Estate, While It Is Still Early Availability</div>
+            <div class="poc-idea-sub">Brazil reached Early Availability in mid-September with November general availability, and the September store release gives ServiceNow Fluent domain separation support on records and APIs, including setting sys_domain and using sys_override so generated applications behave correctly in a domain-separated instance. For most of the platform this is a footnote. For multi-entity HR clients it is the constraint that has quietly kept AI-assisted build tooling out of exactly the estates where the data model is hardest &mdash; shared service centres running several legal entities, government portfolios with separated agencies, any client whose HR data is partitioned rather than filtered. Use the EA window to establish whether the fix is real, on HRSD specifically, before the November upgrade forces the question. Stand up a domain-separated HRSD sandbox with at least three entities and deliberately awkward data: shared services staff who operate across domains, employees who have transferred between entities mid-year, contractors visible to one domain only, and HR cases whose records legitimately span two. Then build the same representative artefacts twice, once by hand and once through Fluent and Build Agent &mdash; a case-routing rule, a record producer with entity-scoped variables, a knowledge surface governed by User Criteria, and an integration that writes back &mdash; and diff the behaviour. Test the failure directions specifically rather than the happy path: does a generated ACL leak across domains, does sys_override behave under domain-scoped impersonation, does the Studio-generated playbook respect entity boundaries, and does an AI agent invoking any of it inherit the right domain context or the caller&rsquo;s. Record what breaks with enough precision to file it during EA, which is the only period in the release cycle where a finding still changes the outcome. Deliver the reproducible test estate as a reusable asset, a behaviour report per artefact type, a go/no-go on Fluent for multi-entity HRSD builds, an upgrade-impact note for the November GA, and any defects raised. Flagship because it is a genuinely dated window, because no vendor release note answers &ldquo;does this hold in my data model,&rdquo; and because being the firm with the tested answer in October is worth considerably more than being the firm reading the same release note in November.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow HRSD &middot; Brazil Release &middot; Fluent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </section><!-- /tab-latest -->
+
+
+
+  <div class="footer">
+    <div class="footer-inner">
+      <div class="footer-wordmark">AI &amp; HR Tech Weekly</div>
+      <div class="footer-tagline">A weekly intelligence brief for the Deloitte HRSD Practice.</div>
+      <div class="footer-colophon">Issue No.&nbsp;33<span class="sep">&middot;</span>16 September 2026<span class="sep">&middot;</span>Compiled with Claude on Cowork</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Archived flat view: tab script removed (no tab nav on archive pages). -->
+
+</body>
+</html>
