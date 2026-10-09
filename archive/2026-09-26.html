@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; HR Tech Weekly &mdash; Issue #35 | 26 September 2026</title>
+<style>
+  /* ============================================================
+     AI & HR Tech Weekly — "The Wire"
+     Modern intelligence-brief aesthetic. Cool near-white, one
+     electric-blue signal accent, grotesk display + mono wire.
+     Built per anthropics/skills:frontend-design (two-pass, anti-default).
+     ============================================================ */
+  :root {
+    --paper:   #f5f5f3;   /* cool near-white canvas */
+    --paper-2: #eeeeec;
+    --card:    #ffffff;   /* white cards lift off the canvas */
+    --ink:     #15161a;   /* cool near-black */
+    --ink-2:   #33353c;
+    --steel:   #565a63;   /* secondary text */
+    --mist:    #8a8f99;   /* metadata */
+    --faint:   #b6bac1;
+    --line:    #e4e4e7;   /* hairline */
+    --line-2:  #d2d4d9;
+    --muted:   #565a63;   /* alias for legacy inline styles */
+    --accent:      #0a7d54;   /* deep emerald — the ONLY bold note (legible on white) */
+    --accent-deep: #07623f;
+    --accent-wash: #e7f3ed;   /* faint accent tint for feature zones */
+
+    --display: 'Space Grotesk', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --sans:    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+    --max: 1120px;
+    --measure: 70ch;
+    --col: 48rem;   /* article reading column — ~80 char measure at 18px; centered */
+    --r:   12px;   /* feature radius — deliberately NOT zero (anti-broadsheet) */
+    --r-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'ss01' 1;
+  }
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent); z-index: 200;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+
+  /* ---------- Masthead — terminal "wire" header ---------- */
+  .masthead { padding: 34px 24px 0; }
+  .masthead-inner { max-width: var(--max); margin: 0 auto; }
+  .wire {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--mist);
+    padding-bottom: 16px;
+  }
+  .wire span { display: inline-flex; align-items: center; }
+  .wire span + span::before { content: '//'; color: var(--line-2); margin: 0 12px; }
+  .wire .wire-issue { color: var(--accent); font-weight: 600; }
+  .wire .wire-live { color: var(--ink); }
+  .wire .wire-live::after { content: ''; width: 6px; height: 6px; margin-left: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  .nameplate {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(40px, 7.5vw, 78px); line-height: 0.96; letter-spacing: -0.035em;
+    color: var(--ink); padding: 6px 0 0; max-width: 14ch;
+  }
+  .standfirst {
+    font-family: var(--sans); font-size: clamp(15px, 1.9vw, 18px); line-height: 1.5;
+    color: var(--steel); max-width: 60ch; padding: 18px 0 22px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  /* ---------- Section nav ---------- */
+  .tab-nav { background: rgba(245,245,243,0.85); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .tab-nav-inner { max-width: var(--max); margin: 0 auto; display: flex; gap: 4px; padding: 0 24px; overflow-x: auto; scrollbar-width: none; }
+  .tab-nav-inner::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none; border: none; cursor: pointer; color: var(--steel);
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 15px 14px; white-space: nowrap; position: relative;
+    display: inline-flex; align-items: baseline; gap: 6px; transition: color 0.15s;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn[aria-selected="true"] { color: var(--accent); }
+  .tab-btn[aria-selected="true"]::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: -1px; height: 2px; background: var(--accent); }
+  .kbd-hint { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--faint); }
+  .tab-btn[aria-selected="true"] .kbd-hint { color: var(--accent); }
+
+  /* ---------- Main ---------- */
+  .main { max-width: var(--max); margin: 0 auto; padding: 40px 24px 72px; }
+  .tab-content { display: none; counter-reset: section; }
+  .tab-content.active { display: block; animation: fade 0.25s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---------- Section headers — indexed eyebrow ---------- */
+  .section-header { display: flex; align-items: center; gap: 16px; margin: 56px 0 24px; }
+  .section-header:first-child { margin-top: 0; }
+  /* The reading column applies ONLY to the Latest tab's article sections; centered */
+  #tab-latest .section-header { max-width: var(--col); margin-inline: auto; }
+  .section-title {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+    white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: baseline; gap: 10px;
+  }
+  .section-title::before {
+    counter-increment: section; content: counter(section, decimal-leading-zero);
+    font-family: var(--mono); font-weight: 600; color: var(--accent); letter-spacing: 0;
+  }
+  .section-line { flex: 1; height: 0; border-top: 1px solid var(--line); }
+  .section-hint { font-family: var(--mono); font-size: 11px; color: var(--mist); flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ---------- Indicators ---------- */
+  .kicker-numbers {
+    font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--mist); margin: 0 0 14px;
+  }
+  .kicker-numbers b { color: var(--accent); font-weight: 600; }
+  .velocity-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin: 0 0 16px;
+  }
+  .velocity-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 20px 22px; position: relative; overflow: hidden; transition: border-color 0.18s;
+  }
+  .velocity-card:hover { border-color: var(--line-2); }
+  .velocity-card::before { content: ''; position: absolute; top: 0; left: 0; width: 28px; height: 3px; background: var(--accent); }
+  .velocity-label {
+    font-family: var(--mono); font-size: 10.5px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--mist); margin: 6px 0 12px; line-height: 1.4; min-height: 2.8em;
+  }
+  .velocity-value {
+    font-family: var(--display); font-weight: 600; font-size: 38px; line-height: 0.95;
+    letter-spacing: -0.03em; color: var(--ink); font-variant-numeric: tabular-nums lining-nums;
+  }
+  .velocity-sub { font-size: 13px; color: var(--steel); margin-top: 10px; line-height: 1.5; }
+
+  /* ---------- Stories ---------- */
+  .story-grid { display: flex; flex-direction: column; }
+  .story-card { background: none; border: none; border-radius: 0; box-shadow: none; padding: 28px 0; border-bottom: 1px solid var(--line); max-width: var(--col); margin-inline: auto; }
+  .story-card:last-child { border-bottom: none; }
+  .story-top { display: flex; flex-direction: column; gap: 11px; margin-bottom: 12px; }
+  .story-badges { order: -1; display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+  .badge {
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--mist);
+    background: none; border: none; border-radius: 0; padding: 0; position: relative;
+  }
+  .badge::before { content: '['; color: var(--line-2); margin-right: 1px; }
+  .badge::after { content: ']'; color: var(--line-2); margin-left: 1px; }
+  .badge-new, .badge-hot, .badge-breaking { color: var(--accent); }
+  .badge-new::before, .badge-hot::before, .badge-breaking::before,
+  .badge-new::after, .badge-hot::after, .badge-breaking::after { color: var(--accent); opacity: 0.5; }
+  .story-title { font-family: var(--display); font-weight: 600; font-size: 23px; line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); max-width: var(--col); }
+  .story-body { font-family: var(--sans); font-size: 18px; color: var(--ink-2); line-height: 1.62; margin-bottom: 16px; max-width: var(--col); }
+  .story-link {
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--accent); display: inline-flex; align-items: center; gap: 7px;
+  }
+  .story-link::before { content: '\21B3'; color: var(--accent); font-weight: 600; }
+  .story-link:hover { color: var(--accent-deep); }
+
+  /* Lead story — accent bar + scale, no drop cap */
+  .story-grid > .story-card:first-child { position: relative; padding-left: 24px; padding-top: 6px; padding-bottom: 32px; }
+  .story-grid > .story-card:first-child::after { content: ''; position: absolute; left: 0; top: 8px; bottom: 32px; width: 4px; background: var(--accent); border-radius: 4px; }
+  .story-grid > .story-card:first-child .story-title { font-size: clamp(26px, 3.6vw, 36px); line-height: 1.08; letter-spacing: -0.03em; }
+  .story-grid > .story-card:first-child .story-body { font-size: 20px; line-height: 1.6; }
+
+  /* ---------- Weekly POC ideas — flagship feature ---------- */
+  .poc-highlight {
+    background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
+    padding: 0; margin-top: 56px; overflow: hidden; box-shadow: 0 1px 2px rgba(20,22,30,0.04);
+  }
+  .poc-highlight-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 20px 26px; background: var(--accent); }
+  .poc-highlight-title { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+  .poc-highlight-note { font-family: var(--mono); font-size: 10.5px; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid rgba(255,255,255,0.4); border-radius: 100px; padding: 4px 11px; }
+  .poc-idea-list { display: flex; flex-direction: column; padding: 4px 26px 22px; }
+  .poc-idea-item { display: flex; gap: 22px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .poc-idea-item:last-child { border-bottom: none; padding-bottom: 4px; }
+  .poc-idea-num { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 0.9; color: var(--accent); background: none; width: auto; height: auto; min-width: 40px; border-radius: 0; box-shadow: none; display: block; margin-top: 2px; letter-spacing: -0.03em; font-variant-numeric: lining-nums; }
+  .poc-idea-text { font-family: var(--display); font-size: 19px; font-weight: 600; color: var(--ink); line-height: 1.28; letter-spacing: -0.01em; }
+  .poc-idea-sub { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; line-height: 1.6; max-width: var(--measure); }
+  .poc-idea-tags { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+
+  /* ---------- POC Lab: toolbar ---------- */
+  .poc-toolbar { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 49px; z-index: 90; }
+  .poc-search-row { display: flex; gap: 10px; align-items: center; }
+  .poc-search { flex: 1; background: var(--paper); border: 1px solid var(--line-2); border-radius: var(--r-sm); color: var(--ink); padding: 9px 13px; font-size: 14px; font-family: var(--sans); transition: border-color 0.18s; }
+  .poc-search::placeholder { color: var(--faint); }
+  .poc-search:focus { outline: none; border-color: var(--accent); }
+  .poc-results { font-family: var(--mono); font-size: 11.5px; color: var(--mist); white-space: nowrap; }
+  .poc-filters { display: flex; flex-direction: column; gap: 8px; }
+  .filter-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .filter-label { font-family: var(--mono); font-size: 10px; color: var(--mist); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; min-width: 62px; }
+  .filter-chip { background: var(--paper); border: 1px solid var(--line-2); color: var(--steel); font-size: 12px; font-weight: 500; font-family: var(--sans); padding: 5px 12px; border-radius: 100px; cursor: pointer; transition: color 0.15s, background 0.15s, border-color 0.15s; }
+  .filter-chip:hover { color: var(--ink); border-color: var(--mist); }
+  .filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-chip-count { opacity: 0.7; font-weight: 600; margin-left: 4px; }
+  .poc-clear { background: none; border: none; color: var(--mist); font-size: 12px; font-weight: 500; cursor: pointer; padding: 5px 9px; border-radius: var(--r-sm); }
+  .poc-clear:hover { color: var(--accent); }
+  .poc-clear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ---------- POC groups ---------- */
+  .poc-group { margin-bottom: 32px; }
+  .poc-group[hidden] { display: none; }
+  .poc-group-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .poc-group-title { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 9px; flex-shrink: 0; white-space: nowrap; }
+  .poc-group-title.group-building { color: var(--accent); }
+  .poc-group-title.group-idea { color: var(--ink); }
+  .poc-group-title.group-done { color: var(--steel); }
+  .poc-group-title.group-parked { color: var(--faint); }
+  .poc-group-count { background: var(--paper); border: 1px solid var(--line-2); border-radius: 100px; padding: 1px 9px; font-family: var(--mono); font-size: 11px; color: var(--mist); font-weight: 500; }
+  .poc-group-line { flex: 1; height: 0; border-top: 1px solid var(--line); }
+
+  /* ---------- POC cards ---------- */
+  .poc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+  .poc-card { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--line-2); border-radius: var(--r-sm); padding: 18px 20px; transition: border-color 0.18s, box-shadow 0.18s; display: flex; flex-direction: column; gap: 10px; }
+  .poc-card:hover { border-color: var(--line-2); box-shadow: 0 4px 16px -10px rgba(20,22,30,0.25); }
+  .poc-card[hidden] { display: none; }
+  .poc-card[data-status="building"] { border-left-color: var(--accent); }
+  .poc-card[data-status="done"] { border-left-color: var(--ink); }
+  .poc-card[data-status="parked"] { border-left-color: var(--faint); opacity: 0.72; }
+  .poc-card.new-this-week { box-shadow: inset 3px 0 0 var(--accent); }
+  .poc-card-head { display: flex; flex-direction: column; gap: 8px; }
+  .poc-card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .poc-card-title { font-family: var(--display); font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.25; letter-spacing: -0.01em; }
+  .poc-status { font-family: var(--mono); font-size: 9.5px; font-weight: 500; padding: 3px 8px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid; }
+  .status-idea { background: none; color: var(--mist); border-color: var(--line-2); }
+  .status-building { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .status-done { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .status-parked { background: none; color: var(--faint); border-color: var(--line); }
+  .poc-card-hook { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; }
+  .poc-card-meta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .chip { font-family: var(--mono); font-size: 10px; font-weight: 500; padding: 0; border-radius: 0; letter-spacing: 0.04em; text-transform: uppercase; color: var(--mist); }
+  .chip-diff.diff-beginner, .chip-diff.diff-intermediate { color: var(--steel); }
+  .chip-diff.diff-advanced { color: var(--accent); }
+  .chip-platform { color: var(--mist); }
+  .chip-date { color: var(--faint); }
+  .chip-new { color: var(--accent); }
+  .poc-expand-btn { background: none; border: 1px solid var(--line-2); color: var(--steel); cursor: pointer; font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 7px 12px; border-radius: var(--r-sm); display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; transition: color 0.18s, border-color 0.18s; align-self: flex-start; }
+  .poc-expand-btn:hover { color: var(--ink); border-color: var(--mist); }
+  .poc-expand-btn .expand-icon { transition: transform 0.2s; display: inline-block; font-family: var(--mono); }
+  .poc-expand-btn[aria-expanded="true"] .expand-icon { transform: rotate(90deg); }
+  .poc-expand-btn[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
+  .poc-card-detail { margin-top: 2px; border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .poc-card-detail[hidden] { display: none; }
+  .poc-sec h4 { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .poc-sec p, .poc-sec li { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+  .poc-sec ol, .poc-sec ul { padding-left: 20px; }
+  .poc-sec li { margin-bottom: 3px; }
+  .poc-sec li::marker { color: var(--faint); font-size: 11px; }
+  .poc-empty { background: var(--card); border: 1px dashed var(--line-2); border-radius: var(--r); padding: 28px; text-align: center; color: var(--mist); font-size: 14px; }
+  .poc-empty[hidden] { display: none; }
+
+  /* ---------- Archive ---------- */
+  .archive-list { display: flex; flex-direction: column; }
+  .archive-card { background: none; border: none; border-bottom: 1px solid var(--line); border-radius: 0; padding: 22px 0; transition: none; }
+  .archive-card:hover { background: none; }
+  .archive-card.archive-pending { opacity: 0.55; }
+  .archive-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .archive-issue { font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }
+  .archive-date { font-family: var(--display); font-size: 19px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .archive-link { font-family: var(--mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+  .archive-link:hover { color: var(--accent-deep); }
+  .archive-link::before { content: '\21B3 '; }
+  .archive-link-pending { font-family: var(--mono); font-size: 10.5px; color: var(--faint); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid var(--line); border-radius: 100px; padding: 3px 10px; }
+  .archive-headlines { display: flex; flex-direction: column; gap: 6px; }
+  .archive-headline { font-size: 14px; color: var(--ink-2); padding-left: 18px; position: relative; line-height: 1.5; }
+  .archive-headline::before { content: '\2014'; position: absolute; left: 0; color: var(--accent); }
+
+  /* ---------- Submit ---------- */
+  .submit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 8px; }
+  .submit-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 26px 24px; text-align: left; transition: border-color 0.18s, box-shadow 0.18s; }
+  .submit-card:hover { border-color: var(--line-2); box-shadow: 0 4px 16px -10px rgba(20,22,30,0.25); }
+  .submit-icon { display: none; }
+  .submit-card-title { font-family: var(--display); font-size: 19px; font-weight: 600; margin-bottom: 10px; color: var(--ink); letter-spacing: -0.01em; }
+  .submit-card-desc { font-size: 14px; color: var(--ink-2); margin-bottom: 20px; line-height: 1.55; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 11px 18px; border-radius: var(--r-sm); text-decoration: none; border: 1px solid var(--accent); background: var(--accent); color: #fff; transition: background 0.18s, border-color 0.18s; }
+  .btn:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+  .btn-green, .btn-blue, .btn-purple { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ---------- Footer / colophon ---------- */
+  .footer { padding: 40px 24px 52px; border-top: 1px solid var(--line-2); margin-top: 60px; }
+  .footer-inner { max-width: var(--max); margin: 0 auto; }
+  .footer-wordmark { font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 10px; }
+  .footer-tagline { font-family: var(--sans); font-size: 15px; color: var(--steel); margin-bottom: 18px; }
+  .footer-colophon { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mist); line-height: 1.9; }
+  .footer-colophon .sep { color: var(--line-2); margin: 0 10px; }
+  .divider { height: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+  .empty-state { background: var(--card); border: 1px dashed var(--line-2); border-radius: var(--r); padding: 22px; text-align: center; color: var(--mist); font-size: 14px; max-width: var(--col); margin-inline: auto; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 640px) {
+    .masthead { padding: 24px 18px 0; }
+    .main { padding: 28px 18px 52px; }
+    .tab-nav-inner { padding: 0 18px; }
+    .tab-btn { padding: 13px 12px; }
+    .nameplate { font-size: clamp(34px, 12vw, 50px); max-width: none; }
+    .story-body { font-size: 16.5px; }
+    .story-grid > .story-card:first-child .story-body { font-size: 17.5px; }
+    .velocity-grid { grid-template-columns: 1fr 1fr; }
+    .poc-toolbar { position: static; }
+    .filter-label { min-width: auto; }
+    .poc-grid { grid-template-columns: 1fr; }
+    .submit-grid { grid-template-columns: 1fr; }
+    .poc-highlight-head { padding: 16px 18px; }
+    .poc-idea-list { padding: 4px 18px 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="wire">
+      <span class="wire-issue">Issue 35</span>
+      <span>26 Sep 2026</span>
+      <span>Deloitte HRSD Practice</span>
+      <span class="wire-live">Archived Issue</span>
+    </div>
+    <h1 class="nameplate">AI &amp; HR Tech Weekly</h1>
+    <p class="standfirst">Curated signal on ServiceNow HRSD and frontier AI &mdash; the week&rsquo;s developments, read for the Deloitte HRSD Practice with the consulting angle attached.</p>
+  </div>
+</header>
+
+<div style="background:var(--card);border-bottom:1px solid var(--line);">
+  <div style="max-width:var(--max);margin:0 auto;padding:14px 24px;">
+    <a href="../index.html" style="font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;font-weight:600;">&#8592;&nbsp;Back to Latest Issue</a>
+  </div>
+</div>
+
+<main class="main">
+
+
+
+
+  <!-- TAB: LATEST -->
+  <section id="tab-latest" class="tab-content active">
+    <p class="kicker-numbers">This Week <b>/</b> By the Numbers</p>
+    <div class="velocity-grid">
+      <div class="velocity-card">
+        <div class="velocity-label">Days Until the EU AI Act&rsquo;s High-Risk Recruitment Rules Actually Apply</div>
+        <div class="velocity-value">432</div>
+        <div class="velocity-sub">The AI Office does not inspect hiring tools &mdash; Article 50&rsquo;s transparency duty applies today, but the Annex III conformity-assessment regime for recruitment AI was deferred by the Digital Omnibus to 2 December 2027</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">API Price Cut Across OpenAI&rsquo;s New GPT-6 Sol and Luna</div>
+        <div class="velocity-value">50%</div>
+        <div class="velocity-sub">Shipped roughly 90 minutes after Claude Opus 5.5 cut its own price by the same margin &mdash; Sol claims Opus 5-beating scores on business workflows at about 9% of the cost</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">Faster Output Generation Anthropic Claims for Opus 5.5 vs Opus 5</div>
+        <div class="velocity-value">30%</div>
+        <div class="velocity-sub">On top of a 20% price cut to $4/$20 per million tokens &mdash; Anthropic says benchmark margins between frontier models have stopped being a reliable guide to real-world differences</div>
+      </div>
+      <div class="velocity-card">
+        <div class="velocity-label">DeepSeek&rsquo;s Annualised Revenue Run Rate After an Up-to-4.5&times; Price Hike</div>
+        <div class="velocity-value">US$1B</div>
+        <div class="velocity-sub">More than double a few months ago, funding a fresh US$7.5B raise at a US$75B valuation ahead of a prospective Shanghai listing</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">HR &amp; ServiceNow Intelligence</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Newsom Punts on SB 947 but Orders Two Agencies to Draft AI Kill-Switch Rules by November</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">California</span>
+            <span class="badge badge-genai">Regulation</span>
+          </div>
+        </div>
+        <div class="story-body">With SB 947 (the reintroduced No Robo Bosses Act) and SB 951 (a 90-day notice requirement before AI-driven layoffs) both still sitting unsigned on the Governor&rsquo;s desk after clearing the legislature, Newsom sidestepped the fight over specific bills on 18 September and instead directed the Government Operations Agency and the Office of Emergency Services to design AI safety recommendations &mdash; external evaluators, kill-switch mechanisms and expanded incident reporting &mdash; due by 16 November. It follows his own Executive Order N-6-26 from May, which already has state agencies assessing AI&rsquo;s workforce impact and updating California&rsquo;s WARN Act guidance by 15 October. So what for a Deloitte HRSD practitioner: California is building the guardrails procedurally as much as legislatively, and a kill-switch requirement is not an abstract ask &mdash; ServiceNow&rsquo;s own AI Control Tower shipped exactly that mechanism this month (see below), which means the platform side of compliance may arrive before the statute does. Track both dates on a client&rsquo;s compliance calendar regardless of whether SB 947 gets signed: the WARN Act update lands in three weeks, the kill-switch recommendations seven.</div>
+        <a class="story-link" href="https://calmatters.org/politics/2026/09/ai-rules-newsom-state-directive/" target="_blank" rel="noopener">CalMatters &mdash; Newsom orders California agencies to develop new AI safety plans after rejecting tougher law &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">No, the EU AI Office Is Not Inspecting Your Hiring Tool &mdash; Recruitment AI Rules Were Deferred to December 2027</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">EU</span>
+            <span class="badge badge-genai">Regulation</span>
+          </div>
+        </div>
+        <div class="story-body">A wave of vendor posts this month claimed the EU AI Office had begun inspecting automated hiring tools under &ldquo;Article 50&rdquo; &mdash; that is wrong on two counts. The AI Office supervises providers of general-purpose AI models, not businesses using a hiring tool, which answers to a national authority instead; and Article 50 is the general transparency duty that people must be told when they are dealing with an AI system, already in force for everything, not a hiring-specific inspection regime. The actual high-risk obligations for recruitment AI under Annex III &mdash; the ones with real conformity-assessment and documentation duties &mdash; do not bite until 2 December 2027, after the Digital Omnibus deferred them. So what for a Deloitte HRSD practitioner: useful to have on hand the next time a client&rsquo;s legal team forwards a scary post about EU inspectors &mdash; the compliance clock has 14 months left to run, enough time to build the conformity documentation properly rather than scrambling, but it is not zero: Article 50&rsquo;s transparency duty already applies today to anything an HRSD Virtual Agent or Otto skill says to a candidate.</div>
+        <a class="story-link" href="https://www.opsintel.io/blog/eu-ai-office-begins-automated-hiring-tool-inspections-first-enforcement-wave-under-article-50-starts-september-2026/" target="_blank" rel="noopener">OpsIntel &mdash; EU AI Office Begins Automated Hiring Tool Inspections? First Enforcement Wave Under Article 50 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">AI Gateway Went GA With an MCP Tool Catalog and a Kill Switch &mdash; the Governance Layer Our Galileo POC Was Waiting For</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-servicenow">ServiceNow</span>
+            <span class="badge badge-genai">Agentic</span>
+          </div>
+        </div>
+        <div class="story-body">ServiceNow&rsquo;s AI Gateway reached general availability on 10 September, rebuilt on a new Envoy-based architecture, and added an MCP Tool Catalog that discovers and governs MCP tools at the individual-tool level, scans them automatically for malicious behaviour and sensitive-data exposure, and lets an admin pause a misbehaving MCP server at runtime with no code change. Alongside it, AI Control Tower picked up a Kill Switch that revokes credentials through Okta and stops an agent mid-run, new service-graph connectors for Anthropic, OpenAI, Moveworks and Microsoft Agent 365, and a Continuous Control Monitoring capability that scores agents against quality and safety templates. So what for a Deloitte HRSD practitioner: this is close to the instrumentation the Galileo-over-MCP boundary test POC (promoted two issues back) asked a delivery team to build by hand &mdash; ServiceNow just shipped a chunk of it as a product feature. Re-scope that POC around what the Tool Catalog now gives you for free versus what still needs custom User Criteria diffing, and September&rsquo;s Kill Switch is the answer to the obvious client question &ldquo;how do we stop it&rdquo; that every MCP conversation eventually reaches.</div>
+        <a class="story-link" href="https://www.servicenow.com/community/ai-control-tower-articles/what-s-new-in-ai-control-tower-for-august-amp-september-2026/ta-p/3597749" target="_blank" rel="noopener">ServiceNow Community &mdash; What&rsquo;s New in AI Control Tower for August &amp; September 2026 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">SAP Quietly Shipped a Tabular Foundation Model &mdash; and HCM Data Is Exactly the Shape It Wants</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">SAP</span>
+            <span class="badge badge-genai">Models</span>
+          </div>
+        </div>
+        <div class="story-body">On 15 September SAP made TabPFN-3.5 Plus available in SAP AI Core: a tabular foundation model from Prior Labs, which SAP acquired in July, built to predict directly from structured business data &mdash; rows, columns, transactions, history &mdash; with no model training or tuning, handling missing values and mixed data types natively through in-context learning. That is a different bet to the chatbot-shaped releases dominating this newsletter most weeks, and most enterprise data, HCM data very much included, already lives as tables: headcount, comp bands, leave balances, case volumes, attrition history. So what for a Deloitte HRSD practitioner: ServiceNow&rsquo;s own Predictive Intelligence has done tabular ML on platform data for years, but it is a classifier framework, not a foundation model that claims to generalise across small, messy tables without bespoke setup. Worth a genuine bake-off rather than an assumption either way &mdash; attrition risk, case-escalation likelihood and leave-forecast are all tabular problems sitting in HRSD case history, and if a foundation-model approach beats Predictive Intelligence on accuracy with less setup, that is a sellable capability gap for clients running plain HRSD without a data science team attached.</div>
+        <a class="story-link" href="https://news.sap.com/2026/09/tabpfn-35-plus-now-available-sap-ai-core-instant-business-predictions/" target="_blank" rel="noopener">SAP News &mdash; TabPFN-3.5 Plus Now Available in SAP AI Core for Instant Business Predictions &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Workday Total Benefits Bundles an AI Self-Service Agent Into Every Enrolment &mdash; the Benefits Experience Just Became a Competitive Front</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">HR Tech</span>
+            <span class="badge badge-genai">Workday</span>
+          </div>
+        </div>
+        <div class="story-body">Workday launched Total Benefits on 24 September, consolidating benefits administration into one platform: Workday Wellness automates provider onboarding (a 75% time reduction for early adopters), a Self-Service Agent explains coverage in plain language during enrolment and life events, Life and Money Solutions adds earned wage access and income verification through partners including PayPal and Chime, and Strada provides hands-on administration support. The framing is squarely cost-driven &mdash; employers face a median 9% healthcare cost increase in 2026 &mdash; and the Self-Service Agent is the piece aimed directly at the question every employee actually asks: what does this plan cover for me. So what for a Deloitte HRSD practitioner: Employee Center and Otto for HRSD handle benefits cases today, but not with a purpose-built conversational agent tuned to plan comparison and life-event guidance the way Workday just packaged it, and this is the kind of feature gap a client&rsquo;s HR VP will have seen in a demo before asking Deloitte why HRSD does not do the same. Worth a competitive teardown before the next benefits-platform RFP rather than after.</div>
+        <a class="story-link" href="https://newsroom.workday.com/2026-09-24-Workday-Launches-Total-Benefits,-Bringing-Health,-Wealth,-and-Wellbeing-Support-Together-in-One-Place" target="_blank" rel="noopener">Workday Newsroom &mdash; Workday Launches Total Benefits, Bringing Health, Wealth, and Wellbeing Support Together in One Place &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">General AI Hot News</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Anthropic and OpenAI Fought a Pricing War in 90 Minutes &mdash; Frontier Intelligence Is Now a Commodity Argument</div>
+          <div class="story-badges">
+            <span class="badge badge-breaking">BREAKING</span>
+            <span class="badge badge-genai">Anthropic</span>
+            <span class="badge badge-genai">OpenAI</span>
+          </div>
+        </div>
+        <div class="story-body">On 22 September Anthropic shipped Claude Opus 5.5 at $4/$20 per million tokens, cutting price by 20% and claiming 30% faster output and roughly 40% lower cost-per-task than Opus 5 while matching Claude Fable 5.1 on most benchmarks; OpenAI answered within about 90 minutes with GPT-6 Sol at $2/$10 and GPT-6 Luna at $0.10/$0.50, claiming Sol beats Opus 5 on business-workflow tasks at about 9% of the cost and matches Claude&rsquo;s best coding scores at roughly 80% less. Both companies now explicitly argue that benchmark margins between frontier models have compressed to the point that price and integration, not raw capability, decide the winner. So what for a Deloitte HRSD practitioner: the model-selection conversation with clients has quietly flipped from &ldquo;which model is smartest&rdquo; to &ldquo;which model is cheapest for this specific HRSD workload,&rdquo; and Otto&rsquo;s third-party-by-default migration (covered two issues back) means a client can now switch the model behind a skill without touching platform configuration &mdash; cost modelling per skill, not per platform, is the analysis clients will start asking for. Treat the vendor comparisons as directional rather than decisive: neither used identical benchmark conditions.</div>
+        <a class="story-link" href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic &mdash; Introducing Claude Opus 5.5 &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Claude Marketplace Went Live With 2,000+ Connectors &mdash; and Deloitte Is Listed as a Launch Service Partner</div>
+          <div class="story-badges">
+            <span class="badge badge-hot">HOT</span>
+            <span class="badge badge-genai">Anthropic</span>
+            <span class="badge badge-genai">Ecosystem</span>
+          </div>
+        </div>
+        <div class="story-body">Anthropic launched the Claude Marketplace on 23 September, consolidating connectors and plugins, Claude-powered products from companies including CrowdStrike, Cursor and Snowflake, and a roster of consulting and systems-integration service partners into one discovery surface; Accenture, Boston Consulting Group and Deloitte are named launch partners in the service-partner tier, with more than 2,000 connectors and plugins live at launch. Builders list tools via MCP, buyers can apply committed Anthropic spend to partner software, and the whole thing is explicitly aimed at collapsing the procurement friction between wanting an agent and having bought one. So what for a Deloitte HRSD practitioner: this is not a story to read passively &mdash; Deloitte is on the list, which means there is already an internal conversation somewhere about what the firm lists there, and an HRSD-specific offering, an MCP connector into HRSD case data, or a packaged POC-to-production pattern, is exactly the kind of asset the marketplace is built to distribute. Worth raising with the practice lead before a competitor&rsquo;s connector shows up first; this digest itself, compiled in Cowork, is a small working proof the tooling already does the job.</div>
+        <a class="story-link" href="https://claude.com/blog/claude-marketplace" target="_blank" rel="noopener">Claude Blog &mdash; Claude Marketplace: One Place to Discover Plugins, Agents, and Services From Our Partners &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">DeepSeek Raised API Prices Up to 4.5&times; and Revenue Doubled Anyway &mdash; the &ldquo;Free, Open, Cheap&rdquo; Story Just Got More Complicated</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">DeepSeek</span>
+            <span class="badge badge-genai">Infrastructure</span>
+          </div>
+        </div>
+        <div class="story-body">DeepSeek&rsquo;s annualised revenue run rate reached roughly US$1 billion this month, more than doubling in a few months, after the company raised API pricing 2.3&times; to 4.5&times; in August; CEO Liang Wenfeng told investors DeepSeek still holds pricing &ldquo;among the lowest&rdquo; of major labs despite the increase, and the company is finalising a roughly US$7.5 billion raise at a US$75 billion valuation ahead of a prospective Shanghai listing. Liang also disclosed DeepSeek now puts more than 70% of its compute into training new models and less than 30% into serving existing ones, a resourcing ratio that will show up as availability pressure on the models clients are actually running. So what for a Deloitte HRSD practitioner: any client that adopted a DeepSeek-backed skill or connector for cost reasons under Otto&rsquo;s third-party-model migration should re-run the unit economics now rather than at renewal &mdash; &ldquo;open and cheap&rdquo; was never a permanent feature of any lab&rsquo;s pricing, and this is the clearest evidence yet that the open-weight cost advantage narrows once a lab needs revenue to fund its own training compute.</div>
+        <a class="story-link" href="https://www.pymnts.com/news/artificial-intelligence/2026/deepseek-doubles-annual-revenue-run-rate-to-1-billion-ahead-of-ipo/" target="_blank" rel="noopener">PYMNTS &mdash; DeepSeek Doubles Annual Revenue Run Rate to $1 Billion Ahead of IPO &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Gemini 3.8 Flash TTS Went GA With 150+ Voices &mdash; the Building Block for an HR Voice Agent That Doesn&rsquo;t Sound Like Every Other HR Voice Agent</div>
+          <div class="story-badges">
+            <span class="badge badge-new">NEW</span>
+            <span class="badge badge-genai">Google</span>
+            <span class="badge badge-genai">Voice</span>
+          </div>
+        </div>
+        <div class="story-body">Google&rsquo;s Gemini API changelog for 22 September confirms Gemini 3.8 Flash TTS and Flash-Lite TTS reached general availability, adding voice design, voice replication and an extended library of more than 150 prebuilt and custom voices to the Live API text-to-speech stack. It lands the same month the Live API also picked up asynchronous function calling and interleaved reasoning across its conversational models (covered two issues back), so the voice layer and the reasoning layer of a Google-built voice agent are now both shipping within weeks of each other rather than months apart. So what for a Deloitte HRSD practitioner: ServiceNow Voice for HRSD still runs its own TTS stack, but the competitive bar for &ldquo;does this sound like a real person&rdquo; just moved, and voice replication specifically raises a governance question worth flagging early &mdash; a client using a cloned or branded voice for an HR bot needs consent and disclosure handling most Employee Center Voice deployments have not thought through yet, and the Australian disclosure duty covered in past issues would likely treat a synthetic HR voice as exactly the kind of &ldquo;computer program&rdquo; it wants described.</div>
+        <a class="story-link" href="https://ai.google.dev/gemini-api/docs/changelog" target="_blank" rel="noopener">Google AI for Developers &mdash; Gemini API Release Notes &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">NVIDIA Launched DSX Ready to Certify AI-Factory Power and Cooling Gear &mdash; the Compute Buildout Just Got a Supply Chain</div>
+          <div class="story-badges">
+            <span class="badge badge-genai">WATCH</span>
+            <span class="badge badge-genai">NVIDIA</span>
+            <span class="badge badge-genai">Infrastructure</span>
+          </div>
+        </div>
+        <div class="story-body">On 21 September NVIDIA introduced DSX Ready, a qualification programme certifying partner power and cooling products against its DSX AI-factory reference design, with Hitachi Energy, LG Energy Solution and Tesla qualifying battery energy storage systems and LG Electronics, LiquidStack and Vertiv qualifying coolant distribution units at launch, and more infrastructure and software categories promised to follow. The point is to de-risk the physical build-out: an operator can now buy a DSX-qualified CDU or BESS knowing it meets NVIDIA&rsquo;s own reference spec rather than integrating and testing from scratch. So what for a Deloitte HRSD practitioner: this is the unglamorous half of every compute story this newsletter covers &mdash; the 2GW Australian commitment and the Vera Rubin throughput numbers from recent issues only turn into delivered capacity if the power and cooling supply chain keeps pace, and a certification programme is NVIDIA&rsquo;s own admission that it was becoming the bottleneck. Nothing to build here, but it is a useful line for a client conversation about realistic compute-availability timelines rather than the ones a vendor slide promises.</div>
+        <a class="story-link" href="https://blogs.nvidia.com/blog/dsx-ready-ai-factories-power-cooling/" target="_blank" rel="noopener">NVIDIA Blog &mdash; NVIDIA Launches DSX Ready to Qualify Power and Cooling Products for AI Factories &#8594;</a>
+      </article>
+
+      <article class="story-card">
+        <div class="story-top">
+          <div class="story-title">Claude Tag Now Lets People Bring Their Own Connectors Into a Slack Channel &mdash; Precisely the Sprawl AI Gateway&rsquo;s New Tool Catalog Was Built to Catch</div>
+          <div class="story-badges">
+            <span class="badge badge-genai">WATCH</span>
+            <span class="badge badge-genai">Anthropic</span>
+            <span class="badge badge-genai">Governance</span>
+          </div>
+        </div>
+        <div class="story-body">On 24 September Anthropic expanded Claude Tag so a person&rsquo;s personal connectors, their own calendar, drive or other tools, work inside a shared Slack channel conversation, with new review and auto-approval modes for what gets posted and expanded admin governance on Enterprise plans, rolling out first on Team. It is a genuinely useful feature &mdash; colleagues get Claude&rsquo;s help without every tool being provisioned centrally first &mdash; and it is also a textbook case of the shadow-integration sprawl that AI Control Tower&rsquo;s new service-graph connectors and MCP Tool Catalog (covered above) exist to discover. So what for a Deloitte HRSD practitioner: any client running Claude Tag in a channel that touches HR conversations, a manager asking Claude to check someone&rsquo;s calendar for a PIP meeting, say, now has personal-connector data flowing through a surface the AI Control Tower may not know about yet, because a personal connector in a channel is a different governance surface to the sanctioned MCP tools an admin registered centrally. Worth a five-minute check with any client already on Claude Tag: does their AI Control Tower inventory actually see this, or only what IT provisioned.</div>
+        <a class="story-link" href="https://claude.com/blog/claude-tag-now-supports-personal-connectors-in-channels" target="_blank" rel="noopener">Claude Blog &mdash; Claude Tag Now Supports Personal Connectors in Channels &#8594;</a>
+      </article>
+
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">Team Submissions</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="empty-state">
+      No new submissions this week. Got a POC idea or investigation request? Head to the <strong>Submit Idea</strong> tab.
+    </div>
+
+    <div class="poc-highlight">
+      <div class="poc-highlight-head">
+        <div class="poc-highlight-title">This Week's POC Ideas</div>
+        <span class="poc-highlight-note">Promoted to POC Lab &middot; persists until retired</span>
+      </div>
+      <div class="poc-idea-list">
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">1</div>
+          <div>
+            <div class="poc-idea-text">The AI Gateway Tool Catalog Baseline &mdash; Turn On Governed MCP Before the Next Third-Party Agent Connects</div>
+            <div class="poc-idea-sub">AI Gateway&rsquo;s September GA shipped an MCP Tool Catalog that discovers and scores every MCP tool touching an instance and a Kill Switch that revokes credentials and stops an agent mid-run &mdash; but a shipped feature is not a configured one, and most instances will have it sitting off by default. Stand up the Tool Catalog against a Zurich sandbox, connect two or three representative MCP clients (a Moveworks-style assistant, a research corpus like Galileo, a bespoke internal agent), and record what the automated scan actually catches versus what still needs the manual User Criteria diffing from the earlier permission red-team POC. Wire the Kill Switch to a defined trigger &mdash; an MCP tool reading beyond its declared scope &mdash; and time how long detection-to-containment actually takes. Why now: this is the product answer to a governance question clients have been asking since the HRSD MCP Server shipped in August, and a working baseline configuration is a faster sell than a bespoke build, which frees the practice to spend the custom-engineering budget on what the Tool Catalog genuinely cannot see.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow HRSD &middot; AI Gateway &middot; AI Control Tower</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">2</div>
+          <div>
+            <div class="poc-idea-text">The Benefits Concierge Bake-Off &mdash; Build an Otto-Native Answer to Workday Total Benefits Before a Client Asks Why HRSD Doesn&rsquo;t Have One</div>
+            <div class="poc-idea-sub">Workday&rsquo;s Self-Service Agent explains coverage in plain language at the exact moment an employee is confused &mdash; open enrolment, a new dependent, a life event &mdash; and that is a demo any HR VP evaluating platforms will have now seen. Build an Otto for HRSD skill scoped to benefits cases that ingests plan documents and coverage tiers, answers plain-language comparison questions during enrolment windows, and hands off cleanly to a human for anything touching eligibility determination or a dispute. Benchmark it against Total Benefits&rsquo; public demo on the same ten realistic questions &mdash; not a synthetic eval &mdash; and be honest in the write-up about where Otto loses. Why now: benefits is a case type every HRSD client already has live, so this is a skill build on existing configuration rather than a new module, and a credible answer here closes the single feature gap most likely to surface in the next benefits-platform RFP.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-beginner">Beginner</span>
+              <span class="chip chip-platform">ServiceNow HRSD &middot; Otto for HRSD &middot; Employee Center</span>
+            </div>
+          </div>
+        </div>
+        <div class="poc-idea-item">
+          <div class="poc-idea-num">3</div>
+          <div>
+            <div class="poc-idea-text">The Tabular Pilot &mdash; Test Whether a TabPFN-Style Foundation Model Beats Predictive Intelligence on Real HRSD Case History</div>
+            <div class="poc-idea-sub">SAP just proved a tabular foundation model can predict from raw structured data with no training or tuning, and HRSD case history is exactly that shape: headcount, tenure, case volume, escalation flags, leave patterns. Take an anonymised export of twelve months of case data from a client sandbox, run the same attrition-risk or case-escalation prediction task through both ServiceNow Predictive Intelligence and an open tabular foundation model, and compare accuracy, setup time and explainability side by side rather than assuming either wins. Document exactly what data cleaning Predictive Intelligence still requires that the foundation-model approach claims to skip. Why now: this is a two-to-three-day bake-off, not a build, and it settles a genuine capability question &mdash; if the foundation-model approach wins on accuracy with materially less setup, that is a sellable gap for clients running plain HRSD without a data science team attached; if it does not, that is a useful answer too.</div>
+            <div class="poc-idea-tags">
+              <span class="chip chip-diff diff-intermediate">Intermediate</span>
+              <span class="chip chip-platform">ServiceNow HRSD &middot; Predictive Intelligence &middot; Open-Weight Tabular AI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </section><!-- /tab-latest -->
+
+
+  <div class="footer">
+    <div class="footer-inner">
+      <div class="footer-wordmark">AI &amp; HR Tech Weekly</div>
+      <div class="footer-tagline">A weekly intelligence brief for the Deloitte HRSD Practice.</div>
+      <div class="footer-colophon">Issue No.&nbsp;35<span class="sep">&middot;</span>26 September 2026<span class="sep">&middot;</span>Compiled with Claude on Cowork</div>
+    </div>
+  </div>
+
+
+</main>
+
+<!-- Archived flat view: tab script removed (no tab nav on archive pages). -->
+
+</body>
+</html>
